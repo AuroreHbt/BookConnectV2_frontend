@@ -1,3 +1,6 @@
+// MapScreen
+
+
 import { useRef, useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -15,7 +18,7 @@ import MapView, { PROVIDER_DEFAULT, Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useIsFocused } from "@react-navigation/native";
-import { likeEvent, unlikeEvent, addEvent } from "../reducers/event";
+import { likeEvent, unlikeEvent, addEvent } from "../../reducers/event";
 import { LinearGradient } from "expo-linear-gradient";
 
 // Fonction pour définir les couleurs des catégories

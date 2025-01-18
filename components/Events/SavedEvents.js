@@ -1,7 +1,11 @@
+// MyEventsScreen
+// Récupérer la partie "Participer"
+
+
 import React, { useEffect, useState } from "react";
 
 // BottomTab visible sur les Screens => globalStyles
-import { globalStyles } from '../styles/globalStyles';
+import { globalStyles } from '../../styles/globalStyles';
 
 import {
   KeyboardAvoidingView,
@@ -18,7 +22,7 @@ import {
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { deleteEvent } from "../reducers/event";
+import { deleteEvent } from "../../reducers/event";
 
 // import de la bibliothèque d'icône Fontawsome via react-native-vector-icons
 import Icon from 'react-native-vector-icons/FontAwesome';

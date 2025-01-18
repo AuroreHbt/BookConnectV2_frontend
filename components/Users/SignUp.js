@@ -1,7 +1,9 @@
+// LoginScreen
+
 import React, { useState } from "react";
 
-// import du style global commun avec SignUpScreen
-import { signPageStyles } from '../styles/signPageStyles';
+// import du style global commun avec SignInScreen
+import { signPageStyles } from '../../styles/signPageStyles';
 
 // import de la bibliothèque d'icône Fontawsome via react-native-vector-icons
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -18,15 +20,17 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   View,
-  Alert,
 } from "react-native";
 
 import { useDispatch } from "react-redux";
-import { login } from "../reducers/user";
+import { login } from "../../reducers/user";
 
 
 // Regex pour valider les emails et mots de passe
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+const usernameRegex = /^[a-zA-Z0-9]{3,}$/;
+// Uniquement des carctères alphanumériques et long d'au moins 3 carctères
 
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 // Rentrer au moins une lettre, un chiffre et un caractère spécial et 8 caractères mini.
@@ -34,18 +38,18 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8
 // Adresse du backend via la variable d'environnement
 const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
 
-export default function SignInScreen({ navigation }) {
+export default function SignUp ({ navigation }) {
 
   const dispatch = useDispatch();
 
   // Etat pour stocker les valeurs des champs de saisie
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [username, setUsername] = useState("");
-
   // Etat pour la gestion des erreurs de validation
   const [emailError, setEmailError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
   // Etat pour afficher ou masquer le mot de passe
@@ -60,6 +64,16 @@ export default function SignInScreen({ navigation }) {
       isValid = false;
     } else {
       setEmailError("");
+    }
+
+    // Validation du username
+    if (!usernameRegex.test(username)) {
+      setUsernameError(
+        "Le nom d'utilisateur doit contenir au moins 3 caractères alphanumériques."
+      );
+      isValid = false;
+    } else {
+      setUsernameError("");
     }
 
     // Validation du mot de passe
@@ -83,45 +97,39 @@ export default function SignInScreen({ navigation }) {
   // https://reactnavigation.org/docs/navigation-object/#goback
   const goBack = () => navigation.goBack();
 
-  const handleSubmitSignIn = () => {
-    // Early return si les champs, email et mot de passes ne sont pas remplies correctement
+  const handleSubmitSignUp = () => {
+    // Early return si les champs, username, email mot de passes ne sont pas remplies correctement
     if (!validateFields()) {
       console.log("Validation échouée");
       return;
     }
 
-    // Fetch de la route post du backend pour la connexion
-    fetch(`${BACKEND_ADDRESS}/users/signin`, {
+    // Fetch de la route post du backend pour l'inscription
+    fetch(`${BACKEND_ADDRESS}/users/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, username }),
+      body: JSON.stringify({ email, username, password }),
     })
       .then((response) => {
         return response.json();
       })
       .then((data) => {
         console.log("Données retournées par le backend:", data);
-        console.log('data.result: ', data.result);
-
 
         if (data.result) {
           // Si connexion réussie, redirige vers le dashboard
           dispatch(
-            data &&
             login({
+              token: data.token,
               username: data.username,
               email: data.email,
-              token: data.token,
               _id: data._id,
             })
           );
-          console.log("Connexion réussie");
-          setPassword("");
-          setUsername("");
+          console.log("Inscription réussie");
           navigation.navigate("TabNavigator", { screen: "Dashboard" });
         } else {
-          console.log("Erreur lors de la connexion:", data.error);
-          Alert.alert("Erreur", data.error);
+          console.log('Erreur lors de l"inscription:', data.error);
         }
       });
   };
@@ -139,8 +147,19 @@ export default function SignInScreen({ navigation }) {
           <View>
             <Text style={signPageStyles.title}>BookConnect</Text>
           </View>
+
           <View style={signPageStyles.separator} />
+
           <View style={signPageStyles.inputContainer}>
+            <TextInput
+              placeholder="Nom d'utilisateur"
+              onChangeText={(value) => setUsername(value)}
+              value={username}
+              style={signPageStyles.input}
+            />
+            {usernameError ? (
+              <Text style={signPageStyles.errorText}>{usernameError}</Text>
+            ) : null}
             <TextInput
               placeholder="E-mail"
               autoCapitalize="none"
@@ -186,20 +205,21 @@ export default function SignInScreen({ navigation }) {
                 activeOpacity={0.8}
               >
                 <TouchableOpacity
-                  onPress={() => handleSubmitSignIn()}
+                  onPress={() => handleSubmitSignUp()}
                   style={signPageStyles.button}
                 >
-                  <Text style={signPageStyles.textButton}>Se connecter</Text>
+                  <Text style={signPageStyles.textButton}>S'inscrire</Text>
                 </TouchableOpacity>
               </LinearGradient>
             </View>
 
-            <View>
+            <View style={signPageStyles.returnContainer}>
               <TouchableOpacity
                 onPress={goBack}
+                style={signPageStyles.returnButton}
                 activeOpacity={0.8}
               >
-                <Text style={signPageStyles.textReturn}>Je n'ai pas encore de compte</Text>
+                <Text style={signPageStyles.textReturn}>J'ai déjà un compte</Text>
               </TouchableOpacity>
             </View>
           </View>

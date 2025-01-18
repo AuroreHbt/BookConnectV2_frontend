@@ -1,6 +1,20 @@
+// Accès à la bibliothèque personnelle
+
+// Stories créées => CreatedStories
+// Contenus sauvegardés => SavedStories ? => fav ?
+// Likes et favoris => LikedStories
+
+// pour la lecture : ReadStories ou DisplayStories
+
+// A voir plus tard
+// Lectures en cours => ReadingStories
+
+
+// ==> StoryScreen à retravailler en important les Components nécessaires
+
 import React from 'react';
 
-import { bottomTabStyles } from "../styles/bottomTabStyles";
+import { bottomTabStyles } from "../../styles/bottomTabStyles";
 
 import {
     View,

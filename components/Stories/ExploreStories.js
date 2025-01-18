@@ -1,3 +1,5 @@
+// FindStoriesScreen
+
 import React, { useEffect, useState } from "react";
 
 import {
@@ -17,7 +19,7 @@ import {
 } from 'react-native';
 
 import { Picker } from '@react-native-picker/picker';
-import { globalStyles } from '../styles/globalStyles'
+import { globalStyles } from '../../styles/globalStyles'
 
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -40,7 +42,7 @@ export default function FindStoriesScreen({ navigation }) {
     const [randomStory, setRandomStory] = useState(null);
     const [lastStoryId, setLastStoryId] = useState([])
 
-   
+
 
     const goBack = () => navigation.goBack();
 
@@ -125,110 +127,110 @@ export default function FindStoriesScreen({ navigation }) {
 
     return (
         <ScrollView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
 
-                <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-                    <View style={styles.titlePageContainer}>
-                        <Text style={styles.titlePage} >Rechercher une histoire</Text>
-                        <TouchableOpacity
-                            onPress={goBack}
-                            activeOpacity={0.8}
-                        >
-                            <Icon
-                                style={styles.returnContainer}
-                                name="chevron-circle-left"
-                                size={32}
-                                color='rgba(55, 27, 12, 0.3)'
-                            />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.inputContainer}>
-
-                        <View style={styles.input}>
-
-                            <TextInput
-                                placeholder="Titre de l'histoire"
-                                onChangeText={(value) => setTitle(value)}
-                                value={title}
-                            />
-                        </View>
-
-                        <View style={styles.input}>
-                            <TextInput
-                                placeholder="Nom de l'auteur"
-                                onChangeText={(value) => setAuthor(value)}
-                                value={author}
-                            />
-                        </View>
-                        <View style={styles.pickerContainer}>
-                            <Pressable
-                                style={styles.picker}
+                    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+                        <View style={styles.titlePageContainer}>
+                            <Text style={styles.titlePage} >Rechercher une histoire</Text>
+                            <TouchableOpacity
+                                onPress={goBack}
+                                activeOpacity={0.8}
                             >
-                                <Picker
-                                    prompt="Choisir une catégorie"
+                                <Icon
+                                    style={styles.returnContainer}
+                                    name="chevron-circle-left"
+                                    size={32}
+                                    color='rgba(55, 27, 12, 0.3)'
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.inputContainer}>
 
-                                    selectedValue={category}
-                                    onValueChange={(value) => { setCategory(value); setCategorySelected(value) }}
-                                    mode="dialog"
+                            <View style={styles.input}>
+
+                                <TextInput
+                                    placeholder="Titre de l'histoire"
+                                    onChangeText={(value) => setTitle(value)}
+                                    value={title}
+                                />
+                            </View>
+
+                            <View style={styles.input}>
+                                <TextInput
+                                    placeholder="Nom de l'auteur"
+                                    onChangeText={(value) => setAuthor(value)}
+                                    value={author}
+                                />
+                            </View>
+                            <View style={styles.pickerContainer}>
+                                <Pressable
+                                    style={styles.picker}
                                 >
-                                    <Picker.Item label="Sélectionnez une catégorie" value="" />
-                                    <Picker.Item label="Autre" value="Autre" />
-                                    <Picker.Item label="Autobiographie / Biographie" value="Autobiographie / Biographie" />
-                                    <Picker.Item label="Essai" value="Essai" />
-                                    <Picker.Item label="Poésie" value="Poésie" />
-                                    <Picker.Item label="Science Fiction" value="Science Fiction" />
-                                    <Picker.Item label="Fantasy" value="Fantasy" />
-                                    <Picker.Item label="Romance" value="Romance" />
-                                    <Picker.Item label="Policier" value="Policier" />
-                                    {/* Ajouter d'autres catégories ici */}
-                                </Picker>
-                            </Pressable>
+                                    <Picker
+                                        prompt="Choisir une catégorie"
+
+                                        selectedValue={category}
+                                        onValueChange={(value) => { setCategory(value); setCategorySelected(value) }}
+                                        mode="dialog"
+                                    >
+                                        <Picker.Item label="Sélectionnez une catégorie" value="" />
+                                        <Picker.Item label="Autre" value="Autre" />
+                                        <Picker.Item label="Autobiographie / Biographie" value="Autobiographie / Biographie" />
+                                        <Picker.Item label="Essai" value="Essai" />
+                                        <Picker.Item label="Poésie" value="Poésie" />
+                                        <Picker.Item label="Science Fiction" value="Science Fiction" />
+                                        <Picker.Item label="Fantasy" value="Fantasy" />
+                                        <Picker.Item label="Romance" value="Romance" />
+                                        <Picker.Item label="Policier" value="Policier" />
+                                        {/* Ajouter d'autres catégories ici */}
+                                    </Picker>
+                                </Pressable>
+                            </View>
                         </View>
-                    </View>
 
-                    <View style={styles.buttonGroup}>
-                        <LinearGradient
-                            colors={['rgba(255, 123, 0, 0.9)', 'rgba(216, 72, 21, 1)']}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 0, y: 0.7 }}
-                            style={styles.gradientButton}
-                        >
-                            <TouchableOpacity
-                                activeOpacity={0.8}
-                                onPress={handleStorySearch}
-                                style={styles.button}
+                        <View style={styles.buttonGroup}>
+                            <LinearGradient
+                                colors={['rgba(255, 123, 0, 0.9)', 'rgba(216, 72, 21, 1)']}
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 0, y: 0.7 }}
+                                style={styles.gradientButton}
                             >
-                                <Text style={styles.textButton}>Rechercher</Text>
-                            </TouchableOpacity>
-                        </LinearGradient>
-                        <LinearGradient
-                            colors={['rgba(255, 123, 0, 0.9)', 'rgba(216, 72, 21, 1)']}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 0, y: 0.7 }}
-                            style={styles.gradientButton}
-                        >
-                            <TouchableOpacity
-                                activeOpacity={0.8}
-                                onPress={handleRandomStory}
-                                style={styles.button}
+                                <TouchableOpacity
+                                    activeOpacity={0.8}
+                                    onPress={handleStorySearch}
+                                    style={styles.button}
+                                >
+                                    <Text style={styles.textButton}>Rechercher</Text>
+                                </TouchableOpacity>
+                            </LinearGradient>
+                            <LinearGradient
+                                colors={['rgba(255, 123, 0, 0.9)', 'rgba(216, 72, 21, 1)']}
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 0, y: 0.7 }}
+                                style={styles.gradientButton}
                             >
-                                <Text style={styles.textButton}>Histoire aléatoire</Text>
-                            </TouchableOpacity>
-                        </LinearGradient>
-                    </View>
-                    <FlatList
-                        data={allStories}
-                        keyExtractor={(item) => item._id}
-                        renderItem={renderStory}
-                        style={styles.flatList}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                    />
+                                <TouchableOpacity
+                                    activeOpacity={0.8}
+                                    onPress={handleRandomStory}
+                                    style={styles.button}
+                                >
+                                    <Text style={styles.textButton}>Histoire aléatoire</Text>
+                                </TouchableOpacity>
+                            </LinearGradient>
+                        </View>
+                        <FlatList
+                            data={allStories}
+                            keyExtractor={(item) => item._id}
+                            renderItem={renderStory}
+                            style={styles.flatList}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                        />
 
-                </KeyboardAvoidingView>
-            </View>
-        </TouchableWithoutFeedback>
+                    </KeyboardAvoidingView>
+                </View>
+            </TouchableWithoutFeedback>
         </ScrollView>
     );
 };

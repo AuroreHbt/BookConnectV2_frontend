@@ -1,3 +1,5 @@
+// ResultResearchStoriesScreen
+
 import React, { useState, useEffect } from "react";
 
 import {
@@ -11,9 +13,9 @@ import {
   Image,
 } from "react-native";
 
-import { globalStyles } from "../styles/globalStyles";
+import { globalStyles } from "../../styles/globalStyles";
 import { useDispatch, useSelector } from "react-redux";
-import { addLike, removeLike } from "../reducers/story";
+import { addLike, removeLike } from "../../reducers/story";
 
 import Icon from "react-native-vector-icons/FontAwesome";
 

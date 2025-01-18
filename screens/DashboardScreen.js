@@ -1,3 +1,11 @@
+// components à prévoir 
+  // profileSettings
+  // LastStories => LastCreatedStories de tous les users
+  // SavedEvents
+  // autre ? 
+
+  
+
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
@@ -62,7 +70,7 @@ export default function DashboardScreen({ navigation }) {
   };
 
   console.log('story: ', story);
-  
+
   const handleReadStories = (story) => {
     navigation.navigate("ReadStory", { story })
   };
@@ -72,7 +80,7 @@ export default function DashboardScreen({ navigation }) {
   };
 
   const handleMyEvents = () => {
-     navigation.navigate("MyEvents");
+    navigation.navigate("MyEvents");
   };
 
   return (

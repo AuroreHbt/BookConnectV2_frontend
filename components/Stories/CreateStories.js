@@ -1,7 +1,10 @@
+// NewStoryScreen
+
+
 import React, { useState } from "react";
 
 // BottomTab visible sur les Screens => globalStyles
-import { globalStyles } from '../styles/globalStyles';
+import { globalStyles } from '../../styles/globalStyles';
 
 // import de Pressable pour gérer les interactions tactiles (onPress, onLongPress etc)
 import {
@@ -19,7 +22,7 @@ import {
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { addStory } from "../reducers/story";
+import { addStory } from "../../reducers/story";
 
 // import pour créer une case à cocher
 import Checkbox from 'expo-checkbox';

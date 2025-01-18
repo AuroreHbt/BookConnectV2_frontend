@@ -1,8 +1,8 @@
 import { StyleSheet, TouchableOpacity, Platform, Text, View, FlatList, Image, KeyboardAvoidingView } from 'react-native';
 import { useDispatch, useSelector } from "react-redux";
-import { globalStyles } from '../styles/globalStyles';
+import { globalStyles } from '../../styles/globalStyles';
 import { useState } from "react";
-import { addLike, removeLike } from "../reducers/story";
+import { addLike, removeLike } from "../../reducers/story";
 
 
 import Icon from "react-native-vector-icons/FontAwesome";

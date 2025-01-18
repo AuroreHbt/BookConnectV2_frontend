@@ -17,13 +17,13 @@ export const eventSlice = createSlice({
         addEventPlanner: (state, action) => {
             state.eventsPlanner.push(action.payload);
         },
-       
+
         deleteEvent: (state, action) => {
             state.events = state.events.filter(event => event._id !== action.payload.id);
-          },
-          
+        },
 
-          likeEvent: (state, action) => {
+
+        likeEvent: (state, action) => {
             console.log("Adding like:", action.payload);
             const existingEvent = state.likes.find(event => event._id === action.payload._id);
             if (!existingEvent) {
@@ -41,6 +41,6 @@ export const eventSlice = createSlice({
     },
 });
 
-export const { addEvent, addEventPlanner, likeEvent,unlikeEvent, deleteEvent } = eventSlice.actions;
+export const { addEvent, addEventPlanner, likeEvent, unlikeEvent, deleteEvent } = eventSlice.actions;
 export default eventSlice.reducer;
 // reducer bien ajouté au App.js

@@ -1,3 +1,5 @@
+// EventsScreen
+
 import React, { useState } from "react";
 import {
   Alert,
@@ -12,7 +14,7 @@ import {
   View,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome"
-import { bottomTabStyles } from "../styles/bottomTabStyles";
+import { bottomTabStyles } from "../../styles/bottomTabStyles";
 import { LinearGradient } from 'expo-linear-gradient';
 
 

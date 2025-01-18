@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { globalStyles } from '../styles/globalStyles';
+import { globalStyles } from '../../styles/globalStyles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {
@@ -16,7 +16,7 @@ import {
 // pour afficher les fichiers PDF hébergés en ligne
 import { WebView } from "react-native-webview";
 
-import { addLike, removeLike } from "../reducers/story";
+import { addLike, removeLike } from "../../reducers/story";
 
 
 export default function ReadStoryScreen({ route, navigation }) {

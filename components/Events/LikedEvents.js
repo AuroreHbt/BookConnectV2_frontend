@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Icon from "react-native-vector-icons/Ionicons";
-import { unlikeEvent } from "../reducers/event";
+import { unlikeEvent } from "../../reducers/event";
 
 export default function FavEventScreen() {
   const dispatch = useDispatch();

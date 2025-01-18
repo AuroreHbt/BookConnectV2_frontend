@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 // BottomTab visible sur les Screens => globalStyles
-import { globalStyles } from '../styles/globalStyles';
+import { globalStyles } from '../../styles/globalStyles';
 
 import {
   KeyboardAvoidingView,
@@ -21,7 +21,7 @@ import {
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { deleteStory, updateStory, addStory } from "../reducers/story";
+import { deleteStory, updateStory, addStory } from "../../reducers/story";
 
 // import de la bibliothèque d'icône Fontawsome via react-native-vector-icons
 import Icon from 'react-native-vector-icons/FontAwesome';
