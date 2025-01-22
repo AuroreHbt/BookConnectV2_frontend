@@ -22,8 +22,8 @@ export const signPageStyles = StyleSheet.create({
     },
 
     title: {
-        fontFamily: 'Asul-Bold',
-        fontWeight: '700',
+        fontFamily: 'Pacifico-Regular',
+        fontWeight: '400',
         fontSize: 32,
         marginBottom: 5,
         color: 'rgba(55, 27, 12, 0.9)', // #371B0C

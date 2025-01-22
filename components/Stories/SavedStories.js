@@ -1,3 +1,6 @@
+// Liste d'envie de lectures / liste de lecture
+
+
 import { StyleSheet, TouchableOpacity, Platform, Text, View, FlatList, Image, KeyboardAvoidingView } from 'react-native';
 import { useDispatch, useSelector } from "react-redux";
 import { globalStyles } from '../../styles/globalStyles';

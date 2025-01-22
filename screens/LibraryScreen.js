@@ -14,7 +14,7 @@
 
 import React from 'react';
 
-import { bottomTabStyles } from "../../styles/bottomTabStyles";
+import { bottomTabStyles } from "../styles/bottomTabStyles";
 
 import {
     View,
@@ -28,7 +28,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 
 
-export default function StoriesScreen({ navigation }) {
+export default function LibraryScreen({ navigation }) {
 
     // Navigation par lien définie dans App.js
     const handleNewStory = () => {

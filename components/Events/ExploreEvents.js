@@ -41,8 +41,8 @@ export default function EventsScreen({ navigation }) {
       console.log("Searching events for city:", city);
 
       // Appel à l'API de géocodage
-      const apiKey = process.env.EXPO_PUBLIC_MAP_API_KEY;
-      const url = `https://api.opencagedata.com/geocode/v1/json?q=${city}&key=${apiKey}`;
+      const EXPO_PUBLIC_MAP_API_KEY = process.env.EXPO_PUBLIC_MAP_API_KEY;
+      const url = `https://api.opencagedata.com/geocode/v1/json?q=${city}&key=${EXPO_PUBLIC_MAP_API_KEY}`;
       const response = await fetch(url);
 
       if (!response.ok) {

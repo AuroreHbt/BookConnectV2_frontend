@@ -19,14 +19,13 @@ import {
 } from 'react-native';
 
 import { Picker } from '@react-native-picker/picker';
-import { globalStyles } from '../../styles/globalStyles'
+import { globalStyles } from '../../styles/globalStyles';
 
 import { LinearGradient } from 'expo-linear-gradient';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const defaultImage = require('../assets/image-livre-defaut.jpg')
-
+const defaultImage = require('../../assets/image-livre-defaut.jpg')
 
 const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
 

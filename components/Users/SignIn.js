@@ -1,5 +1,7 @@
 // LoginScreen
 
+// remplacer le goback par un useState qui renvoie vers le default de LoginScreen
+
 
 import React, { useState } from "react";
 
@@ -138,7 +140,7 @@ export default function SignIn ({ navigation }) {
           style={signPageStyles.container}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
-          <Image style={signPageStyles.logo} source={require("../assets/LogoBc.png")} />
+          <Image style={signPageStyles.logo} source={require("../../assets/LogoBc.png")} />
           <View>
             <Text style={signPageStyles.title}>BookConnect</Text>
           </View>
