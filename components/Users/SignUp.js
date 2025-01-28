@@ -27,6 +27,9 @@ import {
 import { useDispatch } from "react-redux";
 import { login } from "../../reducers/user";
 
+// importer les composants pour la connexion
+import SignIn from './SignIn';
+
 
 // Regex pour valider les emails et mots de passe
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -41,6 +44,8 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8
 const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
 
 export default function SignUp ({ navigation }) {
+
+  const [showSignIn, setShowSignIn] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -96,8 +101,7 @@ export default function SignUp ({ navigation }) {
     setShowPassword(!showPassword);
   };
 
-  // https://reactnavigation.org/docs/navigation-object/#goback
-  const goBack = () => navigation.goBack();
+  const handleGoSignIn = () => setShowSignIn(true);
 
   const handleSubmitSignUp = () => {
     // Early return si les champs, username, email mot de passes ne sont pas remplies correctement
@@ -136,7 +140,10 @@ export default function SignUp ({ navigation }) {
       });
   };
 
-  return (
+  // si l'état showSignIn est activé alors affiche SignIn à la place de SignUp
+  return showSignIn ? (
+    <SignIn />
+  ) : (
 
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
@@ -217,7 +224,7 @@ export default function SignUp ({ navigation }) {
 
             <View style={signPageStyles.returnContainer}>
               <TouchableOpacity
-                onPress={goBack}
+                onPress={handleGoSignIn}
                 style={signPageStyles.returnButton}
                 activeOpacity={0.8}
               >

@@ -85,8 +85,6 @@ export default function SignIn ({ navigation }) {
     setShowPassword(!showPassword);
   };
 
-  // https://reactnavigation.org/docs/navigation-object/#goback
-  const goBack = () => navigation.goBack();
 
   const handleSubmitSignIn = () => {
     // Early return si les champs, email et mot de passes ne sont pas remplies correctement
@@ -132,7 +130,7 @@ export default function SignIn ({ navigation }) {
   };
 
   return (
-
+    
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
 
@@ -200,12 +198,12 @@ export default function SignIn ({ navigation }) {
             </View>
 
             <View>
-              <TouchableOpacity
+             {/*  <TouchableOpacity
                 onPress={goBack}
                 activeOpacity={0.8}
               >
                 <Text style={signPageStyles.textReturn}>Je n'ai pas encore de compte</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
         </KeyboardAvoidingView>
