@@ -30,6 +30,9 @@ import { login } from "../../reducers/user";
 // importer les composants pour la connexion
 import SignIn from './SignIn';
 
+// import du fond plein gradient
+import GradientBackground from '../../styles/gradientBackground';
+
 
 // Regex pour valider les emails et mots de passe
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -144,7 +147,7 @@ export default function SignUp ({ navigation }) {
   return showSignIn ? (
     <SignIn />
   ) : (
-
+    <GradientBackground>
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
 
@@ -207,7 +210,7 @@ export default function SignUp ({ navigation }) {
 
             <View style={signPageStyles.buttonContainer}>
               <LinearGradient
-                colors={['rgba(255, 123, 0, 0.9)', 'rgba(216, 72, 21, 1)']}
+                colors={['rgba(21, 187, 216, 0.7)', 'rgba(85, 0, 255, 0.7)']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 0.7 }}
                 style={signPageStyles.gradientButton}
@@ -235,5 +238,6 @@ export default function SignUp ({ navigation }) {
         </KeyboardAvoidingView>
       </View>
     </TouchableWithoutFeedback>
+    </GradientBackground>
   );
 };

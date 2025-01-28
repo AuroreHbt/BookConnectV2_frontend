@@ -9,10 +9,21 @@ export const signPageStyles = StyleSheet.create({
 
     container: {
         flex: 1,
-        alignItems: "center",
-        justifyContent: 'space-evenly',
-        marginTop: 100,
-        marginBottom: 100,
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    gradient: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        alignItems: 'center',
+        justifyContent: 'center',
+        top: 0,
+        left: 0,
     },
 
     logo: {
