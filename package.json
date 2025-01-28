@@ -13,6 +13,7 @@
     "@expo-google-fonts/asul": "^0.2.3",
     "@expo-google-fonts/germania-one": "^0.2.3",
     "@expo-google-fonts/poppins": "^0.2.3",
+    "@react-native-async-storage/async-storage": "^2.1.0",
     "@react-native-community/datetimepicker": "^8.2.0",
     "@react-native-picker/picker": "^2.10.2",
     "@react-navigation/bottom-tabs": "6",

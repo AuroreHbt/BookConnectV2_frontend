@@ -1,136 +1,178 @@
-import React from 'react';
+import React, { useState } from "react";
+import { signPageStyles } from '../../styles/signPageStyles';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { LinearGradient } from 'expo-linear-gradient';
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
+  View,
+  Alert,
+} from "react-native";
+import { useDispatch } from "react-redux";
+import { login } from "../../reducers/user";
+import { useNavigation } from '@react-navigation/native'; // Hook pour la navigation
 
-import { StyleSheet, View } from 'react-native';
+const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-// Import des Screens pour la nav
-import LoginScreen from './screens/LoginScreen';
-import DashboardScreen from './screens/DashboardScreen';
-import ExploreScreen from './screens/ExploreScreen';
-import CreateScreen from './screens/CreateScreen';
-import EventScreen from './screens/EventScreen';
-import LibraryScreen from './screens/LibraryScreen';
-import ShopScreen from './screens/ShopScreen';
+const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
 
-// Imports pour la nested navigation (stack + tab)
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+export default function SignIn() {
+  const navigation = useNavigation();  // Utilisation du hook useNavigation
+  const dispatch = useDispatch();
 
-// Import pour les icones
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-// Imports pour configurer le store redux
-import user from './reducers/user';
-import story from './reducers/story';
-import event from './reducers/event';
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
+  const validateFields = () => {
+    let isValid = true;
 
-// https://docs.expo.dev/versions/latest/sdk/font/
-// https://docs.expo.dev/develop/user-interface/fonts/
-// import pour utliser le hook useFonts pour charger la police
-import { useFonts } from 'expo-font';
-// import pour empecher le rendu de l'appli tant que la font n'est pas chargée et prête
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-
-SplashScreen.preventAutoHideAsync();
-
-const store = configureStore({
-  reducer: { user, story, event },
-})
-
-const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
-
-
-function TabNavigator() {
-  return (
-    <Tab.Navigator screenOptions={({ route }) => ({
-
-      tabBarIcon: ({ color, size }) => {
-        let iconName = '';
-
-        if (route.name === 'Accueil') {
-          iconName = 'home';
-        } else if (route.name === 'Explorer') {
-          iconName = 'search'
-        } else if (route.name === 'Créer') {
-          iconName = 'plus'
-        } else if (route.name === 'Evènements') {
-          iconName = 'calendar-o';
-        } else if (route.name === 'Histoires') {
-          iconName = 'book'
-        } else if (route.name === 'Profil') {
-          iconName = 'user-circle-o'
-        } else if (route.name === 'Achats') {
-          iconName = 'shopping-basket'
-        }
-
-        return <FontAwesome name={iconName} size={size} color={color} />;
-      },
-
-      headerShown: false,
-      tabBarActiveTintColor: 'rgba(85, 0, 255, 0.8)',
-      tabBarInactiveTintColor: 'rgba(85, 0, 255, 0.3)',
-      tabBarStyle: { position: 'absolute' },
-
-      tabBarBackground: () => (
-        <View style={styles.container} />
-      ),
-
-    })}
-
-    >
-      <Tab.Screen name="Accueil" component={DashboardScreen} />
-      <Tab.Screen name="Explorer" component={ExploreScreen} />
-      <Tab.Screen name="Créer" component={CreateScreen} />
-      <Tab.Screen name="Evènements" component={EventScreen} />
-      <Tab.Screen name="Histoires" component={LibraryScreen} />
-    </Tab.Navigator>
-  );
-};
-
-
-export default function App() {
-
-  // utilisation google fonts
-  const [fontsLoaded, error] = useFonts({
-    'Pacifico-Regular': require('./assets/fonts/Pacifico-Regular.ttf'), // fontWeight: '400',
-    'Poppins-Medium': require('./assets/fonts/Poppins-Medium.ttf'), // fontWeight: '500',
-    'Poppins-Regular': require('./assets/fonts/Poppins-Regular.ttf'), // fontWeight: '400',
-    'Poppins-Light': require('./assets/fonts/Poppins-Light.ttf'), // fontWeight: '300',
-  });
-
-  useEffect(() => {
-    if (fontsLoaded || error) {
-      SplashScreen.hideAsync();
+    if (!EMAIL_REGEX.test(email)) {
+      setEmailError("Veuillez entrer un email valide.");
+      isValid = false;
+    } else {
+      setEmailError("");
     }
-  }, [fontsLoaded, error]); // useEffect se lancera à l’initialisation et à chaque changement de l’état fontsLoaded.
 
-  // vérification du chargement de la font
-  if (!fontsLoaded && !error) {
-    return null;
-  }
+    if (!passwordRegex.test(password)) {
+      setPasswordError(
+        "Le mot de passe doit contenir au moins 8 caractères, une lettre, un chiffre et un caractère spécial."
+      );
+      isValid = false;
+    } else {
+      setPasswordError("");
+    }
+
+    return isValid;
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleSubmitSignIn = () => {
+    if (!validateFields()) {
+      console.log("Validation échouée");
+      return;
+    }
+
+    fetch(`${BACKEND_ADDRESS}/users/signin`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password, username }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Données retournées par le backend:", data);
+
+        if (data.result) {
+          dispatch(
+            data &&
+            login({
+              username: data.username,
+              email: data.email,
+              token: data.token,
+              _id: data._id,
+            })
+          );
+          console.log("Connexion réussie");
+          setPassword("");
+          setUsername("");
+          navigation.navigate("TabNavigator", { screen: "Dashboard" });  // Redirection après connexion réussie
+        } else {
+          console.log("Erreur lors de la connexion:", data.error);
+          Alert.alert("Erreur", data.error);
+        }
+      });
+  };
 
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+        <KeyboardAvoidingView
+          style={signPageStyles.container}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          <Image style={signPageStyles.logo} source={require("../../assets/LogoBc.png")} />
+          <View>
+            <Text style={signPageStyles.title}>BookConnect</Text>
+          </View>
+          <View style={signPageStyles.separator} />
+          <View style={signPageStyles.inputContainer}>
+            <TextInput
+              placeholder="E-mail"
+              autoCapitalize="none"
+              keyboardType="email-address"
+              autoComplete="email"
+              textContentType="emailAddress"
+              onChangeText={(value) => setEmail(value)}
+              value={email}
+              style={signPageStyles.input}
+            />
+            {emailError ? <Text style={signPageStyles.errorText}>{emailError}</Text> : null}
+
+            <View style={signPageStyles.inputPwd}>
+              <TextInput
+                placeholder="Mot de passe"
+                secureTextEntry={!showPassword}
+                onChangeText={(value) => setPassword(value)}
+                value={password}
+                style={signPageStyles.input}
+              />
+              <TouchableOpacity
+                style={signPageStyles.iconContainer}
+                onPress={toggleShowPassword}
+              >
+                <Icon
+                  name={showPassword ? 'eye' : 'eye-slash'}
+                  size={24}
+                  color={showPassword ? 'rgba(55, 27, 12, 0.8)' : '#D3D3D3'}
+                />
+              </TouchableOpacity>
+            </View>
+
+            {passwordError ? (
+              <Text style={signPageStyles.errorText}>{passwordError}</Text>
+            ) : null}
+
+            <View style={signPageStyles.buttonContainer}>
+              <LinearGradient
+                colors={['rgba(255, 123, 0, 0.9)', 'rgba(216, 72, 21, 1)']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 0, y: 0.7 }}
+                style={signPageStyles.gradientButton}
+                activeOpacity={0.8}
+              >
+                <TouchableOpacity
+                  onPress={handleSubmitSignIn}
+                  style={signPageStyles.button}
+                >
+                  <Text style={signPageStyles.textButton}>Se connecter</Text>
+                </TouchableOpacity>
+              </LinearGradient>
+            </View>
+
+            <View>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("SignUpScreen")} // Redirection vers la page d'inscription
+                activeOpacity={0.8}
+              >
+                <Text style={signPageStyles.textReturn}>Je n'ai pas encore de compte</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </View>
+    </TouchableWithoutFeedback>
   );
-};
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 0.95,
-    backgroundColor: 'rgba(238, 236, 232, 1)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+}
