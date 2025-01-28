@@ -20,7 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 export default function LoginScreen() {
 
-    const [currentComponent, setCurrentComponent] = useState(null); // état local currentComponent pour gérer quel composant afficher
+    const [currentComponent, setCurrentComponent] = useState('signup'); // état local currentComponent pour gérer quel composant afficher
 
     const handleSubmitSignUp = () => {
         console.log('clic signup');
@@ -86,16 +86,21 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
+        width: '100%',
+        height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
     },
 
     gradient: {
         flex: 1,
-        marginTop: 30,
-        width: 'auto',
-        borderColor: 'red',
-        borderWidth: 2,
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        alignItems: 'center',
+        justifyContent: 'center',
+        top: 0,
+        left: 0,
     },
 
     logo: {
