@@ -17,9 +17,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // Import pour les icônes (Ionicons)
 import { Ionicons } from '@expo/vector-icons';
 
-// Imports pour LinearGradient
-import { LinearGradient } from 'expo-linear-gradient';
-
 // Imports pour configurer le store redux
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
@@ -53,18 +50,12 @@ function TabNavigator() {
           else if (route.name === 'Achats') iconName = 'cart-outline'; // Panier
           else if (route.name === 'Communauté') iconName = 'people-outline'; // Trois bonhommes
 
-          // Création du dégradé sur le contour de l'icône
+          // Icône avec couleur directement appliquée sur les traits (sans gradient)
           return (
-            <LinearGradient
-              colors={['rgba(21, 187, 216, 1)', 'rgba(85, 0, 255, 1)']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={[styles.iconGradient, { width: size, height: size, borderRadius: size / 2 }]}
-            >
-              <Ionicons name={iconName} size={size} color="white" />
-            </LinearGradient>
+            <Ionicons name={iconName} size={size * 1} color={color} />
           );
         },
+        tabBarLabel: () => null, // Suppression des sous-titres
         headerShown: false,
         tabBarActiveTintColor: 'rgba(21, 187, 216, 1)',
         tabBarInactiveTintColor: 'rgba(85, 0, 255, 1)',
@@ -118,12 +109,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(238, 236, 232, 1)',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  iconGradient: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 3,  // Ajouter un peu de padding pour le contour
-    borderWidth: 2, // Définir une bordure
-    borderColor: 'transparent', // Eviter une bordure visible non dégradée
   },
 });

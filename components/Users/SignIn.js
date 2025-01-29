@@ -103,7 +103,7 @@ export default function LoginScreen() {
           setPassword("");
           setUsername("");
           // Redirection vers HomeScreen après connexion réussie
-          navigation.navigate("Accueil"); // Redirection vers le HomeScreen
+          navigation.navigate('TabNavigator', { screen: 'Accueil' });
         } else {
           console.log("Erreur lors de la connexion:", data.error);
           Alert.alert("Erreur", data.error);
