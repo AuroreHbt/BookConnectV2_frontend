@@ -27,9 +27,9 @@ export const signPageStyles = StyleSheet.create({
     },
 
     logo: {
-        flex: 0.5,
-        width: "50%",
-        height: "50%",
+        width: 150, // taille en pixels
+        height: 150,
+        resizeMode: 'contain', // éviter la déformation
     },
 
     title: {
