@@ -37,7 +37,7 @@ const defaultImage = require('../assets/image-livre-defaut.jpg')
 
 const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
 
-export default function DashboardScreen({ navigation }) {
+export default function HomeScreen({ navigation }) {
 
   useEffect(() => {
     Keyboard.dismiss();

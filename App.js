@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 
 // Import des Screens pour la nav
 import LoginScreen from './screens/LoginScreen';
-import DashboardScreen from './screens/DashboardScreen';
+import HomeScreen from './screens/HomeScreen';
 import ExploreScreen from './screens/ExploreScreen';
 import CreateScreen from './screens/CreateScreen';
 import EventScreen from './screens/EventScreen';
@@ -82,7 +82,7 @@ function TabNavigator() {
     })}
 
     >
-      <Tab.Screen name="Accueil" component={DashboardScreen} />
+      <Tab.Screen name="Accueil" component={HomeScreen} />
       <Tab.Screen name="Explorer" component={ExploreScreen} />
       <Tab.Screen name="Créer" component={CreateScreen} />
       <Tab.Screen name="Evènements" component={EventScreen} />
@@ -118,6 +118,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
