@@ -1,7 +1,3 @@
-// LoginScreen
-
-// remplacer le goback par un useState qui renvoie vers le default de LoginScreen
-
 import React, { useState } from "react";
 
 // import du style global commun avec SignInScreen
@@ -26,6 +22,7 @@ import {
 
 import { useDispatch } from "react-redux";
 import { login } from "../../reducers/user";
+import { useNavigation } from "@react-navigation/native"; // Import de useNavigation
 
 // importer les composants pour la connexion
 import SignIn from './SignIn';
@@ -33,20 +30,18 @@ import SignIn from './SignIn';
 // import du fond plein gradient
 import GradientBackground from '../../styles/gradientBackground';
 
-
 // Regex pour valider les emails et mots de passe
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const usernameRegex = /^[a-zA-Z0-9]{3,}$/;
-// Uniquement des carctères alphanumériques et long d'au moins 3 carctères
+const usernameRegex = /^[a-zA-Z0-9]{3,}$/; // Uniquement des caractères alphanumériques et long d'au moins 3 caractères
 
-const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-// Rentrer au moins une lettre, un chiffre et un caractère spécial et 8 caractères mini.
+const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/; // Validation du mot de passe avec lettre, chiffre et caractère spécial
 
 // Adresse du backend via la variable d'environnement
 const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
 
-export default function SignUp ({ navigation }) {
+export default function SignUp() {
+  const navigation = useNavigation(); // Utilisation du hook useNavigation
 
   const [showSignIn, setShowSignIn] = useState(false);
 
@@ -107,7 +102,7 @@ export default function SignUp ({ navigation }) {
   const handleGoSignIn = () => setShowSignIn(true);
 
   const handleSubmitSignUp = () => {
-    // Early return si les champs, username, email mot de passes ne sont pas remplies correctement
+    // Early return si les champs, username, email mot de passes ne sont pas remplis correctement
     if (!validateFields()) {
       console.log("Validation échouée");
       return;
@@ -119,9 +114,7 @@ export default function SignUp ({ navigation }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, username, password }),
     })
-      .then((response) => {
-        return response.json();
-      })
+      .then((response) => response.json())
       .then((data) => {
         console.log("Données retournées par le backend:", data);
 
@@ -136,7 +129,7 @@ export default function SignUp ({ navigation }) {
             })
           );
           console.log("Inscription réussie");
-          navigation.navigate("TabNavigator", { screen: "Home" });
+          navigation.navigate('TabNavigator', { screen: 'Accueil' });
         } else {
           console.log('Erreur lors de l"inscription:', data.error);
         }
@@ -148,96 +141,96 @@ export default function SignUp ({ navigation }) {
     <SignIn />
   ) : (
     <GradientBackground>
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
 
-        <KeyboardAvoidingView
-          style={signPageStyles.container}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
-          <Image style={signPageStyles.logo} source={require("../../assets/LogoBc.png")} />
-          <View>
-            <Text style={signPageStyles.title}>BookConnect</Text>
-          </View>
+          <KeyboardAvoidingView
+            style={signPageStyles.container}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          >
+            <Image style={signPageStyles.logo} source={require("../../assets/LogoBc.png")} />
+            <View>
+              <Text style={signPageStyles.title}>BookConnect</Text>
+            </View>
 
-          <View style={signPageStyles.separator} />
+            <View style={signPageStyles.separator} />
 
-          <View style={signPageStyles.inputContainer}>
-            <TextInput
-              placeholder="Nom d'utilisateur"
-              onChangeText={(value) => setUsername(value)}
-              value={username}
-              style={signPageStyles.input}
-            />
-            {usernameError ? (
-              <Text style={signPageStyles.errorText}>{usernameError}</Text>
-            ) : null}
-            <TextInput
-              placeholder="E-mail"
-              autoCapitalize="none"
-              keyboardType="email-address"
-              autoComplete="email"
-              textContentType="emailAddress"
-              onChangeText={(value) => setEmail(value)}
-              value={email}
-              style={signPageStyles.input}
-            />
-            {emailError ? <Text style={signPageStyles.errorText}>{emailError}</Text> : null}
-
-            <View style={signPageStyles.inputPwd}>
+            <View style={signPageStyles.inputContainer}>
               <TextInput
-                placeholder="Mot de passe"
-                secureTextEntry={!showPassword}
-                onChangeText={(value) => setPassword(value)}
-                value={password}
+                placeholder="Nom d'utilisateur"
+                onChangeText={(value) => setUsername(value)}
+                value={username}
                 style={signPageStyles.input}
               />
-              <TouchableOpacity
-                style={signPageStyles.iconContainer}
-                onPress={toggleShowPassword}
-              >
-                <Icon
-                  name={showPassword ? 'eye' : 'eye-slash'}
-                  size={24}
-                  color={showPassword ? 'rgba(55, 27, 12, 0.8)' : '#D3D3D3'}
+              {usernameError ? (
+                <Text style={signPageStyles.errorText}>{usernameError}</Text>
+              ) : null}
+              <TextInput
+                placeholder="E-mail"
+                autoCapitalize="none"
+                keyboardType="email-address"
+                autoComplete="email"
+                textContentType="emailAddress"
+                onChangeText={(value) => setEmail(value)}
+                value={email}
+                style={signPageStyles.input}
+              />
+              {emailError ? <Text style={signPageStyles.errorText}>{emailError}</Text> : null}
+
+              <View style={signPageStyles.inputPwd}>
+                <TextInput
+                  placeholder="Mot de passe"
+                  secureTextEntry={!showPassword}
+                  onChangeText={(value) => setPassword(value)}
+                  value={password}
+                  style={signPageStyles.input}
                 />
-              </TouchableOpacity>
-            </View>
-
-            {passwordError ? (
-              <Text style={signPageStyles.errorText}>{passwordError}</Text>
-            ) : null}
-
-            <View style={signPageStyles.buttonContainer}>
-              <LinearGradient
-                colors={['rgba(21, 187, 216, 0.7)', 'rgba(85, 0, 255, 0.7)']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 0, y: 0.7 }}
-                style={signPageStyles.gradientButton}
-                activeOpacity={0.8}
-              >
                 <TouchableOpacity
-                  onPress={() => handleSubmitSignUp()}
-                  style={signPageStyles.button}
+                  style={signPageStyles.iconContainer}
+                  onPress={toggleShowPassword}
                 >
-                  <Text style={signPageStyles.textButton}>S'inscrire</Text>
+                  <Icon
+                    name={showPassword ? 'eye' : 'eye-slash'}
+                    size={24}
+                    color={showPassword ? 'rgba(55, 27, 12, 0.8)' : '#D3D3D3'}
+                  />
                 </TouchableOpacity>
-              </LinearGradient>
-            </View>
+              </View>
 
-            <View style={signPageStyles.returnContainer}>
-              <TouchableOpacity
-                onPress={handleGoSignIn}
-                style={signPageStyles.returnButton}
-                activeOpacity={0.8}
-              >
-                <Text style={signPageStyles.textReturn}>J'ai déjà un compte</Text>
-              </TouchableOpacity>
+              {passwordError ? (
+                <Text style={signPageStyles.errorText}>{passwordError}</Text>
+              ) : null}
+
+              <View style={signPageStyles.buttonContainer}>
+                <LinearGradient
+                  colors={['rgba(21, 187, 216, 0.7)', 'rgba(85, 0, 255, 0.7)']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 0, y: 0.7 }}
+                  style={signPageStyles.gradientButton}
+                  activeOpacity={0.8}
+                >
+                  <TouchableOpacity
+                    onPress={() => handleSubmitSignUp()}
+                    style={signPageStyles.button}
+                  >
+                    <Text style={signPageStyles.textButton}>S'inscrire</Text>
+                  </TouchableOpacity>
+                </LinearGradient>
+              </View>
+
+              <View style={signPageStyles.returnContainer}>
+                <TouchableOpacity
+                  onPress={handleGoSignIn}
+                  style={signPageStyles.returnButton}
+                  activeOpacity={0.8}
+                >
+                  <Text style={signPageStyles.textReturn}>J'ai déjà un compte</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </KeyboardAvoidingView>
-      </View>
-    </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
+        </View>
+      </TouchableWithoutFeedback>
     </GradientBackground>
   );
 };

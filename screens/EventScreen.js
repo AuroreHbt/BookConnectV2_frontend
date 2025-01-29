@@ -1,8 +1,12 @@
-// Accès à l'agenda personnel
+import React from 'react';
+import { View, Text } from 'react-native';
 
-// Events créés => CreatedEvents
-// Events sauvegardés => SavedEvents => POUR PARTICIPER
-// Likes et favoris => LikedEvents
+const EventScreen = () => {
+  return (
+    <View>
+      <Text>Bienvenue sur la page des événements</Text>
+    </View>
+  );
+};
 
-
-// ==> EventScreen
+export default EventScreen;
