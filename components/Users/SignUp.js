@@ -136,11 +136,7 @@ export default function SignUp ({ navigation }) {
             })
           );
           console.log("Inscription réussie");
-<<<<<<< HEAD
-          navigation.navigate("TabNavigator", { screen: "DashboardScreen" });
-=======
           navigation.navigate("TabNavigator", { screen: "Home" });
->>>>>>> 0b27d7ae320027f622fad20c45ba4d4e7ab6d7e7
         } else {
           console.log('Erreur lors de l"inscription:', data.error);
         }

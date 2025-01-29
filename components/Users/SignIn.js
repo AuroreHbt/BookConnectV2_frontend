@@ -18,6 +18,7 @@ import {
 
 import { useDispatch } from "react-redux";
 import { login } from "../../reducers/user";
+import { useNavigation } from "@react-navigation/native"; // Import de useNavigation
 import SignUp from "./SignUp";
 
 // import du fond plein gradient
@@ -31,6 +32,7 @@ const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
+  const navigation = useNavigation(); // Initialisation de navigation
 
   // État pour gérer l'affichage de SignIn ou SignUp
   const [currentComponent, setCurrentComponent] = useState("signin");
@@ -74,30 +76,22 @@ export default function LoginScreen() {
   };
 
   const handleSubmitSignIn = () => {
-    // Early return si les champs, email et mot de passes ne sont pas remplies correctement
     if (!validateFields()) {
       console.log("Validation échouée");
       return;
     }
- 
-    // Fetch de la route post du backend pour la connexion
+
     fetch(`${BACKEND_ADDRESS}/users/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password, username }),
     })
-      .then((response) => {
-        return response.json();
-      })
+      .then((response) => response.json())
       .then((data) => {
         console.log("Données retournées par le backend:", data);
-        console.log('data.result: ', data.result);
- 
- 
+
         if (data.result) {
-          // Si connexion réussie, redirige vers le dashboard
           dispatch(
-            data &&
             login({
               username: data.username,
               email: data.email,
@@ -108,7 +102,7 @@ export default function LoginScreen() {
           console.log("Connexion réussie");
           setPassword("");
           setUsername("");
-          navigation.navigate("TabNavigator", { screen: "HomeScreen" });
+          navigation.navigate("TabNavigator"); // Navigation corrigée
         } else {
           console.log("Erreur lors de la connexion:", data.error);
           Alert.alert("Erreur", data.error);

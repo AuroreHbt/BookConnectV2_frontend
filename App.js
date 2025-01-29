@@ -1,11 +1,9 @@
-import React from 'react';
-
+import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-// Import des Screens pour la nav
-import LoginScreen from './screens/LoginScreen';
-import HomeScreen from './screens/HomeScreen';
-import HomeScreen from './screens/HomeScreen';
+// Import des Screens pour la navigation
+import LoginScreen from './screens/LoginScreen'; // Composant
+import HomeScreen from './screens/HomeScreen'; // Screen
 import ExploreScreen from './screens/ExploreScreen';
 import CreateScreen from './screens/CreateScreen';
 import EventScreen from './screens/EventScreen';
@@ -33,7 +31,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { useFonts } from 'expo-font';
 // import pour empecher le rendu de l'appli tant que la font n'est pas chargée et prête
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+
 
 SplashScreen.preventAutoHideAsync();
 
@@ -45,87 +43,60 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 
+// **STACK POUR HOME**
 function HomeStackNavigator() {
   return (
     <HomeStack.Navigator screenOptions={{ headerShown: false }}>
       <HomeStack.Screen name="Profile" component={HomeScreen} />
-      <HomeStack.Screen
-        name="MyCurrentReadings"
-        component={MyCurrentReadingsScreen}
-      />
-      <HomeStack.Screen
-        name="MyEvents"
-        component={MyEventsScreen}
-      />
+      {/* Remplace tes autres screens de home ici si tu veux */}
     </HomeStack.Navigator>
   )
 }
 
+// **TAB NAVIGATOR**
 function TabNavigator() {
   return (
     <Tab.Navigator screenOptions={({ route }) => ({
-
       tabBarIcon: ({ color, size }) => {
         let iconName = '';
-
-        if (route.name === 'Accueil') {
-          iconName = 'home';
-        } else if (route.name === 'Explorer') {
-          iconName = 'search'
-        } else if (route.name === 'Créer') {
-          iconName = 'plus'
-        } else if (route.name === 'Evènements') {
-          iconName = 'calendar-o';
-        } else if (route.name === 'Histoires') {
-          iconName = 'book'
-        } else if (route.name === 'Profil') {
-          iconName = 'user-circle-o'
-        } else if (route.name === 'Achats') {
-          iconName = 'shopping-basket'
-        }
-
+        if (route.name === 'Accueil') iconName = 'home';
+        else if (route.name === 'Explorer') iconName = 'search';
+        else if (route.name === 'Créer') iconName = 'plus';
+        else if (route.name === 'Evènements') iconName = 'calendar-o';
+        else if (route.name === 'Histoires') iconName = 'book';
+        else if (route.name === 'Achats') iconName = 'shopping-basket';
         return <FontAwesome name={iconName} size={size} color={color} />;
       },
-
       headerShown: false,
       tabBarActiveTintColor: 'rgba(85, 0, 255, 0.8)',
       tabBarInactiveTintColor: 'rgba(85, 0, 255, 0.3)',
       tabBarStyle: { position: 'absolute' },
-
-      tabBarBackground: () => (
-        <View style={styles.container} />
-      ),
-
-    })}
-
-    >
-      <Tab.Screen name="Home" component={HomeScreen} />
+      tabBarBackground: () => <View style={styles.container} />,
+    })}>
+      <Tab.Screen name="Accueil" component={HomeStackNavigator} />
       <Tab.Screen name="Explorer" component={ExploreScreen} />
       <Tab.Screen name="Créer" component={CreateScreen} />
       <Tab.Screen name="Evènements" component={EventScreen} />
       <Tab.Screen name="Histoires" component={LibraryScreen} />
     </Tab.Navigator>
   );
-};
+}
 
-
+// **APP PRINCIPALE**
 export default function App() {
-
-  // utilisation google fonts
   const [fontsLoaded, error] = useFonts({
-    'Pacifico-Regular': require('./assets/fonts/Pacifico-Regular.ttf'), // fontWeight: '400',
-    'Poppins-Medium': require('./assets/fonts/Poppins-Medium.ttf'), // fontWeight: '500',
-    'Poppins-Regular': require('./assets/fonts/Poppins-Regular.ttf'), // fontWeight: '400',
-    'Poppins-Light': require('./assets/fonts/Poppins-Light.ttf'), // fontWeight: '300',
+    'Pacifico-Regular': require('./assets/fonts/Pacifico-Regular.ttf'),
+    'Poppins-Medium': require('./assets/fonts/Poppins-Medium.ttf'),
+    'Poppins-Regular': require('./assets/fonts/Poppins-Regular.ttf'),
+    'Poppins-Light': require('./assets/fonts/Poppins-Light.ttf'),
   });
 
   useEffect(() => {
     if (fontsLoaded || error) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, error]); // useEffect se lancera à l’initialisation et à chaque changement de l’état fontsLoaded.
+  }, [fontsLoaded, error]);
 
-  // vérification du chargement de la font
   if (!fontsLoaded && !error) {
     return null;
   }
@@ -134,16 +105,15 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+          {/* Ecran de login */}
           <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Home" component={HomeScreen} />
+          {/* Si SignUp n'est pas un écran, on ne l'ajoute pas ici. Gère ça directement dans LoginScreen ou un autre endroit si nécessaire */}
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
   );
-};
-
+}
 
 const styles = StyleSheet.create({
   container: {
