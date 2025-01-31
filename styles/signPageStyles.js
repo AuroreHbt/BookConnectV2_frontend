@@ -22,8 +22,6 @@ export const signPageStyles = StyleSheet.create({
         position: 'absolute',
         alignItems: 'center',
         justifyContent: 'center',
-        top: 0,
-        left: 0,
     },
 
     logo: {
@@ -48,41 +46,47 @@ export const signPageStyles = StyleSheet.create({
         marginTop: 10,
     },
 
-    inputPwd: {
-        flexDirection: 'row',
-        justifyContent: "center",
-        alignItems: 'center',
-        width: '100%' // 100% de la largeur de inputContainer
-    },
-
-    iconContainer: {
-        position: 'absolute', // position absolue pour superposer l'icone sur l'input
-        justifyContent: 'center',
-        top: 0,
-        bottom: 0,
-        right: 60,
-    },
-
     inputContainer: {
         alignItems: 'center',
-        width: '90%'
+        width: '80%', // Ajustement à 80%
     },
 
-    input: {
-        backgroundColor: "#EEECE8",
+    inputPwd: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%', // Même largeur que les autres inputs
+        backgroundColor: '#EEECE8',
         paddingVertical: 15,
         borderRadius: 5,
         borderBottomWidth: 0.7,
-        borderBottomColor: "rgba(55, 27, 12, 0.50)",
-        width: "75%",
+        borderBottomColor: 'rgba(55, 27, 12, 0.50)',
         paddingLeft: 15,
-        margin: 10,
+        marginVertical: 10,
+    },
+
+    iconContainer: {
+        position: 'absolute',
+        justifyContent: 'center',
+        top: 0,
+        bottom: 0,
+        right: 20, // Ajustement pour bien aligner l'icône avec l'input
+    },
+
+    input: {
+        backgroundColor: '#EEECE8',
+        paddingVertical: 15,
+        borderRadius: 5,
+        borderBottomWidth: 0.7,
+        borderBottomColor: 'rgba(55, 27, 12, 0.50)',
+        width: '100%',
+        paddingLeft: 15,
+        marginVertical: 10, // Ajout de marge homogène
     },
 
     buttonContainer: {
         marginTop: 15,
         marginBottom: 10,
-        width: '75%',
+        width: '80%', // Ajustement à 80%
         alignItems: 'center',
     },
 
