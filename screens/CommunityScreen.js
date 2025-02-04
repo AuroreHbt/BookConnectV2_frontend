@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const ShopScreen = () => {
+const CommunityScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>Bienvenue sur la page des Achats</Text>
+      <Text>Écran Communauté</Text>
     </View>
   );
 };
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ShopScreen;
+export default CommunityScreen;  // Vérifie que c'est bien un export par défaut
