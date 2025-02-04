@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useEffect } from "react";
+import { StyleSheet, View } from "react-native";
 
 // Import des Screens pour la navigation
 import LoginScreen from './screens/LoginScreen'; 
@@ -8,25 +8,31 @@ import EventScreen from './screens/EventScreen';
 import LibraryScreen from './screens/LibraryScreen';
 import ShopScreen from './screens/ShopScreen';
 import CommunityScreen from './screens/CommunityScreen'; 
+import SearchScreen from './components/Stories/SearchScreen';
 
 // Imports pour la nested navigation (stack + tab)
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-// Import pour les icônes (Ionicons)
-import { Ionicons } from '@expo/vector-icons';
+// Import du module pour animer les icônes (Ionicons)
+import AnimatedIcon from "./modules/AnimatedIcon";
+
+
+// import pour appliquer un gradient sur les icones actives
+import { LinearGradient } from "expo-linear-gradient";
 
 // Imports pour configurer le store redux
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import user from './reducers/user';
-import story from './reducers/story';
-import event from './reducers/event';
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import user from "./reducers/user";
+import story from "./reducers/story";
+import event from "./reducers/event";
 
 // Import pour charger la police
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
+import { useFonts } from "expo-font";
+// https://docs.expo.dev/versions/latest/sdk/splash-screen/
+import * as SplashScreen from "expo-splash-screen";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -39,27 +45,47 @@ const Tab = createBottomTabNavigator();
 
 // **TAB NAVIGATOR**
 function TabNavigator() {
+  const ActiveColor = ({ size }) => (
+    <LinearGradient
+      colors={["rgba(21, 187, 216, 0.7)", "rgba(85, 0, 255, 1)"]}
+      start={{ x: 0, y: 1 }}
+      end={{ x: 1, y: 0 }}
+      style={{ width: size, height: size }}
+    />
+  );
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName = '';
-          if (route.name === 'Accueil') iconName = 'home-outline'; // Maison
-          else if (route.name === 'Evènements') iconName = 'calendar-outline'; // Calendrier
-          else if (route.name === 'Histoires') iconName = 'book-outline'; // Livre
-          else if (route.name === 'Achats') iconName = 'cart-outline'; // Panier
-          else if (route.name === 'Communauté') iconName = 'people-outline'; // Trois bonhommes
+        tabBarIcon: ({ focused, size }) => {
+          let iconName = "";
 
-          // Icône avec couleur directement appliquée sur les traits (sans gradient)
+          if (route.name === "Accueil") {
+            iconName = focused ? "home" : "home-outline"; // Maison pleine si active, outline si inactive
+          } else if (route.name === "Evènements") {
+            iconName = focused ? "calendar-sharp" : "calendar-outline"; // Calendrier plein si active, outline si inactive
+          } else if (route.name === "Histoires") {
+            iconName = focused ? "library" : "library-outline"; // livres ou livre seul : book ou book-outline
+          } else if (route.name === "Achats") {
+            iconName = focused ? "cart" : "cart-outline"; // Caddie plein si active, outline si inactive
+          } else if (route.name === "Communauté") {
+            iconName = focused ? "people" : "people-outline"; // Deux persos pleins si active, outline si inactive
+          }
+
+          // Icônes de la bibliotheque Ionicons appelée via le module AnimatedIcon
           return (
-            <Ionicons name={iconName} size={size * 1} color={color} />
+            <AnimatedIcon
+              focused={focused}
+              iconName={iconName} // props "iconName" provenant du module "AnimatedIcon" (= composant). Si on laisse "name", les icones ne sont pas affichées car la props est incorrecte.
+              size={size * 1}
+              ActiveColor={ActiveColor} // Passe le composant ActiveColor, pas le résultat de son appel
+              inactiveColor="rgba(85, 0, 255, 1)" // remplace la propriété tabBarInactiveTintColor: "rgba(85, 0, 255, 1)"
+            />
           );
         },
-        tabBarLabel: () => null, // Suppression des sous-titres
         headerShown: false,
-        tabBarActiveTintColor: 'rgba(21, 187, 216, 1)',
-        tabBarInactiveTintColor: 'rgba(85, 0, 255, 1)',
-        tabBarStyle: { position: 'absolute' },
+        tabBarStyle: { position: "absolute" },
+        tabBarLabel: () => null, // Suppression des libellés sous les icônes
         tabBarBackground: () => <View style={styles.container} />,
       })}
     >
@@ -75,10 +101,10 @@ function TabNavigator() {
 // **APP PRINCIPALE**
 export default function App() {
   const [fontsLoaded, error] = useFonts({
-    'Pacifico-Regular': require('./assets/fonts/Pacifico-Regular.ttf'),
-    'Poppins-Medium': require('./assets/fonts/Poppins-Medium.ttf'),
-    'Poppins-Regular': require('./assets/fonts/Poppins-Regular.ttf'),
-    'Poppins-Light': require('./assets/fonts/Poppins-Light.ttf'),
+    "Pacifico-Regular": require("./assets/fonts/Pacifico-Regular.ttf"),
+    "Poppins-Medium": require("./assets/fonts/Poppins-Medium.ttf"),
+    "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
+    "Poppins-Light": require("./assets/fonts/Poppins-Light.ttf"),
   });
 
   useEffect(() => {
@@ -97,6 +123,7 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="SearchScreen" component={SearchScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
@@ -106,8 +133,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 0.95,
-    backgroundColor: 'rgba(238, 236, 232, 1)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "rgba(255, 255, 255, 1)", // white
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
