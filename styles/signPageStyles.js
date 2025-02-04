@@ -52,25 +52,26 @@ export const signPageStyles = StyleSheet.create({
         width: inputWidth, // largeur fixe pour le container
         alignItems: 'center',
         paddingTop: 50,
+        marginBottom: 20,
     },
 
     inputPwd: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: inputWidth, // même largeur que les autres inputs
+        width: inputWidth,
         backgroundColor: 'transparent',
         paddingVertical: 15,
         borderRadius: 5,
         borderBottomWidth: 1,
         borderBottomColor: '#5500FF',
-        paddingLeft: 15,
         marginVertical: 10,
-    },
+      },
 
     inputPwdText: {
         flex: 1, // Permet au champ texte d'occuper tout l'espace restant
-        color: '#FFFFFF',
-        fontSize: 16,
+        paddingHorizontal: 10,
+        fontFamily: 'Poppins-Regular',
+        fontSize: 14,
     },
 
     iconContainer: {
@@ -84,14 +85,15 @@ export const signPageStyles = StyleSheet.create({
         borderRadius: 5,
         borderBottomWidth: 1,
         borderBottomColor: '#5500FF',
-        width: inputWidth, // largeur fixe pour l'input
-        paddingHorizontal: 15,
+        width: inputWidth,
+        paddingHorizontal: 10,
         marginVertical: 10,
-        color: '#FFFFFF',
-    },
+        fontFamily: 'Poppins-Regular',
+        fontSize: 14,
+      },
 
     buttonContainer: {
-        marginTop: 35,
+        marginTop: 20,
         marginBottom: 10,
         width: inputWidth,
         alignItems: 'center',
