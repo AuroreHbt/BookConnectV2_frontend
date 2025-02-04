@@ -30,6 +30,10 @@ import SignIn from './SignIn';
 // import du fond plein gradient
 import GradientBackground from '../../styles/gradientBackground';
 
+// import pour le bouton gradient vide
+import GradientButton from '../../styles/GradientButton';
+
+
 // Regex pour valider les emails et mots de passe
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -152,8 +156,9 @@ export default function SignUp() {
             <View>
               <Text style={signPageStyles.title}>BookConnect</Text>
             </View>
-
-            <View style={signPageStyles.separator} />
+            <View>
+              <Text style={signPageStyles.slogan}>Share, discover, write</Text>
+            </View>
 
             <View style={signPageStyles.inputContainer}>
               <TextInput
@@ -183,7 +188,7 @@ export default function SignUp() {
                   secureTextEntry={!showPassword}
                   onChangeText={(value) => setPassword(value)}
                   value={password}
-                  style={signPageStyles.input}
+                  style={signPageStyles.inputPwdText}
                 />
                 <TouchableOpacity
                   style={signPageStyles.iconContainer}
@@ -201,22 +206,9 @@ export default function SignUp() {
                 <Text style={signPageStyles.errorText}>{passwordError}</Text>
               ) : null}
 
-              <View style={signPageStyles.buttonContainer}>
-                <LinearGradient
-                  colors={['rgba(21, 187, 216, 0.7)', 'rgba(85, 0, 255, 0.7)']}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 0, y: 0.7 }}
-                  style={signPageStyles.gradientButton}
-                  activeOpacity={0.8}
-                >
-                  <TouchableOpacity
-                    onPress={() => handleSubmitSignUp()}
-                    style={signPageStyles.button}
-                  >
-                    <Text style={signPageStyles.textButton}>S'inscrire</Text>
-                  </TouchableOpacity>
-                </LinearGradient>
-              </View>
+                <View>
+                  <GradientButton onPress={handleSubmitSignUp} title="S'inscrire" />
+                </View>
 
               <View style={signPageStyles.returnContainer}>
                 <TouchableOpacity
