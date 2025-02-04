@@ -2,17 +2,19 @@
 // SignUpScreen
 // SignIn Screen
 
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 
+const screenWidth = Dimensions.get('window').width;
+const inputWidth = screenWidth * 0.6; // 80% de la largeur de l'écran
 
 export const signPageStyles = StyleSheet.create({
 
     container: {
         flex: 1,
         width: '100%',
-        height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
+        paddingHorizontal: 10,
     },
 
     gradient: {
@@ -22,74 +24,85 @@ export const signPageStyles = StyleSheet.create({
         position: 'absolute',
         alignItems: 'center',
         justifyContent: 'center',
-        top: 0,
-        left: 0,
     },
 
     logo: {
-        width: 150, // taille en pixels
-        height: 150,
+        width: 100, // taille en pixels
+        height: 100,
         resizeMode: 'contain', // éviter la déformation
     },
 
     title: {
-        fontFamily: 'Pacifico-Regular',
-        fontWeight: '400',
-        fontSize: 32,
+        fontFamily: 'Poppins-Medium',
+        fontWeight: '600',
+        fontSize: 36,
         marginBottom: 5,
-        color: 'rgba(55, 27, 12, 0.9)', // #371B0C
+        color: '#7325A8',
     },
 
-    separator: {
-        width: '25%',
-        borderColor: 'rgba(55, 27, 12, 0.98)', // #371B0C
-        borderTopWidth: 2.5,
-        marginBottom: 35,
-        marginTop: 10,
+    slogan: {
+        fontFamily: 'Poppins-Medium',
+        fontWeight: '400',
+        fontSize: 22,
+        marginBottom: 5,
+        color: '#7325A8',
+    },
+
+    inputContainer: {
+        width: inputWidth, // largeur fixe pour le container
+        alignItems: 'center',
+        paddingTop: 50,
     },
 
     inputPwd: {
         flexDirection: 'row',
-        justifyContent: "center",
         alignItems: 'center',
-        width: '100%' // 100% de la largeur de inputContainer
+        width: inputWidth, // même largeur que les autres inputs
+        backgroundColor: 'transparent',
+        paddingVertical: 15,
+        borderRadius: 5,
+        borderBottomWidth: 1,
+        borderBottomColor: '#5500FF',
+        paddingLeft: 15,
+        marginVertical: 10,
+    },
+
+    inputPwdText: {
+        flex: 1, // Permet au champ texte d'occuper tout l'espace restant
+        color: '#FFFFFF',
+        fontSize: 16,
     },
 
     iconContainer: {
-        position: 'absolute', // position absolue pour superposer l'icone sur l'input
-        justifyContent: 'center',
-        top: 0,
-        bottom: 0,
-        right: 60,
-    },
-
-    inputContainer: {
-        alignItems: 'center',
-        width: '90%'
+        position: 'absolute',
+        right: 15, // Ajustement pour bien aligner l'icône
     },
 
     input: {
-        backgroundColor: "#EEECE8",
+        backgroundColor: 'transparent',
         paddingVertical: 15,
         borderRadius: 5,
-        borderBottomWidth: 0.7,
-        borderBottomColor: "rgba(55, 27, 12, 0.50)",
-        width: "75%",
-        paddingLeft: 15,
-        margin: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#5500FF',
+        width: inputWidth, // largeur fixe pour l'input
+        paddingHorizontal: 15,
+        marginVertical: 10,
+        color: '#FFFFFF',
     },
 
     buttonContainer: {
-        marginTop: 15,
+        marginTop: 35,
         marginBottom: 10,
-        width: '75%',
+        width: inputWidth,
         alignItems: 'center',
+        paddingBottom: 15,
     },
 
     gradientButton: {
+        padding: 12,
+        width: inputWidth/1.3,
+        alignItems: 'center',
         borderRadius: 15,
-        marginVertical: 10,
-        width: '65%',
     },
 
     button: {
@@ -102,24 +115,24 @@ export const signPageStyles = StyleSheet.create({
         fontFamily: 'sans-serif',
         fontWeight: 'bold',
         fontSize: 18,
-        color: 'white', // 'rgba(55, 27, 12, 0.8)', // #371B0C
+        color: 'white'
     },
 
     textReturn: {
         fontFamily: 'Poppins-Regular',
         fontWeight: '300',
-        fontSize: 16,
+        fontSize: 12,
         borderBottomWidth: 1,
-        borderBottomColor: "rgba(55, 27, 12, 0.80)",
-        color: "rgba(55, 27, 12, 0.80)",
+        borderBottomColor: "#5500FF",
+        color: "#5500FF",
     },
 
     errorText: {
         textAlign: 'left',
-        fontFamily: 'sans-serif',
-        fontSize: 16,
+        fontSize: 14,
         color: 'red',
-        width: '75%',
+        width: '100%', // Assurer l'alignement avec les inputs
+        paddingLeft: 10, // Ajout d'un padding pour éviter le chevauchement
     },
 
 });
