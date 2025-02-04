@@ -2,7 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default function LibraryScreen({ navigation }) {
+import SearchScreen from '../components/Stories/SearchScreen'
+
+export default function LibraryScreen() {
+
+    const [currentComponent, setCurrentComponent] = useState("library")
+
+    if (currentComponent === "search") {
+        return <SearchScreen onPress={() => setCurrentComponent("library")} />;
+    }
+
     return (
          <KeyboardAvoidingView
               behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -14,7 +23,7 @@ export default function LibraryScreen({ navigation }) {
                 </View>
                 <TouchableOpacity
                     style={styles.searchContainer}
-                    onPress={() => navigation.navigate('SearchScreen')}
+                    onPress={() => setCurrentComponent("search")}
                 >
                     <Icon name="search" size={25} color="#000" style={styles.searchIcon} />
                     <Text style={styles.searchPlaceholder}>Rechercher une histoire...</Text>
