@@ -1,18 +1,28 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+<<<<<<< HEAD
+import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import FindEvents from '../components/Events/FindEvents';
 
-const EventScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text>Bienvenue sur la page des événements</Text>
-    </View>
-  );
-};
+export default function EventScreen() {
+    return (
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.container}
+        >
+            <FindEvents />
+        </KeyboardAvoidingView>
+    );
+}
+=======
+import { View, Text, StyleSheet } from 'react-native';
+>>>>>>> 64f558b4d75c3dec70f98c332273543be66e68a8
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+    container: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 });
-export default EventScreen;
