@@ -1,120 +1,129 @@
-// Accès à la bibliothèque personnelle
-
-// Stories créées => CreatedStories
-// Contenus sauvegardés => SavedStories ? => fav ?
-// Likes et favoris => LikedStories
-
-// pour la lecture : ReadStories ou DisplayStories
-
-// A voir plus tard
-// Lectures en cours => ReadingStories
-
-
-// ==> StoryScreen à retravailler en important les Components nécessaires
-
-import React from 'react';
-
-import { bottomTabStyles } from "../styles/bottomTabStyles";
-
-import {
-    View,
-    Text,
-    TouchableOpacity,
-    KeyboardAvoidingView,
-    Platform,
-    Image
-} from 'react-native'
-
-import { LinearGradient } from 'expo-linear-gradient';
-
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function LibraryScreen({ navigation }) {
-
-    // Navigation par lien définie dans App.js
-    const handleNewStory = () => {
-        navigation.navigate('NewStory')
-    };
-
-    const handleMyPublishedStories = () => {
-        navigation.navigate('MyPublishedStories')
-    };
-
-    const handleMyCurrentReadings = () => {
-        navigation.navigate('MyCurrentReadings')
-    };
-
-    const handleFindStories = () => {
-        navigation.navigate('FindStories')
-    };
-
-
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={bottomTabStyles.container}
-        >
-            <Image source={require('../assets/LogoBc.png')} style={bottomTabStyles.logo} />
-
-            <View>
-                <Text style={bottomTabStyles.title}>Ecrire et partager</Text>
-            </View>
-
-            <View style={bottomTabStyles.buttonContainer}>
-                <LinearGradient
-                    colors={['rgba(255, 123, 0, 0.9)', 'rgba(216, 72, 21, 1)']}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 0, y: 0.7 }}
-                    style={bottomTabStyles.gradientButton}
-                    activeOpacity={0.8}
+         <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
+            <View style={styles.container}>
+                <View style={styles.headerContainer}>
+                    <Icon name="user-circle" size={45} color="#b4b4b4" style={styles.icon} />
+                    <Text style={styles.title}>Histoire</Text>
+                </View>
+                <TouchableOpacity
+                    style={styles.searchContainer}
+                    onPress={() => navigation.navigate('SearchScreen')}
                 >
-                    <TouchableOpacity
-                        onPress={handleNewStory}
-                        style={bottomTabStyles.button}
-                    >
-                        <Text style={bottomTabStyles.textButton}>Je publie mon histoire</Text>
+                    <Icon name="search" size={25} color="#000" style={styles.searchIcon} />
+                    <Text style={styles.searchPlaceholder}>Rechercher une histoire...</Text>
+                </TouchableOpacity>
+
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.button}>
+                        <Text style={styles.buttonText}>Publier mon histoire</Text>
                     </TouchableOpacity>
-                </LinearGradient>
-            </View>
-
-            <View style={bottomTabStyles.buttonContainer}>
-                <LinearGradient
-                    colors={['rgba(255, 123, 0, 0.9)', 'rgba(216, 72, 21, 1)']}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 0, y: 0.7 }}
-                    style={bottomTabStyles.gradientButton}
-                    activeOpacity={0.8}
-                >
-                    <TouchableOpacity
-                        onPress={handleMyPublishedStories}
-                        style={bottomTabStyles.button}
-                    >
-                        <Text style={bottomTabStyles.textButton}>Mes histoires publiées</Text>
+                    <TouchableOpacity style={styles.button}>
+                        <Text style={styles.buttonText}>Découvrir une histoire</Text>
                     </TouchableOpacity>
-                </LinearGradient>
+                </View>
+
+                <Text style={styles.sectionTitle}>Parcourir les histoires</Text>
+
+                <View style={styles.storyButtonGrid}>
+                    {['Essai', 'Roman', 'Poésie', 'Fantasy', 'Nouvelle', 'Science-fiction', 'Adulte', 'WIP'].map(
+                        (name, index) => (
+                            <TouchableOpacity key={index} style={styles.storyButton}>
+                                <Text style={styles.storyButtonText}>{name}</Text>
+                            </TouchableOpacity>
+                        )
+                    )}
+                </View>
             </View>
-
-            <View>
-                <Text style={bottomTabStyles.title}>Découvrir</Text>
-            </View>
-
-
-            <View style={bottomTabStyles.buttonContainer}>
-                <LinearGradient
-                    colors={['rgba(255, 123, 0, 0.9)', 'rgba(216, 72, 21, 1)']}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 0, y: 0.7 }}
-                    style={bottomTabStyles.gradientButton}
-                    activeOpacity={0.8}
-                >
-                    <TouchableOpacity
-                        onPress={handleFindStories}
-                        style={bottomTabStyles.button}
-                    >
-                        <Text style={bottomTabStyles.textButton}>Découvrir des histoires</Text>
-                    </TouchableOpacity>
-                </LinearGradient>
-            </View>
-
         </KeyboardAvoidingView>
     );
-};
+}
+
+const styles = StyleSheet.create({
+    container: {
+        padding: 20,
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 20,
+        marginBottom: 20,
+    },
+    icon: {
+        marginRight: 30,
+    },
+    title: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: '#4A4A4A',
+    },
+    searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: 'black',
+        borderRadius: 5,
+        padding: 10,
+        backgroundColor: '#F9F9F9',
+        marginBottom: 15,
+        marginTop: 30
+    },
+    searchIcon: {
+        marginRight: 10,
+    },
+    searchPlaceholder: {
+        fontSize: 16,
+        color: '#888',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 80,
+        marginBottom: 80,
+    },
+    button: {
+        backgroundColor: '#6C63FF',
+        paddingVertical: 5,
+        paddingHorizontal: 5,
+        borderRadius: 25,
+        flex: 1,
+        alignItems: 'center',
+        marginHorizontal: 5,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    sectionTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#000',
+        marginBottom: 80,
+    },
+    storyButtonGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+    },
+    storyButton: {
+        backgroundColor: '#00C2FF',
+        padding: 15,
+        borderRadius: 10,
+        width: '45%',
+        marginBottom: 15,
+        alignItems: 'center',
+    },
+    storyButtonText: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+});

@@ -2,12 +2,13 @@ import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 
 // Import des Screens pour la navigation
-import LoginScreen from "./screens/LoginScreen";
-import HomeScreen from "./screens/HomeScreen";
-import EventScreen from "./screens/EventScreen";
-import LibraryScreen from "./screens/LibraryScreen";
-import ShopScreen from "./screens/ShopScreen";
-import CommunityScreen from "./screens/CommunityScreen";
+import LoginScreen from './screens/LoginScreen'; 
+import HomeScreen from './screens/HomeScreen';
+import EventScreen from './screens/EventScreen';
+import LibraryScreen from './screens/LibraryScreen';
+import ShopScreen from './screens/ShopScreen';
+import CommunityScreen from './screens/CommunityScreen'; 
+import SearchScreen from './components/Stories/SearchScreen';
 
 // Imports pour la nested navigation (stack + tab)
 import { NavigationContainer } from "@react-navigation/native";
@@ -122,6 +123,7 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="SearchScreen" component={SearchScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
