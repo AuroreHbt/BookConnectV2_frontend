@@ -93,8 +93,6 @@ export const signPageStyles = StyleSheet.create({
       },
 
     buttonContainer: {
-        marginTop: 20,
-        marginBottom: 10,
         width: inputWidth,
         alignItems: 'center',
         paddingBottom: 15,
