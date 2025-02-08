@@ -67,7 +67,11 @@ export default function HomeScreen({ navigation }) {
             <TouchableOpacity onPress={toggleParameter}>
               <Image source={require("../assets/avatar1.jpg")} style={styles.avatar} />
             </TouchableOpacity>
-            <Text style={styles.welcome}>Hello <Text style={styles.bold}>{user?.username || "Utilisateur"}</Text></Text>
+            <View style={styles.welcomeContainer}>
+              <Text style={styles.welcome}>
+                Hello <Text style={styles.bold}>{user?.username || "Utilisateur"}</Text>
+              </Text>
+            </View>
           </View>
 
           <ScrollView style={styles.scrollContent}>
@@ -137,6 +141,7 @@ export default function HomeScreen({ navigation }) {
     </TouchableWithoutFeedback>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -146,27 +151,16 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    padding: 40,
+    padding: 35,
   },
-  parameterButton: {
-    position: "absolute",
-    top: 30,
-    right: 10,
-  },
-  identityUser: {
-    flexDirection: "row",
-    alignItems: "center",
-    position: "absolute",
-    top: 30,
-    left: 10,
+  welcomeContainer: {
+    marginLeft: 10, // To make the text closer to the avatar
   },
   avatar: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    marginRight: 10,
   },
   welcome: {
     fontSize: 20,
@@ -189,14 +183,13 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins",
     color: "#6A2D99",
   },
-  /** Styles pour uniformiser les cartes **/
   card: {
     backgroundColor: "#fff",
     borderRadius: 10,
-    width: 130, // Taille uniforme pour toutes les cartes
+    width: 130,
     padding: 10,
     marginRight: 15,
-    alignItems: "center", // Centrer le contenu
+    alignItems: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
@@ -204,9 +197,9 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   book: {
-    width: 110, // Largeur uniforme des images
+    width: 110,
     height: 150,
-    marginBottom: 10, // Espacement entre l'image et le titre
+    marginBottom: 10,
     borderRadius: 5,
   },
   cardTitle: {
