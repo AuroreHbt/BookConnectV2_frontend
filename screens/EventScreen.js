@@ -1,6 +1,6 @@
-import React from "react";
-import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
-import FindEvents from "../components/Events/FindEvents";
+import React from 'react';
+import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import FindEvents from '../components/Events/FindEvents';
 
 export default function EventScreen() {
   return (
