@@ -2,15 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import SearchScreen from '../components/Stories/SearchScreen'
+import SearchStory from '../components/Stories/SearchStory'
+import ReadStories from '../components/Stories/ReadStories'
+import CreateStories from '../components/Stories/CreateStories'
+
 
 export default function LibraryScreen() {
 
-    const [currentComponent, setCurrentComponent] = useState("library")
+    const [currentComponent, setCurrentComponent] = useState("library");
+    const [selectedStory, setSelectedStory] = useState(null);
 
     if (currentComponent === "search") {
-        return <SearchScreen onPress={() => setCurrentComponent("library")} />;
-    }
+        return (
+         <SearchStory backLibrary={() => setCurrentComponent("library")}
+        openReadStory={(story) => {
+            setSelectedStory(story)
+            setCurrentComponent("read")
+        }}
+        />
+    );
+}
+
+if (currentComponent === "read") {
+    return <ReadStories story={selectedStory} backSearch={() => setCurrentComponent("search")} />;
+}
+
+if (currentComponent === "publish") {
+    return <CreateStories  backLibrary={() => setCurrentComponent("library")} />;
+}
 
     return (
          <KeyboardAvoidingView
@@ -28,11 +47,13 @@ export default function LibraryScreen() {
                     <Icon name="search" size={25} color="#000" style={styles.searchIcon} />
                     <Text style={styles.searchPlaceholder}>Rechercher une histoire...</Text>
                 </TouchableOpacity>
-
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Publier mon histoire</Text>
-                    </TouchableOpacity>
+                <TouchableOpacity 
+                style={styles.button}
+                onPress={() => setCurrentComponent("publish")}
+                >
+    <Text style={styles.buttonText}>Publier mon histoire</Text>
+</TouchableOpacity>
                     <TouchableOpacity style={styles.button}>
                         <Text style={styles.buttonText}>Découvrir une histoire</Text>
                     </TouchableOpacity>
