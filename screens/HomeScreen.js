@@ -5,6 +5,13 @@ import { deleteEvent } from "../reducers/event";
 import UserSettings from "../components/Users/UserSettings";
 import Icon from "react-native-vector-icons/FontAwesome";
 import {
+  Svg,
+  Text as SvgText,
+  Defs,
+  LinearGradient as SvgLinearGradient,
+  Stop,
+} from "react-native-svg";
+import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -58,20 +65,50 @@ export default function HomeScreen({ navigation }) {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.container}>
         <LinearGradient
-          colors={["rgba(85, 0, 255, 0.1)", "rgba(85, 0, 255, 0.2)", "rgba(45, 118, 230, 0.3)", "rgba(21, 187, 216, 0.4)", "rgba(21, 187, 216, 0.01)"]}
+          colors={[
+            "rgba(85, 0, 255, 0.1)",
+            "rgba(85, 0, 255, 0.2)",
+            "rgba(45, 118, 230, 0.3)",
+            "rgba(21, 187, 216, 0.4)",
+            "rgba(21, 187, 216, 0.01)",
+          ]}
           start={{ x: 0, y: 0.1 }}
           end={{ x: 0, y: 1 }}
           style={styles.gradient}
         >
           <View style={styles.header}>
             <TouchableOpacity onPress={toggleParameter}>
-              <Image source={require("../assets/avatar1.jpg")} style={styles.avatar} />
+            <Image
+  source={
+    user?.avatar
+      ? { uri: user.avatar }
+      : require("../assets/DragonAdulte.png")
+  }
+  style={styles.avatar}
+/>
+
             </TouchableOpacity>
             <View style={styles.welcomeContainer}>
-              <Text style={styles.welcome}>
-                Hello <Text style={styles.bold}>{user?.username || "Utilisateur"}</Text>
-              </Text>
-            </View>
+  <Svg height="30" width="200">
+    <Defs>
+      <SvgLinearGradient id="textGradient" x1="0" y1="1" x2="0" y2="0">
+        <Stop offset="0" stopColor="#5500FF" stopOpacity="1" />
+        <Stop offset="1" stopColor="#15BBD8" stopOpacity="1" />
+      </SvgLinearGradient>
+    </Defs>
+    <SvgText
+      x="0"
+      y="25"
+      fontSize="20"
+      fontWeight="bold"
+      fill="url(#textGradient)"
+      fontFamily="Poppins"
+    >
+      Hello {user?.username || "Utilisateur"}
+    </SvgText>
+  </Svg>
+</View>
+
           </View>
 
           <ScrollView style={styles.scrollContent}>
@@ -79,8 +116,18 @@ export default function HomeScreen({ navigation }) {
               <Text style={styles.textSection}>Lectures en cours</Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {story ? (
-                  <TouchableOpacity onPress={() => navigation.navigate("ReadStory", { story })}>
-                    <Image source={story.coverImage ? { uri: story.coverImage } : defaultImage} style={styles.book} resizeMode="cover" />
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("ReadStory", { story })}
+                  >
+                    <Image
+                      source={
+                        story.coverImage
+                          ? { uri: story.coverImage }
+                          : defaultImage
+                      }
+                      style={styles.book}
+                      resizeMode="cover"
+                    />
                     <Text>{story.title}</Text>
                   </TouchableOpacity>
                 ) : (
@@ -94,9 +141,22 @@ export default function HomeScreen({ navigation }) {
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {allStories.length > 0 ? (
                   allStories.map((story, index) => (
-                    <TouchableOpacity key={index} onPress={() => navigation.navigate("ReadStory", { story })}>
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() =>
+                        navigation.navigate("ReadStory", { story })
+                      }
+                    >
                       <View style={styles.card}>
-                        <Image source={story.coverImage ? { uri: story.coverImage } : defaultImage} style={styles.book} resizeMode="cover" />
+                        <Image
+                          source={
+                            story.coverImage
+                              ? { uri: story.coverImage }
+                              : defaultImage
+                          }
+                          style={styles.book}
+                          resizeMode="cover"
+                        />
                         <Text style={styles.cardTitle}>{story.title}</Text>
                       </View>
                     </TouchableOpacity>
@@ -114,7 +174,11 @@ export default function HomeScreen({ navigation }) {
                   addedEvents.map((event, index) => (
                     <View key={index}>
                       <Text>{event.title}</Text>
-                      <Text>{event.date?.day ? new Date(event.date.day).toLocaleDateString() : "Date non renseignée"}</Text>
+                      <Text>
+                        {event.date?.day
+                          ? new Date(event.date.day).toLocaleDateString()
+                          : "Date non renseignée"}
+                      </Text>
                     </View>
                   ))
                 ) : (
@@ -135,7 +199,12 @@ export default function HomeScreen({ navigation }) {
           animationType="slide"
           transparent={true}
         >
-          <UserSettings visible={isParameterVisible} onClose={toggleParameter} user={user} onLogout={handleLogout} />
+          <UserSettings
+            visible={isParameterVisible}
+            onClose={toggleParameter}
+            user={user}
+            onLogout={handleLogout}
+          />
         </Modal>
       </SafeAreaView>
     </TouchableWithoutFeedback>
@@ -152,7 +221,9 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 35,
+    paddingTop: 30,
+    paddingLeft: 15,
+    paddingBottom: 15,
   },
   welcomeContainer: {
     marginLeft: 10, // To make the text closer to the avatar
@@ -177,11 +248,11 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   textSection: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 17,
+    fontWeight: "normal",
     marginBottom: 10,
     fontFamily: "Poppins",
-    color: "#6A2D99",
+    color: "rgba(85, 0, 255, 1)",
   },
   card: {
     backgroundColor: "#fff",

@@ -3,12 +3,15 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, Modal, Animated } from
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useDispatch } from "react-redux";
 import { logout } from "../../reducers/user"; 
+import AvatarSelector from "./AvatarSelector"; 
 
 const defaultImage = require("../../assets/avatar1.jpg");
 
 const UserSettings = ({ visible, onClose, user }) => {
   const dispatch = useDispatch();
   const slideAnim = useState(new Animated.Value(-300))[0]; // Animation du slide-in
+  const [showAvatarSelector, setShowAvatarSelector] = useState(false);
+  const [avatar, setAvatar] = useState(user?.avatar || defaultImage);
 
   // Effet d'ouverture et de fermeture
   React.useEffect(() => {
@@ -32,18 +35,23 @@ const UserSettings = ({ visible, onClose, user }) => {
     onClose();
   };
 
+  const handleAvatarSelected = (newAvatar) => {
+    setAvatar(newAvatar);
+    setShowAvatarSelector(false);
+  };
+
   return (
     <Modal transparent={true} visible={visible} animationType="fade">
       <TouchableOpacity style={styles.overlay} onPress={onClose} activeOpacity={1}>
         <Animated.View style={[styles.modalContainer, { transform: [{ translateX: slideAnim }] }]}>
           {/* HEADER AVEC AVATAR */}
           <View style={styles.header}>
-            <Image source={user?.avatar ? { uri: user.avatar } : defaultImage} style={styles.avatar} />
+            <Image source={typeof avatar === 'string' ? { uri: avatar } : avatar} style={styles.avatar} />
             <Text style={styles.userName}>{user?.username || "Utilisateur"}</Text>
           </View>
 
           {/* OPTIONS DE SETTINGS */}
-          <TouchableOpacity style={styles.option} onPress={() => alert("Changer ma photo")}>
+          <TouchableOpacity style={styles.option} onPress={() => setShowAvatarSelector(true)}>
             <Icon name="camera" size={20} color="#6A2D99" />
             <Text style={styles.optionText}>Changer ma photo</Text>
           </TouchableOpacity>
@@ -64,6 +72,13 @@ const UserSettings = ({ visible, onClose, user }) => {
           </TouchableOpacity>
         </Animated.View>
       </TouchableOpacity>
+
+      {/* MODAL POUR LE SÉLECTEUR D'AVATAR */}
+      {showAvatarSelector && (
+        <Modal transparent={true} visible={showAvatarSelector} animationType="slide">
+          <AvatarSelector onAvatarSelected={handleAvatarSelected} />
+        </Modal>
+      )}
     </Modal>
   );
 };

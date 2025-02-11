@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  value: { username: null, email: null, token: null, _id: null },
+  value: { username: null, email: null, token: null, _id: null, avatar: null },
 };
 
 export const userSlice = createSlice({
@@ -9,18 +9,17 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      state.value.username = action.payload.username;
-      state.value.email = action.payload.email;
-      state.value.token = action.payload.token;
-      state.value._id = action.payload._id;
+      state.value = { ...action.payload, avatar: action.payload.avatar || "" }; // Simplification de l'affectation
     },
     logout: (state) => {
-      state.value.username = null;
-      state.value.email = null;
-      state.value.token = null;
+      state.value = { username: null, email: null, token: null, _id: null, avatar: "" }; // Reset complet
     },
+    updateAvatar: (state, action) => {
+      state.value.avatar = action.payload; // Mise à jour de l'avatar
+      console.log("Nouvel avatar:", action.payload); // Log propre
+    },    
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout, updateAvatar } = userSlice.actions;
 export default userSlice.reducer;
