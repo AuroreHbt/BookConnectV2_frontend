@@ -63,7 +63,7 @@ export const signPageStyles = StyleSheet.create({
         paddingVertical: 15,
         borderRadius: 5,
         borderBottomWidth: 1,
-        borderBottomColor: '#5500FF',
+        borderBottomColor: '#FFFFFF',
         marginVertical: 10,
       },
 
@@ -84,7 +84,7 @@ export const signPageStyles = StyleSheet.create({
         paddingVertical: 15,
         borderRadius: 5,
         borderBottomWidth: 1,
-        borderBottomColor: '#5500FF',
+        borderBottomColor: '#FFFFFF',
         width: inputWidth,
         paddingHorizontal: 10,
         marginVertical: 10,

@@ -163,7 +163,7 @@ export default function SignUp() {
             <View style={signPageStyles.inputContainer}>
               <TextInput
                 placeholder="Nom d'utilisateur"
-                placeholderTextColor="#5500FF"
+                placeholderTextColor="#FFFFFF"
                 onChangeText={(value) => setUsername(value)}
                 value={username}
                 style={signPageStyles.input}
@@ -173,7 +173,7 @@ export default function SignUp() {
               ) : null}
               <TextInput
                 placeholder="E-mail"
-                placeholderTextColor="#5500FF"
+                placeholderTextColor="#FFFFFF"
                 autoCapitalize="none"
                 keyboardType="email-address"
                 autoComplete="email"
@@ -187,7 +187,7 @@ export default function SignUp() {
               <View style={signPageStyles.inputPwd}>
                 <TextInput
                   placeholder="Mot de passe"
-                  placeholderTextColor="#5500FF"
+                  placeholderTextColor="#FFFFFF"
                   secureTextEntry={!showPassword}
                   onChangeText={(value) => setPassword(value)}
                   value={password}
@@ -200,7 +200,7 @@ export default function SignUp() {
                   <Icon
                     name={showPassword ? 'eye' : 'eye-slash'}
                     size={24}
-                    color={showPassword ? 'rgba(55, 27, 12, 0.8)' : '#5500FF'}
+                    color={showPassword ? 'rgba(55, 27, 12, 0.8)' : '#FFFFFF'}
                   />
                 </TouchableOpacity>
               </View>
