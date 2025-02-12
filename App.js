@@ -2,13 +2,12 @@ import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 
 // Import des Screens pour la navigation
-import LoginScreen from './screens/LoginScreen'; 
-import HomeScreen from './screens/HomeScreen';
-import EventScreen from './screens/EventScreen';
-import LibraryScreen from './screens/LibraryScreen';
-import ShopScreen from './screens/ShopScreen';
-import CommunityScreen from './screens/CommunityScreen'; 
-
+import LoginScreen from "./screens/LoginScreen";
+import HomeScreen from "./screens/HomeScreen";
+import EventScreen from "./screens/EventScreen";
+import LibraryScreen from "./screens/LibraryScreen";
+import ShopScreen from "./screens/ShopScreen";
+import CommunityScreen from "./screens/CommunityScreen";
 
 // Imports pour la nested navigation (stack + tab)
 import { NavigationContainer } from "@react-navigation/native";
@@ -17,7 +16,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 // Import du module pour animer les icônes (Ionicons)
 import AnimatedIcon from "./modules/AnimatedIcon";
-
 
 // import pour appliquer un gradient sur les icones actives
 import { LinearGradient } from "expo-linear-gradient";
@@ -123,7 +121,6 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
-
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
@@ -132,7 +129,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.95,
+    flex: 1,
     backgroundColor: "rgba(255, 255, 255, 1)", // white
     alignItems: "center",
     justifyContent: "center",
