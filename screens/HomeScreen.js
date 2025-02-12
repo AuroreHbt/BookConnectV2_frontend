@@ -213,7 +213,7 @@ export default function HomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 0.95,
   },
   gradient: {
     flex: 1,

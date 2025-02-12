@@ -99,10 +99,10 @@ export const signPageStyles = StyleSheet.create({
     },
 
     gradientButton: {
-        padding: 12,
+        padding: 25,
         width: inputWidth/1.3,
         alignItems: 'center',
-        borderRadius: 15,
+        borderRadius: 20,
     },
 
     button: {

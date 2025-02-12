@@ -77,6 +77,7 @@ if (currentComponent === "publish") {
 
 const styles = StyleSheet.create({
     container: {
+        // flex: 0.95,
         padding: 20,
     },
     headerContainer: {

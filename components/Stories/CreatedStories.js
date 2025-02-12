@@ -33,12 +33,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
 
-export default function MyPublishedStoriesScreen({ navigation }) {
+export default function CreatedStories ({ backLibrary, navigation }) {
 
-  // https://reactnavigation.org/docs/navigation-object/#goback
-  const goBack = () => navigation.goBack();
-
-  const defaultImage = require('../assets/image-livre-defaut.jpg')
+  const defaultImage = require("../../assets/image-livre-defaut.jpg")
 
   const user = useSelector((state) => state.user.value); // Informations recupérées depuis le store
   const story = useSelector((state) => state.story.value); // story list = tableau d'objets
@@ -97,7 +94,7 @@ export default function MyPublishedStoriesScreen({ navigation }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ token: user.token, id: storyId }),
-      // Envoi de l'ID de l'histoire à supprimer lié au token de l'author : sans cette ligne, la requete est vide (cf. console.log de req.body sur la route delete)
+      // Envoi de l'ID de l'histoire à supprimer lié au token du "writer" : sans cette ligne, la requete est vide (cf. console.log de req.body sur la route delete)
     })
       .then((response) => response.json())
       .then((data) => {
@@ -197,11 +194,11 @@ export default function MyPublishedStoriesScreen({ navigation }) {
       >
         <View>
 
-          {/* Titre + Bouton retour (goBack) */}
+          {/* Titre + Bouton retour screen Library */}
           <View style={globalStyles.titleContainer}>
-            <Text style={globalStyles.title}>Mes oeuvres</Text>
+            <Text style={globalStyles.title}>Mes publications</Text>
             <TouchableOpacity
-              onPress={goBack}
+              onPress={backLibrary}
               activeOpacity={0.8}
             >
               <Icon

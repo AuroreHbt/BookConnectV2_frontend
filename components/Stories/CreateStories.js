@@ -1,11 +1,13 @@
-// NewStoryScreen
-
-
 import React, { useState } from "react";
 
+// component qiu affiche les histoires publiées par le writer connecté
+import CreatedStories from "./CreatedStories";
+
 // BottomTab visible sur les Screens => globalStyles
-import { globalStyles } from '../../styles/globalStyles';
-import { signPageStyles } from '../../styles/signPageStyles';
+import { globalStyles } from "../../styles/globalStyles";
+
+// style bouton gradient
+import { signPageStyles } from "../../styles/signPageStyles";
 
 // import de Pressable pour gérer les interactions tactiles (onPress, onLongPress etc)
 import {
@@ -18,32 +20,33 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Pressable
+  Pressable,
 } from "react-native";
 
 import { useSelector, useDispatch } from "react-redux";
 
+// import de la fonction pour ajouter les stories créées au store "story"
 import { addStory } from "../../reducers/story";
 
 // import pour créer une case à cocher
-import Checkbox from 'expo-checkbox';
+import Checkbox from "expo-checkbox";
 
 // import pour faire un menu déroulant
-import { Picker } from '@react-native-picker/picker';
+import { Picker } from "@react-native-picker/picker";
 
-// import pour utiliser le comoposant Icon de la bibliothèque react-native-vector-icons (/FontAwesome)
-import Icon from 'react-native-vector-icons/FontAwesome';
+// bibliotheque d'icones Ionicons
+import { Ionicons } from "@expo/vector-icons";
 
 // import pour utiliser des dégradés linéaires (x,y)
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 
 // import pour accéder aux dossiers du téléphone
 // https://docs.expo.dev/versions/latest/sdk/document-picker/#using-with-expo-file-system
-import * as DocumentPicker from 'expo-document-picker'
+import * as DocumentPicker from "expo-document-picker";
 
 // import pour mettre un spinner de chargement lors du press sur le bouton pour le délai d'upload/publication
 // https://github.com/SimformSolutionsPvtLtd/react-native-spinner-button/blob/master/README.md
-import SpinnerButton from 'react-native-spinner-button';
+import SpinnerButton from "react-native-spinner-button";
 
 // composant wrapper pour résoudre cette erreur :
 // Warning: A props object containing a "key" prop is being spread into JSX: <Animated(View) key={someKey} {...props} />
@@ -52,35 +55,31 @@ const SafeSpinnerButton = React.forwardRef((props, ref) => {
   return <SpinnerButton ref={ref} {...otherProps} />;
 });
 
-const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS
+const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
 
-
-export default function NewStoryScreen({ backLibrary }) {
-
-  // https://reactnavigation.org/docs/navigation-object/#goback
-  const goBack = () => navigation.goBack();
-
-  const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
+export default function CreateStorie({ backLibrary }) {
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
   const [isAdult, setIsAdult] = useState(false);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
 
-  const [storyFile, setStoryFile] = useState('');
-  const [coverImage, setCoverImage] = useState('');
+  const [storyFile, setStoryFile] = useState("");
+  const [coverImage, setCoverImage] = useState("");
 
-  const [titleError, setTitleError] = useState('');
-  const [categoryError, setCategoryError] = useState('');
-  const [descError, setDescError] = useState('');
-  const [fileError, setFileError] = useState('');
+  const [titleError, setTitleError] = useState("");
+  const [categoryError, setCategoryError] = useState("");
+  const [descError, setDescError] = useState("");
+  const [fileError, setFileError] = useState("");
 
   const [categorySelected, setCategorySelected] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // variable d'état pour gérer l'état du spinner-button
   const [characterTitleCount, setCharacterTitleCount] = useState(0); // variable d'état pour gérer l'affichage du nombre de caractères pour le titre
   const [characterDescriptionCount, setCharacterDescriptionCount] = useState(0); // variable d'état pour gérer l'affichage du nombre de caractères pour la description
 
+  const [showCreatedStories, setShowCreatedStories] = useState(false); // variable d'état pour afficher les histoires publiées
 
-  const user = useSelector((state) => state.user.value)
-  const story = useSelector((state) => state.story.value)
+  const user = useSelector((state) => state.user.value);
+  const story = useSelector((state) => state.story.value);
 
   const dispatch = useDispatch();
 
@@ -95,7 +94,11 @@ export default function NewStoryScreen({ backLibrary }) {
       console.log("Résultat brut pour le fichier texte :", document);
 
       // Vérifiez si l'utilisateur a annulé ou si `assets` est vide
-      if (document.canceled || !document.assets || document.assets.length === 0) {
+      if (
+        document.canceled ||
+        !document.assets ||
+        document.assets.length === 0
+      ) {
         console.log("Annulé par l'utilisateur");
         setIsLoading(false); // Arrêter le spinner
         return;
@@ -148,34 +151,34 @@ export default function NewStoryScreen({ backLibrary }) {
     console.log("Image de couverture :", coverImage);
 
     // validation des champs :
-    let hasError = false
+    let hasError = false;
 
     if (!title) {
-      setTitleError('Le titre est obligatoire')
-      hasError = true
+      setTitleError("Le titre est obligatoire");
+      hasError = true;
     } else {
-      setTitleError('')
+      setTitleError("");
     }
 
     if (!category) {
-      setCategoryError('La catégorie est obligatoire')
-      hasError = true
+      setCategoryError("La catégorie est obligatoire");
+      hasError = true;
     } else {
-      setCategoryError('')
+      setCategoryError("");
     }
 
     if (!description) {
-      setDescError('La description est obligatoire')
-      hasError = true
+      setDescError("La description est obligatoire");
+      hasError = true;
     } else {
-      setDescError('')
+      setDescError("");
     }
 
     if (!storyFile) {
-      setFileError('Selectionnez un fichier texte')
-      hasError = true
+      setFileError("Selectionnez un fichier texte");
+      hasError = true;
     } else {
-      setFileError('')
+      setFileError("");
     }
 
     // early return pour stopper le code si des erreurs sont détectées:
@@ -188,24 +191,24 @@ export default function NewStoryScreen({ backLibrary }) {
 
     // création de l'objet formData pour l'envoi de fichiers et de données
     const formData = new FormData();
-    formData.append('author', user.username)
-    formData.append('title', title)
-    formData.append('category', category)
-    formData.append("isAdult", isAdult ? true : false)
-    formData.append('description', description)
-    formData.append('storyFile', {
+    formData.append("writer", user.username);
+    formData.append("title", title);
+    formData.append("category", category);
+    formData.append("isAdult", isAdult ? true : false);
+    formData.append("description", description);
+    formData.append("storyFile", {
       uri: storyFile.uri,
       name: storyFile.name,
-      type: storyFile.mimeType || "application/pdf"
+      type: storyFile.mimeType || "application/pdf",
     });
 
     // ajout de la cover (optionnel)
     if (coverImage) {
-      formData.append('coverImage', {
+      formData.append("coverImage", {
         uri: coverImage.uri,
         name: coverImage.name,
-        type: coverImage.mimeType
-      })
+        type: coverImage.mimeType,
+      });
     }
 
     fetch(`${BACKEND_ADDRESS}/stories/addstory`, {
@@ -214,252 +217,269 @@ export default function NewStoryScreen({ backLibrary }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("réponse du serveur", data)
+        console.log("réponse du serveur", data);
         if (data.result) {
-          console.log("data.result: ", data.result)
-          dispatch(addStory(data.story))
+          console.log("data.result: ", data.result);
+          dispatch(addStory(data.story));
           // console.log("data.story: ", data.story); // Ok Objet sur le model Story
 
-          setTitle('')
-          setCategory('')
-          setIsAdult(false)
-          setDescription('')
-          setStoryFile('')
-          setCoverImage('')
-          setIsLoading(false)
-          setCharacterTitleCount(0)
-          setCharacterDescriptionCount(0)
-          console.log('Histoire publiée avec succès!');
-          navigation.navigate('MyPublishedStories')
+          setTitle("");
+          setCategory("");
+          setIsAdult(false);
+          setDescription("");
+          setStoryFile("");
+          setCoverImage("");
+          setIsLoading(false);
+          setCharacterTitleCount(0);
+          setCharacterDescriptionCount(0);
+          console.log("Histoire publiée avec succès!");
+          setShowCreatedStories(true); // si l'histoire est publiée avec succès, permet l'affichage du component CreatedStories
         } else {
-          console.log('erreur lors de la publication', data.error);
+          console.log("erreur lors de la publication", data.error);
         }
       });
-  }
-
+  };
 
   return (
-
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
-
+      <View style={{ flex: 1, justifyContent: "center", padding: 16 }}>
         <KeyboardAvoidingView
           style={globalStyles.container}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           <View>
+            {showCreatedStories ? (
+              <CreatedStories />
+            ) : (
+              <>
+                {/* Titre + Bouton retour au screen Library */}
+                <View style={globalStyles.titleContainer}>
+                  <Text style={globalStyles.title}>Ma nouvelle aventure</Text>
+                  <TouchableOpacity onPress={backLibrary} activeOpacity={0.8}>
+                    <Ionicons
+                      style={globalStyles.returnContainer}
+                      name="chevron-back-circle-sharp"
+                      size={32}
+                    />
+                  </TouchableOpacity>
+                </View>
 
-            {/* Titre + Bouton retour (goBack) */}
-            <View style={globalStyles.titleContainer}>
-              <Text style={globalStyles.title}>Ma nouvelle histoire</Text>
-              <TouchableOpacity
-                onPress={backLibrary}
-                activeOpacity={0.8}
-              >
-                <Icon
-                  style={globalStyles.returnContainer}
-                  name="chevron-circle-left"
-                  size={32}
-                  color='rgba(55, 27, 12, 0.3)'
-                />
-              </TouchableOpacity>
-            </View>
-
-            {/* formulaire pour publier une histoire */}
-            <View style={styles.inputContainer}>
-
-              <View style={styles.titleInputContainer}>
-                <TextInput
-                  placeholder="Titre de votre histoire (obligatoire) - Format pdf"
-                  maxLength={55}
-                  onChangeText={(value) => {
-                    setTitle(value);
-                    setCharacterTitleCount(value.length);
-                  }}
-                  value={title}
-                />
-              </View>
-              <Text
-                style={
-                  {
-                    textAlign: 'right',
-                    color: 'grey',
-                    marginRight: 25,
-                    marginTop: -5,
-                    marginBottom: 5,
-                  }
-                } >
-                {characterTitleCount}/55
-              </Text>
-
-              {titleError ? <Text style={styles.errorText}>{titleError}</Text> : null}
-
-              {/* Catégorie : liste de choix */}
-              <View style={styles.pickerContainer}>
-
-                <Pressable
-                  style={styles.picker}
-                >
-                  <Picker
-                    prompt="Catégorie (obligatoire)"
-                    style={{ color: !categorySelected ? 'grey' : 'black' }}
-                    selectedValue={category}
-                    // useNativeAndroidPickerStyle={false}
-                    onValueChange={(value) => {
-                      setCategory(value);
-                      setCategorySelected(true);
-                      console.log("Catégorie sélectionnée:", value); // Pour debug
+                {/* formulaire pour publier une histoire */}
+                <View style={styles.inputContainer}>
+                  <View style={styles.titleInputContainer}>
+                    <TextInput
+                      placeholder="Titre de votre récit - Format pdf (obligatoire)"
+                      multiline={true}
+                      maxLength={55}
+                      onChangeText={(value) => {
+                        setTitle(value);
+                        setCharacterTitleCount(value.length);
+                      }}
+                      value={title}
+                    />
+                  </View>
+                  <Text
+                    style={{
+                      textAlign: "right",
+                      color: "grey",
+                      marginRight: 25,
+                      marginTop: -5,
+                      marginBottom: 5,
                     }}
-                    mode="dialog"
                   >
-                    <Picker.Item label="Sélectionnez une catégorie" value="" />
-                    <Picker.Item label="Autre" value="Autre" />
-                    <Picker.Item label="Autobiographie / Biographie" value="Autobiographie / Biographie" />
-                    <Picker.Item label="Essai" value="Essai" />
-                    <Picker.Item label="Poésie" value="Poésie" />
-                    <Picker.Item label="Science Fiction" value="Science Fiction" />
-                    <Picker.Item label="Fantasy" value="Fantasy" />
-                    <Picker.Item label="Romance" value="Romance" />
-                    <Picker.Item label="Policier" value="Policier" />
-                    {/* Ajouter d'autres catégories ici */}
-                  </Picker>
-                </Pressable>
-                <Icon
-                  style={styles.iconPicker}
-                  name="check"
-                  size={28}
-                  color={categorySelected ? 'rgba(13, 173, 72, 0.8)' : 'rgba(211, 211, 211, 1)'}
-                />
-              </View>
-              {categoryError ? <Text style={styles.errorText}>{categoryError}</Text> : null}
-
-              <View style={isAdult ? styles.checkBoxTrue : styles.checkBoxContainer}>
-                <Text style={styles.textCheckbox}>
-                  Contenu 18+
-                </Text>
-                <Checkbox
-                  value={isAdult}
-                  onValueChange={(value) => setIsAdult(value)}
-                  color={isAdult ? '#rgba(13, 173, 72, 0.9)' : undefined}
-                />
-              </View>
-
-              <View style={styles.inputMultiline} >
-                <TextInput
-                  placeholder="Description (obligatoire)"
-                  onChangeText={(value) => {
-                    setDescription(value);
-                    setCharacterDescriptionCount(value.length);
-                  }}
-                  value={description}
-                  multiline
-                  numberOfLines={5}
-                  maxLength={200}
-                />
-              </View>
-              <Text
-                style={
-                  {
-                    textAlign: 'right',
-                    color: 'grey',
-                    marginRight: 25,
-                    marginTop: -5,
-                    marginBottom: 5,
-                  }
-                } >
-                {characterDescriptionCount}/200
-              </Text>
-              {descError ? <Text style={styles.errorText}>{descError}</Text> : null}
-
-              <View style={styles.fileContainer}>
-                <TouchableOpacity
-                  onPress={handleSelectStoryFile}
-                >
-                  <Text
-                    style={[
-                      styles.fileInput &&
-                      {
-                        color: !storyFile.name ? 'grey' : 'black'
-                      }
-                    ]}>
-                    {storyFile ? storyFile.name : "Choisir un texte (obligatoire)"}
+                    {characterTitleCount}/55
                   </Text>
 
-                  <Icon
-                    style={styles.fileIconContainer}
-                    name="file-text"
-                    size={24}
-                    color={storyFile ? 'rgba(13, 173, 72, 0.8)' : 'rgba(211, 211, 211, 1)'}
-                  />
-                </TouchableOpacity>
-              </View>
+                  {titleError ? (
+                    <Text style={styles.errorText}>{titleError}</Text>
+                  ) : null}
 
-              {fileError ? <Text style={styles.errorText}>{fileError}</Text> : null}
-
-              <View style={styles.fileContainer}>
-
-                <TouchableOpacity
-                  onPress={handleSelectCoverImage}
-                >
-                  <Text
-                    style={[
-                      styles.fileInput &&
-                      {
-                        color: !coverImage.name ? 'grey' : 'black'
+                  {/* Catégorie : liste de choix */}
+                  <View style={styles.pickerContainer}>
+                    <Pressable style={styles.picker}>
+                      <Picker
+                        prompt="Sélectionner une catégorie pour votre récit :"
+                        style={{ color: !categorySelected ? "grey" : "black" }}
+                        selectedValue={category}
+                        // useNativeAndroidPickerStyle={false}
+                        onValueChange={(value) => {
+                          setCategory(value);
+                          setCategorySelected(true);
+                          console.log("Catégorie sélectionnée:", value); // Pour debug
+                        }}
+                        mode="dialog" // l'autre mode est : dropdown
+                      >
+                        <Picker.Item label="Catégorie (obligatoire)" value="" />
+                        <Picker.Item label="Autre" value="Autre" />
+                        <Picker.Item
+                          label="Autobiographie / Biographie"
+                          value="Autobiographie / Biographie"
+                        />
+                        <Picker.Item label="Essai" value="Essai" />
+                        <Picker.Item label="Poésie" value="Poésie" />
+                        <Picker.Item
+                          label="Science Fiction"
+                          value="Science Fiction"
+                        />
+                        <Picker.Item label="Fantasy" value="Fantasy" />
+                        <Picker.Item label="Romance" value="Romance" />
+                        <Picker.Item label="Policier" value="Policier" />
+                        {/* Ajouter d'autres catégories ici */}
+                      </Picker>
+                    </Pressable>
+                    <Ionicons
+                      style={styles.iconPicker}
+                      name="checkmark"
+                      size={28}
+                      color={
+                        categorySelected
+                          ? "rgba(85, 0, 255, 0.5)"
+                          : "rgba(211, 211, 211, 1)"
                       }
-                    ]}>
-                    {coverImage ? coverImage.name : "Choisir une image (option)"}
+                    />
+                  </View>
+                  {categoryError ? (
+                    <Text style={styles.errorText}>{categoryError}</Text>
+                  ) : null}
+
+                  <View
+                    style={
+                      isAdult ? styles.checkBoxTrue : styles.checkBoxContainer
+                    }
+                  >
+                    <Text style={styles.textCheckbox}>Contenu 18+</Text>
+                    <Checkbox
+                      value={isAdult}
+                      onValueChange={(value) => setIsAdult(value)}
+                      color={isAdult ? "rgba(85, 0, 255, 0.5)" : undefined}
+                    />
+                  </View>
+
+                  <View style={styles.inputMultiline}>
+                    <TextInput
+                      placeholder="Description (obligatoire)"
+                      onChangeText={(value) => {
+                        setDescription(value);
+                        setCharacterDescriptionCount(value.length);
+                      }}
+                      value={description}
+                      multiline
+                      numberOfLines={5}
+                      maxLength={200}
+                    />
+                  </View>
+                  <Text
+                    style={{
+                      textAlign: "right",
+                      color: "grey",
+                      marginRight: 25,
+                      marginTop: -5,
+                      marginBottom: 5,
+                    }}
+                  >
+                    {characterDescriptionCount}/200
                   </Text>
+                  {descError ? (
+                    <Text style={styles.errorText}>{descError}</Text>
+                  ) : null}
 
-                  <Icon
-                    style={styles.imgIconContainer}
-                    name="image"
-                    size={24}
-                    color={coverImage ? 'rgba(13, 173, 72, 0.8)' : 'rgba(211, 211, 211, 1)'}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
+                  <View style={styles.fileContainer}>
+                    <TouchableOpacity onPress={handleSelectStoryFile}>
+                      <Text
+                        style={[
+                          styles.fileInput && {
+                            color: !storyFile.name ? "grey" : "black",
+                          },
+                        ]}
+                      >
+                        {storyFile
+                          ? storyFile.name
+                          : "Choisir un fichier PDF (obligatoire)"}
+                      </Text>
 
-            {/* Bouton + spinner button */}
-            <View style={styles.buttonContainer}>
-              <LinearGradient
-               colors={[
-                                    "rgba(21, 187, 216, 0.7)",
-                                    "rgba(85, 0, 255, 0.7)",
-                                  ]}
-                                  start={{ x: 0, y: 0 }}
-                                  end={{ x: 0, y: 0.7 }}
-                                  style={signPageStyles.gradientButton}
-                                  activeOpacity={0.8}
-              >
-                <SpinnerButton
-                  isLoading={isLoading}
-                  onPress={handlePostStory}
-                  indicatorCount={10}
-                  spinnerColor='rgba(253,255,0,1)' // "rgba(216, 72, 21, 0.9)"
-                  spinnerType="PacmanIndicator"
-                  buttonStyle={[styles.button]}
-                  animateHeight={32}
-                >
-                  <Text style={styles.textButton}>Publier</Text>
-                </SpinnerButton>
-              </LinearGradient>
-            </View>
+                      <Ionicons
+                        style={styles.fileIconContainer}
+                        name="download-outline"
+                        size={26}
+                        color={
+                          storyFile
+                            ? "rgba(85, 0, 255, 0.5)"
+                            : "rgba(211, 211, 211, 1)"
+                        }
+                      />
+                    </TouchableOpacity>
+                  </View>
 
-          </View >
-        </KeyboardAvoidingView >
+                  {fileError ? (
+                    <Text style={styles.errorText}>{fileError}</Text>
+                  ) : null}
+
+                  <View style={styles.fileContainer}>
+                    <TouchableOpacity onPress={handleSelectCoverImage}>
+                      <Text
+                        style={[
+                          styles.fileInput && {
+                            color: !coverImage.name ? "grey" : "black",
+                          },
+                        ]}
+                      >
+                        {coverImage
+                          ? coverImage.name
+                          : "Choisir un fichier image (option)"}
+                      </Text>
+
+                      <Ionicons
+                        style={styles.fileIconContainer}
+                        name="download-outline"
+                        size={26}
+                        color={
+                          coverImage
+                            ? "rgba(85, 0, 255, 0.5)"
+                            : "rgba(211, 211, 211, 1)"
+                        }
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                {/* Bouton + spinner button */}
+                <View style={styles.buttonContainer}>
+                  <LinearGradient
+                    colors={[
+                      "rgba(21, 187, 216, 0.7)",
+                      "rgba(85, 0, 255, 0.7)",
+                    ]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 0.7 }}
+                    style={signPageStyles.gradientButton}
+                    activeOpacity={0.8}
+                  >
+                    <SpinnerButton
+                      isLoading={isLoading}
+                      onPress={handlePostStory}
+                      indicatorCount={10}
+                      spinnerColor="rgba(253,255,0,1)" // "rgba(216, 72, 21, 0.9)"
+                      spinnerType="PacmanIndicator"
+                      buttonStyle={[styles.button]}
+                      animateHeight={32}
+                    >
+                      <Text style={styles.textButton}>Publier</Text>
+                    </SpinnerButton>
+                  </LinearGradient>
+                </View>
+              </>
+            )}
+          </View>
+        </KeyboardAvoidingView>
       </View>
     </TouchableWithoutFeedback>
   );
 }
 
-
 const styles = StyleSheet.create({
-
   // CSS du container du formulaire
   inputContainer: {
-    maxWidth: '100%',
+    maxWidth: "100%",
 
     // borderWidth: 1,
   },
@@ -482,7 +502,7 @@ const styles = StyleSheet.create({
 
   // CSS du formulaire : choix de la catégorie
   pickerContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     backgroundColor: "rgba(238, 236, 232, 0.9)",
     borderRadius: 5,
 
@@ -505,14 +525,14 @@ const styles = StyleSheet.create({
   },
 
   pickerText: {
-    fontFamily: 'sans-serif',
+    fontFamily: "sans-serif",
     fontSize: 16,
   },
 
   iconPicker: {
-    position: 'absolute',
-    height: '55%',
-    width: '10%',
+    position: "absolute",
+    height: "55%",
+    width: "10%",
     top: 10,
     right: 5,
 
@@ -521,14 +541,14 @@ const styles = StyleSheet.create({
   },
 
   iconPickerChecked: {
-    color: 'rgba(13, 173, 72, 0.9)',
+    color: "rgba(13, 173, 72, 0.9)",
   },
 
   // CSS pour contenu 18+
   checkBoxContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     backgroundColor: "rgba(238, 236, 232, 0.9)",
     paddingVertical: 5,
     paddingRight: 15,
@@ -538,9 +558,9 @@ const styles = StyleSheet.create({
   },
 
   checkBoxTrue: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     // backgroundColor: "rgba(34, 179, 89, 0.1)",
     backgroundColor: "rgba(253,255,0, 0.1)",
     paddingVertical: 5,
@@ -551,16 +571,16 @@ const styles = StyleSheet.create({
   },
 
   textCheckbox: {
-    fontFamily: 'sans-serif',
+    fontFamily: "sans-serif",
     fontSize: 16,
     paddingLeft: 15,
-    color: 'grey',
+    color: "grey",
   },
 
   checkBox: {
     paddingRight: 10,
     marginRight: 10,
-    width: '10%',
+    width: "10%",
   },
 
   // CSS de l'input multilignes description
@@ -577,7 +597,7 @@ const styles = StyleSheet.create({
 
   // CSS pour l'upload fichier PDF et img
   fileContainer: {
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     backgroundColor: "rgba(238, 236, 232, 0.9)", //  #EEECE8
     paddingVertical: 5,
     borderRadius: 5,
@@ -593,54 +613,49 @@ const styles = StyleSheet.create({
   },
 
   fileIconContainer: {
-    position: 'absolute', // position absolue pour superposer l'icone sur l'input
-    top: -3,
-    right: 18,
-  },
-
-  imgIconContainer: {
-    position: 'absolute', // position absolue pour superposer l'icone sur l'input
-    top: -3,
-    right: 15,
+    position: "absolute", // position absolue pour superposer l'icone sur l'input
+    top: -4,
+    right: 5,
   },
 
   // CSS des messages d'erreur
   errorText: {
-    textAlign: 'left',
-    fontFamily: 'sans-serif',
+    textAlign: "left",
+    fontFamily: "sans-serif",
     fontSize: 16,
-    color: 'red',
+    color: "red",
     maxWidth: "85%",
     paddingLeft: 20,
   },
 
   // CSS du bouton publier avec spinner-button pour le temps de chargement
   buttonContainer: {
-    justifyContent: 'center', // Centrer le contenu horizontalement
-    alignItems: 'center',
+    justifyContent: "center", // Centrer le contenu horizontalement
+    alignItems: "center",
     // width: '50%',
-    marginVertical: 20, // Ajoutez un peu d'espace vertical si nécessaire    borderWidth: 1,
+    marginVertical: 20, // Ajoutez un peu d'espace vertical si nécessaire
+    // borderWidth: 1,
     // borderColor: 'blue',
   },
 
   gradientButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 15,
     padding: 25, // Ajustez la hauteur du bouton
-    width: '50%', // Largeur du bouton
+    width: "50%", // Largeur du bouton
     // borderWidth: 1,
     // borderColor: 'red',
   },
 
   button: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingVertical: 10, // Ajustez le padding pour un meilleur espacement
-    width: '50%', // Largeur du bouton
+    width: "50%", // Largeur du bouton
     // backgroundColor: 'transparent', // Laissez le fond transparent pour voir le gradient
-    position: 'relative', // Position relative pour superposer le spinner
-    shadowColor: 'transparent', // Masquer l'ombre
+    position: "relative", // Position relative pour superposer le spinner
+    shadowColor: "transparent", // Masquer l'ombre
     elevation: 0, // Pour Android
 
     // borderWidth: 1,
@@ -648,11 +663,10 @@ const styles = StyleSheet.create({
   },
 
   textButton: {
-    textAlign: 'center',
-    fontFamily: 'sans-serif',
-    fontWeight: 'bold',
+    textAlign: "center",
+    fontFamily: "sans-serif",
+    fontWeight: "bold",
     fontSize: 18,
-    color: 'white',
+    color: "white",
   },
-
 });
