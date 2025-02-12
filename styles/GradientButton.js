@@ -22,8 +22,9 @@ export default function GradientButton({ onPress, title }) {
 const styles = StyleSheet.create({
   buttonContainer: {
     alignItems: 'center',
-    paddingTop: 20,
+    paddingTop: 25,
     paddingBottom: 20,
+    marginTop: 20,
   },
   gradientBorder: {
     padding: 2, // Épaisseur de la bordure
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#a1d7ea',
     borderRadius: 8,
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 50,
   },
   textButton: {
     fontSize: 16,

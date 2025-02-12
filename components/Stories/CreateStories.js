@@ -5,6 +5,7 @@ import React, { useState } from "react";
 
 // BottomTab visible sur les Screens => globalStyles
 import { globalStyles } from '../../styles/globalStyles';
+import { signPageStyles } from '../../styles/signPageStyles';
 
 // import de Pressable pour gérer les interactions tactiles (onPress, onLongPress etc)
 import {
@@ -54,7 +55,7 @@ const SafeSpinnerButton = React.forwardRef((props, ref) => {
 const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS
 
 
-export default function NewStoryScreen({ navigation }) {
+export default function NewStoryScreen({ backLibrary }) {
 
   // https://reactnavigation.org/docs/navigation-object/#goback
   const goBack = () => navigation.goBack();
@@ -252,7 +253,7 @@ export default function NewStoryScreen({ navigation }) {
             <View style={globalStyles.titleContainer}>
               <Text style={globalStyles.title}>Ma nouvelle histoire</Text>
               <TouchableOpacity
-                onPress={goBack}
+                onPress={backLibrary}
                 activeOpacity={0.8}
               >
                 <Icon
@@ -423,10 +424,14 @@ export default function NewStoryScreen({ navigation }) {
             {/* Bouton + spinner button */}
             <View style={styles.buttonContainer}>
               <LinearGradient
-                colors={['rgba(255, 123, 0, 0.9)', 'rgba(216, 72, 21, 1)']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 0, y: 0.7 }}
-                style={styles.gradientButton}
+               colors={[
+                                    "rgba(21, 187, 216, 0.7)",
+                                    "rgba(85, 0, 255, 0.7)",
+                                  ]}
+                                  start={{ x: 0, y: 0 }}
+                                  end={{ x: 0, y: 0.7 }}
+                                  style={signPageStyles.gradientButton}
+                                  activeOpacity={0.8}
               >
                 <SpinnerButton
                   isLoading={isLoading}
