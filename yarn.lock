@@ -3127,10 +3127,10 @@ expo-image-loader@~5.0.0:
   resolved "https://registry.npmjs.org/expo-image-loader/-/expo-image-loader-5.0.0.tgz"
   integrity sha512-Eg+5FHtyzv3Jjw9dHwu2pWy4xjf8fu3V0Asyy42kO+t/FbvW/vjUixpTjPtgKQLQh+2/9Nk4JjFDV6FwCnF2ZA==
 
-expo-image-picker@~16.0.3:
-  version "16.0.5"
-  resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-16.0.5.tgz#fefb08f1a35980015122499fb388f2cfcbf08485"
-  integrity sha512-Rkc4vihqPN/48PV3QJkrG10Lg5s1LonKmpVnGwBSlHjRR5ngqJH++DYFndgD69hLaWrJukzCYpP3CyTMAAatWg==
+expo-image-picker@~16.0.6:
+  version "16.0.6"
+  resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-16.0.6.tgz#ab1378711813a8c857ee577a97ce43e31ea84ab5"
+  integrity sha512-HN4xZirFjsFDIsWFb12AZh19fRzuvZjj2ll17cGr19VNRP06S/VPQU3Tdccn5vwUzQhOBlLu704CnNm278boiQ==
   dependencies:
     expo-image-loader "~5.0.0"
 
@@ -3144,10 +3144,10 @@ expo-linear-gradient@~14.0.1:
   resolved "https://registry.npmjs.org/expo-linear-gradient/-/expo-linear-gradient-14.0.2.tgz"
   integrity sha512-nvac1sPUfFFJ4mY25UkvubpUV/olrBH+uQw5k+beqSvQaVQiUfFtYzfRr+6HhYBNb4AEsOtpsCRkpDww3M2iGQ==
 
-expo-location@~18.0.5:
-  version "18.0.5"
-  resolved "https://registry.npmjs.org/expo-location/-/expo-location-18.0.5.tgz"
-  integrity sha512-fcTtHseRUBh3XiATs2ghycjUJOYEl78lWUuaKRKPZMt+pLhqCX7OstbsySySCHHfz2MudvWaq2yXpe5cDmENzg==
+expo-location@~18.0.3:
+  version "18.0.6"
+  resolved "https://registry.yarnpkg.com/expo-location/-/expo-location-18.0.6.tgz#3134d2c72210ba3168f383f9a91af0fabb0ce237"
+  integrity sha512-+yQsrvkKCCKwy3Xy5v1xcrx7hkIOclJO03itbYF4V6QOrCM6F3xHWbb8ncYOFTgz927mfo6r3Mu7RYykiMDs/g==
 
 expo-modules-autolinking@2.0.7:
   version "2.0.7"
@@ -5550,15 +5550,6 @@ react-native-spinner-button@^1.4.3:
     react-native-gradients "^2.1.1"
     react-native-indicators "^0.17.0"
     react-native-svg "^14.1.0"
-
-react-native-svg@15.8.0:
-  version "15.8.0"
-  resolved "https://registry.npmjs.org/react-native-svg/-/react-native-svg-15.8.0.tgz"
-  integrity sha512-KHJzKpgOjwj1qeZzsBjxNdoIgv2zNCO9fVcoq2TEhTRsVV5DGTZ9JzUZwybd7q4giT/H3RdtqC3u44dWdO0Ffw==
-  dependencies:
-    css-select "^5.1.0"
-    css-tree "^1.1.3"
-    warn-once "0.1.1"
 
 react-native-svg@>=13.2.0:
   version "15.11.1"

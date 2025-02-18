@@ -5,19 +5,24 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import SearchStory from '../components/Stories/SearchStory'
 import ReadStories from '../components/Stories/ReadStories'
 import CreateStories from '../components/Stories/CreateStories'
-
+import WriterPage from '../components/Users/WriterPage'
 
 export default function LibraryScreen() {
 
     const [currentComponent, setCurrentComponent] = useState("library");
     const [selectedStory, setSelectedStory] = useState(null);
+    const [selectedWriter, setSelectedWriter] = useState(null)
 
     if (currentComponent === "search") {
         return (
-         <SearchStory backLibrary={() => setCurrentComponent("library")}
+        <SearchStory backLibrary={() => setCurrentComponent("library")}
         openReadStory={(story) => {
             setSelectedStory(story)
             setCurrentComponent("read")
+        }}
+        openAuthorPage={(writer) => {
+            setSelectedWriter(writer)
+            setCurrentComponent("writer")
         }}
         />
     );
@@ -29,6 +34,10 @@ if (currentComponent === "read") {
 
 if (currentComponent === "publish") {
     return <CreateStories  backLibrary={() => setCurrentComponent("library")} />;
+}
+
+if (currentComponent === "writer") {
+    return <WriterPage writer={selectedWriter} backSearch={() => setCurrentComponent("search")} />
 }
 
     return (

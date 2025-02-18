@@ -57,6 +57,7 @@ function TabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        tabBarHideOnKeyboard: true, // Cacher la nav bar quand le clavier est activée, avant elle était juste dessus
         tabBarIcon: ({ focused, size }) => {
           let iconName = "";
 
