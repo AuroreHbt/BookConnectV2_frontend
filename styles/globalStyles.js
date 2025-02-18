@@ -25,7 +25,7 @@ export const globalStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        paddingTop: 25,
+        // paddingTop: 25,
         paddingHorizontal: 15,
         // overflow: 'hidden'
     },
@@ -35,7 +35,7 @@ export const globalStyles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 15,
-        marginTop: 20,
+        // marginTop: 20,
         marginBottom: 20,
         width: '100%',
 
@@ -47,7 +47,7 @@ export const globalStyles = StyleSheet.create({
         fontWeight: '500',
         fontSize: 28,
         padding: 5,
-        color: 'rgba(55, 27, 12, 0.9)', // #371B0C
+        color: 'rgba(85, 0, 255, 0.8)', 
         flexWrap: 'wrap',
         width: '90%',
 
@@ -57,8 +57,9 @@ export const globalStyles = StyleSheet.create({
     // CSS du chevron pour le goBack
     returnContainer: {
         position: 'absolute',
-        top: 10,
+        top: 25,
         right: 0,
+        color: 'rgba(85, 0, 255, 0.3)',
 
         // borderWidth: 1,
     },

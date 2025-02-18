@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 // BottomTab visible sur les Screens => globalStyles
-import { globalStyles } from '../../styles/globalStyles';
+import { globalStyles } from "../../styles/globalStyles";
 
 import {
   KeyboardAvoidingView,
@@ -23,22 +23,16 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { deleteStory, updateStory, addStory } from "../../reducers/story";
 
-// import de la bibliothèque d'icône Fontawsome via react-native-vector-icons
-import Icon from 'react-native-vector-icons/FontAwesome';
+// bibliotheque d'icones Ionicons
+import { Ionicons } from "@expo/vector-icons";
 
 // import pour utiliser des dégradés linéaires (x,y)
-import { LinearGradient } from 'expo-linear-gradient';
-
-
+import { LinearGradient } from "expo-linear-gradient";
 
 const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
 
-export default function MyPublishedStoriesScreen({ navigation }) {
-
-  // https://reactnavigation.org/docs/navigation-object/#goback
-  const goBack = () => navigation.goBack();
-
-  const defaultImage = require('../assets/image-livre-defaut.jpg')
+export default function CreatedStories({ backLibrary, navigation }) {
+  const defaultImage = require("../../assets/image-livre-defaut.jpg");
 
   const user = useSelector((state) => state.user.value); // Informations recupérées depuis le store
   const story = useSelector((state) => state.story.value); // story list = tableau d'objets
@@ -47,29 +41,28 @@ export default function MyPublishedStoriesScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const [stories, setStories] = useState([]); //hook d'état pour stocker les histoires publiées
-  const [isVisible, setIsVisible] = useState(false) // hook d'état pour le spoiler sur les images sensibles
+  const [isVisible, setIsVisible] = useState(false); // hook d'état pour le spoiler sur les images sensibles
   const [characterTitleCount, setCharacterTitleCount] = useState(0); // variable d'état pour gérer l'affichage du nombre de caractères pour la description
   const [characterDescriptionCount, setCharacterDescriptionCount] = useState(0); // variable d'état pour gérer l'affichage du nombre de caractères pour la description
 
-
   // variables d'état pour gérer la modif titre et description
   const [modaleIsVisible, setModaleIsVisible] = useState(false);
-  const [newTitle, setNewTitle] = useState('');
-  const [newDescription, setNewDescription] = useState('');
+  const [newTitle, setNewTitle] = useState("");
+  const [newDescription, setNewDescription] = useState("");
 
   const handleShowContent = () => {
-    console.log('isVisible initial: ', isVisible);
+    console.log("isVisible initial: ", isVisible);
     setIsVisible(!isVisible); // Inverse l'état de isVisible
     if (isVisible === false) {
       Alert.alert("Contenu sensible visible");
     }
   };
 
-  console.log('état modaleIsVisible: ', modaleIsVisible);
+  console.log("état modaleIsVisible: ", modaleIsVisible);
   const handleShowModal = () => {
     setModaleIsVisible(!modaleIsVisible); // Inverse l'état de modaleIsVisible
-    setNewTitle('');
-    setNewDescription('');
+    setNewTitle("");
+    setNewDescription("");
   };
 
   // Fonction pour récupérer les histoires publiées
@@ -82,7 +75,6 @@ export default function MyPublishedStoriesScreen({ navigation }) {
   useEffect(() => {
     getMyPublishedStories();
   }, [user.username]); // Actualisation sur l'utilisateur en cas de changement
-
 
   // Fonction pour supprimer une histoire que l'on a postée
   const handleDeleteStory = (storyId) => {
@@ -97,17 +89,17 @@ export default function MyPublishedStoriesScreen({ navigation }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ token: user.token, id: storyId }),
-      // Envoi de l'ID de l'histoire à supprimer lié au token de l'author : sans cette ligne, la requete est vide (cf. console.log de req.body sur la route delete)
+      // Envoi de l'ID de l'histoire à supprimer lié au token du "writer" : sans cette ligne, la requete est vide (cf. console.log de req.body sur la route delete)
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("DATA: ", data)
-        console.log("ID: ", storyId)
+        console.log("DATA: ", data);
+        console.log("ID: ", storyId);
 
         if (data.result) {
-          console.log('Réponse du serveur (data.result): ', data.result)
-          dispatch(deleteStory(storyId)) // supprime l'histoire du store
-          console.log('story supprimée avec succès');
+          console.log("Réponse du serveur (data.result): ", data.result);
+          dispatch(deleteStory(storyId)); // supprime l'histoire du store
+          console.log("story supprimée avec succès");
           getMyPublishedStories(); // pour recharger la page avec les stories publiées
         }
       })
@@ -121,13 +113,11 @@ export default function MyPublishedStoriesScreen({ navigation }) {
   // console.log("Valeur de newDescription avant mise à jour :", newDescription);
   // console.log("Contenu de story :", story);
 
-
   // Fonction pour modifier une histoire postée : à définir
   const handleUpdateStory = async (id) => {
-
     // parametre id pour cibler la story qu'on veut
 
-    // Debug 
+    // Debug
     console.log("handleUpdateStory fonction appelée"); // ok
     console.log("storyId:", id);
     console.log("user.token:", user.token); // ok
@@ -143,72 +133,71 @@ export default function MyPublishedStoriesScreen({ navigation }) {
     };
 
     if (newTitle.trim()) updateData.newTitle = newTitle.trim();
-    if (newDescription.trim()) updateData.newDescription = newDescription.trim();
+    if (newDescription.trim())
+      updateData.newDescription = newDescription.trim();
 
     try {
-      const response = await
-        fetch(`${BACKEND_ADDRESS}/stories/updatepublishedstory`, {
-          method: 'PUT',
+      const response = await fetch(
+        `${BACKEND_ADDRESS}/stories/updatepublishedstory`,
+        {
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(updateData),
-        });
+        }
+      );
 
       const data = await response.json();
-      console.log('Données reçues par le serveur :', data);
+      console.log("Données reçues par le serveur :", data);
 
       if (data.result) {
-        console.log('data.result: ', data.result);
+        console.log("data.result: ", data.result);
 
         // Dispatch de la fonction updateStory pour mettre à jour le state
-        dispatch(updateStory({
-          id: storyId,
-          data: {
-            title: updateData.newTitle || story[0].title, // Utilise le titre actuel s'il n'est pas modifié
-            description: updateData.newDescription || story[0].description, // Utilise la description actuelle s'il n'est pas modifié
-          }
-        }));
+        dispatch(
+          updateStory({
+            id: storyId,
+            data: {
+              title: updateData.newTitle || story[0].title, // Utilise le titre actuel s'il n'est pas modifié
+              description: updateData.newDescription || story[0].description, // Utilise la description actuelle s'il n'est pas modifié
+            },
+          })
+        );
 
-        console.log('Histoire mise à jour avec succès :', data.story);
+        console.log("Histoire mise à jour avec succès :", data.story);
 
         Alert.alert("Succès", "L'histoire a été mise à jour avec succès.");
 
         getMyPublishedStories(); // Re-fetch stories
         return data.story;
-
       } else {
-        console.error('Erreur lors de la mise à jour :', data.error);
-        Alert.alert(`Erreur lors de la mise à jour : auteur ou histoire non trouvée`);
+        console.error("Erreur lors de la mise à jour :", data.error);
+        Alert.alert(
+          `Erreur lors de la mise à jour : auteur ou histoire non trouvée`
+        );
       }
     } catch (error) {
-      console.error('Erreur lors de la requête :', error);
-      Alert.alert('Erreur lors de la requête');
+      console.error("Erreur lors de la requête :", error);
+      Alert.alert("Erreur lors de la requête");
     }
   };
 
-
   return (
-
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
         style={globalStyles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <View>
-
-          {/* Titre + Bouton retour (goBack) */}
+          {/* Titre + Bouton retour screen Library */}
           <View style={globalStyles.titleContainer}>
-            <Text style={globalStyles.title}>Mes oeuvres</Text>
-            <TouchableOpacity
-              onPress={goBack}
-              activeOpacity={0.8}
-            >
-              <Icon
+            <Text style={globalStyles.title}>Mes publications</Text>
+            <TouchableOpacity onPress={backLibrary} activeOpacity={0.8}>
+              <Ionicons
                 style={globalStyles.returnContainer}
-                name="chevron-circle-left"
+                name="chevron-back-circle-sharp"
                 size={32}
-                color='rgba(55, 27, 12, 0.3)'
               />
             </TouchableOpacity>
           </View>
@@ -221,7 +210,9 @@ export default function MyPublishedStoriesScreen({ navigation }) {
             // data={Array.isArray(stories) ? stories.reverse() : []} // Check if stories is an array pour inverser l'affichage des story postées sans gérer un tri par date
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() => navigation.navigate("ReadStory", { story: item })} // Navigation avec paramètres
+                onPress={() =>
+                  navigation.navigate("ReadStory", { story: item })
+                } // Navigation avec paramètres
               >
                 <View style={styles.storyContainer}>
                   {/* affichage des infos venant de addNewStory */}
@@ -230,28 +221,37 @@ export default function MyPublishedStoriesScreen({ navigation }) {
                   </View>
 
                   <View style={styles.rowContainer}>
-
-                    <View style={styles.storyCard} >
-                      <Text style={styles.storyPublic}>{item.isAdult ? 'Contenu 18+' : "Tout public"}</Text>
-                      <Text style={styles.storyCategory}>{"Catégorie: " + item.category}</Text>
+                    <View style={styles.storyCard}>
+                      <Text style={styles.storyPublic}>
+                        {item.isAdult ? "Contenu 18+" : "Tout public"}
+                      </Text>
+                      <Text style={styles.storyCategory}>
+                        {"Catégorie: " + item.category}
+                      </Text>
                     </View>
 
                     {/* affichage du fichier image téléchargé */}
                     <View style={styles.imageContainer}>
-
                       {/* Spoiler sur Image */}
                       <Image
-                        source={item.coverImage ? { uri: item.coverImage } : defaultImage}
+                        source={
+                          item.coverImage
+                            ? { uri: item.coverImage }
+                            : defaultImage
+                        }
                         style={
                           item.isAdult // isAdult=true (18+)
-                            ? [styles.coverImageSpoiler, { width: 130, height: 130 }]
+                            ? [
+                                styles.coverImageSpoiler,
+                                { width: 130, height: 130 },
+                              ]
                             : [styles.coverImage, { width: 130, height: 130 }]
                         }
                       />
 
                       {item.coverImage && item.isAdult ? ( // si isAdult = true => 18+ => isVisible doit être false (donc true) pour retirer le spoiler et afficher l'image uploadée
-                        <Icon
-                          name={isVisible ? null : 'eye-slash'} // si isVisible est true (donc = false), pas d'icon, else icon eye-slash
+                        <Ionicons
+                          name={isVisible ? null : "eye-off-outline"} // si isVisible est true (donc = false), pas d'icon
                           size={72}
                           style={isVisible ? null : styles.contentVisible}
                           onPress={handleShowContent}
@@ -262,7 +262,10 @@ export default function MyPublishedStoriesScreen({ navigation }) {
                       {isVisible && (
                         <Image
                           source={{ uri: item.coverImage }}
-                          style={[styles.coverImageVisible, { width: 130, height: 130 }]}
+                          style={[
+                            styles.coverImageVisible,
+                            { width: 130, height: 130 },
+                          ]}
                         />
                       )}
                     </View>
@@ -273,10 +276,12 @@ export default function MyPublishedStoriesScreen({ navigation }) {
                   </Text>
 
                   <View style={styles.buttonCard}>
-
                     {/* bouton pour modifier (route PUT à définir) */}
                     <LinearGradient
-                      colors={['rgba(255, 123, 0, 0.9)', 'rgba(216, 72, 21, 1)']}
+                      colors={[
+                        "rgba(255, 123, 0, 0.9)",
+                        "rgba(216, 72, 21, 1)",
+                      ]}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 0, y: 0.7 }}
                       style={styles.gradientButton}
@@ -298,13 +303,12 @@ export default function MyPublishedStoriesScreen({ navigation }) {
                       style={styles.iconContainer}
                       onPress={() => handleDeleteStory(item._id)} // Passez l'ID de l'histoire ici
                     >
-                      <Icon
-                        name='trash-o'
+                      <Ionicons
+                        name="trash-outline"
                         size={28}
-                        color='rgba(55, 27, 12, 0.7)'
+                        color="rgba(85, 0, 255, 0.8)"
                       />
                     </TouchableOpacity>
-
                   </View>
                   <View>
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -312,7 +316,7 @@ export default function MyPublishedStoriesScreen({ navigation }) {
                         transparent={true}
                         animationType="fade"
                         visible={modaleIsVisible}
-                      //onRequestClose={handleShowModal}  // bouton Fermer pour fermer la modale
+                        //onRequestClose={handleShowModal}  // bouton Fermer pour fermer la modale
                       >
                         <View style={styles.modalContainer}>
                           <Text style={styles.textModal}>
@@ -330,13 +334,12 @@ export default function MyPublishedStoriesScreen({ navigation }) {
                             style={styles.input}
                           />
                           <Text
-                            style={
-                              {
-                                color: 'grey',
-                                marginTop: -10,
-                                marginBottom: 10,
-                              }
-                            } >
+                            style={{
+                              color: "grey",
+                              marginTop: -10,
+                              marginBottom: 10,
+                            }}
+                          >
                             {characterTitleCount}/55
                           </Text>
 
@@ -353,18 +356,20 @@ export default function MyPublishedStoriesScreen({ navigation }) {
                             maxLength={200}
                           />
                           <Text
-                            style={
-                              {
-                                color: 'grey',
-                                marginTop: -10,
-                                marginBottom: 10,
-                              }
-                            } >
+                            style={{
+                              color: "grey",
+                              marginTop: -10,
+                              marginBottom: 10,
+                            }}
+                          >
                             {characterDescriptionCount}/200
                           </Text>
 
                           <LinearGradient
-                            colors={['rgba(255, 123, 0, 0.9)', 'rgba(216, 72, 21, 1)']}
+                            colors={[
+                              "rgba(255, 123, 0, 0.9)",
+                              "rgba(216, 72, 21, 1)",
+                            ]}
                             start={{ x: 0, y: 0 }}
                             end={{ x: 0, y: 0.7 }}
                             style={styles.modalButton}
@@ -376,12 +381,17 @@ export default function MyPublishedStoriesScreen({ navigation }) {
                                 handleShowModal(); // repasse à false
                               }}
                             >
-                              <Text style={styles.textButton}>Mettre à jour</Text>
+                              <Text style={styles.textButton}>
+                                Mettre à jour
+                              </Text>
                             </TouchableOpacity>
                           </LinearGradient>
 
                           <LinearGradient
-                            colors={['rgba(255, 123, 0, 0.9)', 'rgba(216, 72, 21, 1)']}
+                            colors={[
+                              "rgba(255, 123, 0, 0.9)",
+                              "rgba(216, 72, 21, 1)",
+                            ]}
                             start={{ x: 0, y: 0 }}
                             end={{ x: 0, y: 0.7 }}
                             style={styles.modalButton}
@@ -393,28 +403,23 @@ export default function MyPublishedStoriesScreen({ navigation }) {
                               <Text style={styles.textButton}>Fermer</Text>
                             </TouchableOpacity>
                           </LinearGradient>
-
                         </View>
                       </Modal>
                     </TouchableWithoutFeedback>
-
-                  </ View>
+                  </View>
                 </View>
-
               </TouchableOpacity>
             )}
           />
         </View>
-      </KeyboardAvoidingView >
+      </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 }
 
-
 const styles = StyleSheet.create({
-
   storyContainer: {
-    width: '100%',
+    width: "100%",
     padding: 5,
     marginBottom: 15,
     borderRadius: 10,
@@ -426,8 +431,8 @@ const styles = StyleSheet.create({
   },
 
   storyTitle: {
-    fontFamily: 'Poppins-Regular',
-    fontWeight: '400',
+    fontFamily: "Poppins-Regular",
+    fontWeight: "400",
     fontSize: 18,
     paddingHorizontal: 5,
     paddingVertical: 5,
@@ -441,8 +446,8 @@ const styles = StyleSheet.create({
 
   // bloc storyCard + cover
   rowContainer: {
-    flexDirection: 'row',
-    width: '100%',
+    flexDirection: "row",
+    width: "100%",
     height: 140,
 
     // borderWidth: 1,
@@ -451,7 +456,7 @@ const styles = StyleSheet.create({
 
   // bloc des infos de l'histoire: public, category, description
   storyCard: {
-    width: '60%',
+    width: "60%",
 
     // borderWidth: 1,
     // borderColor: 'darkorange',
@@ -459,10 +464,10 @@ const styles = StyleSheet.create({
 
   storyPublic: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     paddingHorizontal: 5,
     marginTop: 10,
-    width: '100%',
+    width: "100%",
 
     // borderWidth: 1,
     // borderColor: 'pink',
@@ -472,7 +477,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingHorizontal: 5,
     marginVertical: 5,
-    width: '100%',
+    width: "100%",
     height: 70,
 
     // borderWidth: 1,
@@ -483,9 +488,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingHorizontal: 5,
     marginVertical: 5,
-    textAlign: 'justify',
-    width: '100%',
-    flexWrap: 'wrap',
+    textAlign: "justify",
+    width: "100%",
+    flexWrap: "wrap",
 
     // borderWidth: 1,
     // borderColor: 'purple',
@@ -493,10 +498,10 @@ const styles = StyleSheet.create({
 
   // bloc des couvertures
   imageContainer: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     right: 0,
-    width: '40%',
+    width: "40%",
     height: 135,
     paddingVertical: 2,
     paddingHorizontal: 3,
@@ -511,28 +516,29 @@ const styles = StyleSheet.create({
   },
 
   coverImageVisible: {
-    position: 'absolute', // supersposition de l'image sur le spoiler
+    position: "absolute", // supersposition de l'image sur le spoiler
     top: 0,
     right: 0,
     borderRadius: 10,
   },
 
   coverImageSpoiler: {
-    position: 'absolute', // supersposition de l'image sur le spoiler
+    position: "absolute", // supersposition de l'image sur le spoiler
     top: 0,
     right: 0,
 
     borderRadius: 10,
-    backgroundColor: 'rgba(0, 0, 0, 1)',
+    backgroundColor: "rgba(0, 0, 0, 1)",
     opacity: 0.3,
   },
 
-  contentVisible: { // eye-slash
-    position: 'absolute',
+  contentVisible: {
+    // eye-slash
+    position: "absolute",
     top: 20,
     right: 20,
-    color: 'rgba(253,255,0, 0.8)',
-    backgroundColor: 'rgba(255, 123, 0, 0.7)',
+    color: "lightgrey",
+    backgroundColor: "black",
     borderRadius: 50,
     padding: 10,
     // elevation: 10,
@@ -545,7 +551,7 @@ const styles = StyleSheet.create({
   //   position: 'absolute',
   //   top: 20,
   //   right: 25,
-  //   color: 'lightgrey', // 'rgba(216, 72, 21, 0.8)',
+  //   color: 'lightgrey',
   //   opacity: 0.5,
   //   borderRadius: 50,
   //   padding: 10,
@@ -554,9 +560,9 @@ const styles = StyleSheet.create({
 
   // CSS du bouton Modifier + poubelle pour suppr
   buttonCard: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '95%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "95%",
     marginVertical: 10,
     marginLeft: 10,
 
@@ -575,32 +581,32 @@ const styles = StyleSheet.create({
   },
 
   textButton: {
-    textAlign: 'center',
-    fontFamily: 'sans-serif',
-    fontWeight: 'bold',
+    textAlign: "center",
+    fontFamily: "sans-serif",
+    fontWeight: "bold",
     fontSize: 16,
-    color: 'white', // 'rgba(55, 27, 12, 0.8)', // #371B0C
+    color: "white",
   },
 
   // style de la modale
   modalContainer: {
     flex: 0.9,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '85%',
-    backgroundColor: 'white',
+    justifyContent: "center",
+    alignItems: "center",
+    width: "85%",
+    backgroundColor: "white",
     borderRadius: 10,
     paddingVertical: 25,
-    margin: 'auto',
+    margin: "auto",
   },
 
   textModal: {
     fontSize: 24,
-    fontFamily: 'sans-serif',
-    textAlign: 'center',
+    fontFamily: "sans-serif",
+    textAlign: "center",
     margin: 5,
     marginVertical: 25,
-    color: "rgba(55, 27, 12, 0.8)",
+    color: "rgba(85, 0, 255, 0.8)",
   },
 
   input: {
@@ -628,5 +634,4 @@ const styles = StyleSheet.create({
     left: 15,
     marginRight: 30,
   },
-
 });
