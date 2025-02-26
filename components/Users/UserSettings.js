@@ -1,17 +1,24 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image, Modal, Animated } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { useDispatch } from "react-redux";
-import { logout } from "../../reducers/user"; 
+import { useDispatch, useSelector } from "react-redux"; 
+import { logout, updateAvatar } from "../../reducers/user"; 
 import AvatarSelector from "./AvatarSelector"; 
 
 const defaultImage = require("../../assets/avatar1.jpg");
 
-const UserSettings = ({ visible, onClose, user }) => {
+const UserSettings = ({ visible, onClose }) => {
   const dispatch = useDispatch();
-  const slideAnim = useState(new Animated.Value(-300))[0]; // Animation du slide-in
+  const slideAnim = useState(new Animated.Value(-300))[0];
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
-  const [avatar, setAvatar] = useState(user?.avatar || defaultImage);
+
+  // Récupère les données utilisateur depuis Redux
+  const user = useSelector((state) => state.user.value);
+  
+  // Vérifie si un avatar sélectionné est présent et le récupère
+  const avatarSource = user?.avatar 
+  ? { uri: user.avatar }
+  : defaultImage;
 
   // Effet d'ouverture et de fermeture
   React.useEffect(() => {
@@ -36,7 +43,7 @@ const UserSettings = ({ visible, onClose, user }) => {
   };
 
   const handleAvatarSelected = (newAvatar) => {
-    setAvatar(newAvatar);
+    dispatch(updateAvatar(newAvatar)); // Met à jour l'avatar dans Redux
     setShowAvatarSelector(false);
   };
 
@@ -46,7 +53,7 @@ const UserSettings = ({ visible, onClose, user }) => {
         <Animated.View style={[styles.modalContainer, { transform: [{ translateX: slideAnim }] }]}>
           {/* HEADER AVEC AVATAR */}
           <View style={styles.header}>
-            <Image source={typeof avatar === 'string' ? { uri: avatar } : avatar} style={styles.avatar} />
+            <Image source={avatarSource} style={styles.avatar} />
             <Text style={styles.userName}>{user?.username || "Utilisateur"}</Text>
           </View>
 
@@ -76,7 +83,7 @@ const UserSettings = ({ visible, onClose, user }) => {
       {/* MODAL POUR LE SÉLECTEUR D'AVATAR */}
       {showAvatarSelector && (
         <Modal transparent={true} visible={showAvatarSelector} animationType="slide">
-          <AvatarSelector onAvatarSelected={handleAvatarSelected} />
+          <AvatarSelector onAvatarSelected={handleAvatarSelected} onClose={() => setShowAvatarSelector(false)} />
         </Modal>
       )}
     </Modal>

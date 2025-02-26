@@ -171,85 +171,6 @@ export default function NewEventScreen({ navigation }) {
 
         console.log("Préparation des données...");
 
-        /* // validation des champs :
-        let hasError = false;
-       
-        // Validation du titre
-        if (!title) {
-          setTitleError('Le titre est obligatoire');
-          hasError = true;
-        } else {
-          setTitleError('');
-        }
-       
-        // Validation de la catégorie
-        if (!category) {
-          setCategoryError('La catégorie est obligatoire');
-          hasError = true;
-        } else {
-          setCategoryError('');
-        }
-       
-        // Validation de la description
-        if (!description) {
-          setDescError('La description est obligatoire');
-          hasError = true;
-        } else {
-          setDescError('');
-        }
-       
-        // Validation de la date
-        if (!day) {
-          setDateError('La date est obligatoire');
-          hasError = true;
-        } else {
-          setDateError('');
-        }
-       
-        // Validation de l'heure de début
-        if (!startTime) {
-          setStartTimeError('L\'heure de début est obligatoire');
-          hasError = true;
-        } else {
-          setStartTimeError('');
-        }
-       
-        // Validation de l'heure de fin
-        if (!endTime) {
-          setEndTimeError('L\'heure de fin est obligatoire');
-          hasError = true;
-        } else {
-          setEndTimeError('');
-        }
-       
-        // Validation du lieu
-        if (!identityPlace) {
-          setIdentityPlaceError('Le lieu est obligatoire');
-          hasError = true;
-        } else {
-          setIdentityPlaceError('');
-        }
-       
-        // Validation de l'adresse
-        if (!placeNumber || !street || !code || !city) {
-          setPlaceError('L\'adresse complète est obligatoire');
-          hasError = true;
-        } else {
-          setPlaceError('');
-        }
-       
-        if (hasError) {
-          console.log("Validation échouée, soumission annulée.");
-          return; // early return
-        } */
-
-        /*   if (!placeNumber || !street || !code || !city) {
-            console.log("Erreur sur l'adresse :", { placeNumber, street, code, city });
-            setPlaceError('L\'adresse complète est obligatoire');
-            hasError = true;
-          } else {
-            setPlaceError('');
-          } */
 
         console.log("Planner (user._id) :", user._id);
         if (!user._id) {
@@ -317,7 +238,7 @@ export default function NewEventScreen({ navigation }) {
         }
         console.log("Envoi des données...");
         fetch(`${BACKEND_ADDRESS}/events/addevent`, {
-            method: "POST",
+            method: "POST", 
             headers: {
                 'Accept': 'application/json', // Optionnel pour indiquer que vous attendez du JSON en réponse
                 'Authorization': `Bearer ${user.token}` // Assurez-vous que le token est présent dans l'état utilisateur
