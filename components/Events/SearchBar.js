@@ -2,10 +2,15 @@ import React from "react";
 import { StyleSheet, TextInput, TouchableOpacity, Text, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
+import AvatarHeader from "../Users/AvatarHeader"; // Import de AvatarHeader
 
 const SearchBar = ({ city, setCity, handleSearchPlace, onFiltersPress, onAddPress }) => {
   return (
     <View style={styles.searchContainer}>
+      
+      {/* Avatar en haut à gauche */}
+      <AvatarHeader />
+
       <View style={styles.inputWrapper}>
         <FontAwesome name="map-marker" size={20} color="#4B0082" style={styles.inputIcon} />
         <TextInput
@@ -15,6 +20,7 @@ const SearchBar = ({ city, setCity, handleSearchPlace, onFiltersPress, onAddPres
           style={styles.inputField}
         />
       </View>
+      
       <TouchableOpacity onPress={handleSearchPlace} style={styles.searchButton}>
         <LinearGradient
           colors={["rgba(21, 187, 216, 0.7)", "rgba(85, 0, 255, 0.7)"]}
@@ -27,12 +33,10 @@ const SearchBar = ({ city, setCity, handleSearchPlace, onFiltersPress, onAddPres
         </LinearGradient>
       </TouchableOpacity>
 
-      {/* Bouton des filtres à l'intérieur de la barre de recherche */}
       <TouchableOpacity onPress={onFiltersPress} style={styles.filtersButton}>
         <FontAwesome name="sliders" size={20} color="#4B0082" />
       </TouchableOpacity>
 
-      {/* Bouton "+" à côté des filtres */}
       <TouchableOpacity onPress={onAddPress} style={styles.addButton}>
         <LinearGradient
           colors={["rgba(21, 187, 216, 0.7)", "rgba(85, 0, 255, 0.7)"]}
@@ -64,7 +68,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     paddingLeft: 10,
+    marginLeft: 10, // Ajoute un espace entre l'avatar et l'input
   },
+  
   inputIcon: {
     marginRight: 10,
   },
@@ -88,7 +94,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   addButton: {
-    marginLeft: 10,  // Ajout d'un espacement pour aligner le bouton "+" avec le bouton filtre
+    marginLeft: 10,
   },
 });
 
