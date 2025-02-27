@@ -1,29 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
-import { deleteEvent } from "../reducers/event";
-import UserSettings from "../components/Users/UserSettings";
-import Icon from "react-native-vector-icons/FontAwesome";
-import {
-  Svg,
-  Text as SvgText,
-  Defs,
-  LinearGradient as SvgLinearGradient,
-  Stop,
-} from "react-native-svg";
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Modal,
-  Image,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
+import { Svg, Text as SvgText, Defs, LinearGradient as SvgLinearGradient, Stop } from "react-native-svg";
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, TouchableWithoutFeedback, Keyboard, Image } from "react-native";
 import { logout } from "../reducers/user";
+import AvatarHeader from "../components/Users/AvatarHeader";
 
 const defaultImage = require("../assets/image-livre-defaut.jpg");
 const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
@@ -37,10 +18,7 @@ export default function HomeScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const story = useSelector((state) => state.story.value);
   const addedEvents = useSelector((state) => state.event.events);
-  console.log("Événements dans le store:", addedEvents);
-
-  const [isParameterVisible, setIsParameterVisible] = useState(false);
-  const [allStories, setAllStories] = useState([]);
+  const [allStories, setAllStories] = React.useState([]);
 
   useEffect(() => {
     fetch(`${BACKEND_ADDRESS}/stories/laststories`)
@@ -51,10 +29,6 @@ export default function HomeScreen({ navigation }) {
         }
       });
   }, []);
-
-  const toggleParameter = () => {
-    setIsParameterVisible(!isParameterVisible);
-  };
 
   const handleLogout = () => {
     dispatch(logout());
@@ -76,55 +50,40 @@ export default function HomeScreen({ navigation }) {
           end={{ x: 0, y: 1 }}
           style={styles.gradient}
         >
+          {/* Header avec AvatarHeader */}
           <View style={styles.header}>
-            <TouchableOpacity onPress={toggleParameter}>
-            <Image
-  source={
-    user?.avatar
-      ? { uri: user.avatar }
-      : require("../assets/DragonAdulte.png")
-  }
-  style={styles.avatar}
-/>
-
-            </TouchableOpacity>
+            <AvatarHeader onLogout={handleLogout} />
             <View style={styles.welcomeContainer}>
-  <Svg height="30" width="200">
-    <Defs>
-      <SvgLinearGradient id="textGradient" x1="0" y1="1" x2="0" y2="0">
-        <Stop offset="0" stopColor="#5500FF" stopOpacity="1" />
-        <Stop offset="1" stopColor="#15BBD8" stopOpacity="1" />
-      </SvgLinearGradient>
-    </Defs>
-    <SvgText
-      x="0"
-      y="25"
-      fontSize="20"
-      fontWeight="bold"
-      fill="url(#textGradient)"
-      fontFamily="Poppins"
-    >
-      Hello {user?.username || "Utilisateur"}
-    </SvgText>
-  </Svg>
-</View>
-
+              <Svg height="30" width="200">
+                <Defs>
+                  <SvgLinearGradient id="textGradient" x1="0" y1="1" x2="0" y2="0">
+                    <Stop offset="0" stopColor="#5500FF" stopOpacity="1" />
+                    <Stop offset="1" stopColor="#15BBD8" stopOpacity="1" />
+                  </SvgLinearGradient>
+                </Defs>
+                <SvgText
+                  x="0"
+                  y="25"
+                  fontSize="20"
+                  fontWeight="bold"
+                  fill="url(#textGradient)"
+                  fontFamily="Poppins"
+                >
+                  Hello {user?.username || "Utilisateur"}
+                </SvgText>
+              </Svg>
+            </View>
           </View>
 
+          {/* Scrollable Content */}
           <ScrollView style={styles.scrollContent}>
             <View style={styles.sectionContainer}>
               <Text style={styles.textSection}>Lectures en cours</Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {story ? (
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate("ReadStory", { story })}
-                  >
+                  <TouchableOpacity onPress={() => navigation.navigate("ReadStory", { story })}>
                     <Image
-                      source={
-                        story.coverImage
-                          ? { uri: story.coverImage }
-                          : defaultImage
-                      }
+                      source={story.coverImage ? { uri: story.coverImage } : defaultImage}
                       style={styles.book}
                       resizeMode="cover"
                     />
@@ -141,19 +100,10 @@ export default function HomeScreen({ navigation }) {
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {allStories.length > 0 ? (
                   allStories.map((story, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      onPress={() =>
-                        navigation.navigate("ReadStory", { story })
-                      }
-                    >
+                    <TouchableOpacity key={index} onPress={() => navigation.navigate("ReadStory", { story })}>
                       <View style={styles.card}>
                         <Image
-                          source={
-                            story.coverImage
-                              ? { uri: story.coverImage }
-                              : defaultImage
-                          }
+                          source={story.coverImage ? { uri: story.coverImage } : defaultImage}
                           style={styles.book}
                           resizeMode="cover"
                         />
@@ -186,26 +136,8 @@ export default function HomeScreen({ navigation }) {
                 )}
               </ScrollView>
             </View>
-
-            <View style={styles.sectionContainer}>
-              <Text style={styles.textSection}>Articles favoris</Text>
-              <Text>Aucun article favori pour le moment.</Text>
-            </View>
           </ScrollView>
         </LinearGradient>
-        <Modal
-          visible={isParameterVisible}
-          onRequestClose={toggleParameter}
-          animationType="slide"
-          transparent={true}
-        >
-          <UserSettings
-            visible={isParameterVisible}
-            onClose={toggleParameter}
-            user={user}
-            onLogout={handleLogout}
-          />
-        </Modal>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
@@ -226,20 +158,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   welcomeContainer: {
-    marginLeft: 10, // To make the text closer to the avatar
-  },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-  },
-  welcome: {
-    fontSize: 20,
-    color: "white",
-    fontFamily: "Poppins",
-  },
-  bold: {
-    fontWeight: "bold",
+    marginLeft: 10,
   },
   scrollContent: {
     padding: 20,
@@ -261,11 +180,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginRight: 15,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 3,
   },
   book: {
     width: 110,
