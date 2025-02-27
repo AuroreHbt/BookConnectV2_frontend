@@ -34,7 +34,7 @@ export default function ReadStoryScreen({ story, backSearch }) {
         <View style={styles.container}>
             <View style={styles.headerContainer}>
             <Text style={styles.headerTitle}>Bonne lecture {user.username} !</Text>
-                <Icon name="angle-double-left" size={30} color="black" style={styles.backIcon} onPress={backSearch} />
+                <Icon name="angle-double-left" size={30} color="black" style={styles.backIcon} onPress={backSearch}/>
                 
             </View>
 
