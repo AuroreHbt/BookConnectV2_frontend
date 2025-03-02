@@ -13,6 +13,8 @@ import {
     Keyboard,
     TouchableWithoutFeedback
 } from 'react-native';
+import Header from '../../modules/Header';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
@@ -117,18 +119,11 @@ export default function SearchScreen({ backLibrary, openReadStory, openWriterPag
         </TouchableOpacity>
     ), []);
 
-    return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+    return ( 
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}> 
             <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
                 <View style={styles.container}>
-                    <View style={styles.headerContainer}>
-                        <Icon name="user-circle" size={45} color="#b4b4b4" style={styles.profilIcon} />
-                        <View style={styles.titleContainer}>
-                            <Text style={styles.title}>Rechercher</Text>
-                            <Icon name="angle-left" size={30} color="black" style={styles.backIcon} onPress={backLibrary} />
-                        </View>
-                    </View>
-
+                  <Header title="Rechercher" onBackPress={backLibrary} />
                     <View style={styles.searchContainer}>
                         <Icon name="search" size={25} color="#000" style={styles.searchIcon} />
                         <TextInput
@@ -149,8 +144,8 @@ export default function SearchScreen({ backLibrary, openReadStory, openWriterPag
                         windowSize={5}
                         removeClippedSubviews={true}
                         getItemLayout={(data, index) => ({ length: 50, offset: 50 * index, index })}
-                        keyboardShouldPersistTaps="handled"
-                        keyboardDismissMode='on-drag'
+                        keyboardShouldPersistTaps="handled" // ferme le clavier quand on appuie sur un élement de la liste
+                        keyboardDismissMode='on-drag' // ferme le clavier quand on fait défiler la liste
                         ListEmptyComponent={
                             search.length > 0 && filteredStories.length === 0 ? (
                                 <Text style={styles.emptyText}>Aucun résultat trouvé</Text>
@@ -169,28 +164,7 @@ const styles = StyleSheet.create({
         padding: 15,
         backgroundColor: "#F8F5F2",
     },
-    headerContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 20,
-        marginBottom: 10,
-    },
-    profilIcon: {},
-    titleContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    backIcon: {
-        marginRight: 20,
-    },
-    title: {
-        fontSize: 34,
-        fontWeight: "bold",
-        marginLeft: 30,
-        color: '#222'
-    },
+   
     searchContainer: {
         flexDirection: "row",
         alignItems: "center",

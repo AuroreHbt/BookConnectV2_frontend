@@ -15,9 +15,11 @@ import { useFocusEffect } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+
 import SearchStory from '../components/Stories/SearchStory';
 import ReadStories from '../components/Stories/ReadStories';
 import CreateStories from '../components/Stories/CreateStories';
+import ExploreStories from '../components/Stories/ExploreStories'
 import WriterPage from '../components/Users/WriterPage';
 
 const storiesByGenre = [
@@ -42,6 +44,7 @@ export default function LibraryScreen() {
   const [selectedStory, setSelectedStory] = useState(null);
   const [selectedWriter, setSelectedWriter] = useState(null);
   const [previousScreen, setPreviousScreen] = useState("library");
+  const [selectedGenre, setSelectedGenre] = useState(null); // permet de séléctionner les histoires par genre
 
   useFocusEffect(
     React.useCallback(() => {
@@ -97,6 +100,12 @@ export default function LibraryScreen() {
     );
   }
 
+  if (currentComponent === "explore") {
+    return <ExploreStories
+    selectedGenre={selectedGenre}
+     backLibrary={() => setCurrentComponent("library")} />;
+  }
+
   return (
     <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
       <View style={styles.container}>
@@ -123,7 +132,11 @@ export default function LibraryScreen() {
           <View style={styles.genreContainer}>
             {genres.map((genre) => (
               <View key={genre.id} style={styles.genreWrapper}>
-                <TouchableOpacity style={[styles.genreButton, {backgroundColor: genre.color}]}>
+                <TouchableOpacity style={[styles.genreButton, {backgroundColor: genre.color}]}
+                  onPress={()=> {
+                    setSelectedGenre(genre.name);
+                    setCurrentComponent("explore")
+                  }} >
                   <MaterialCommunityIcons name={genre.icon} size={30} color="white" />
                 </TouchableOpacity>
                 <Text style={styles.genreText}>{genre.name}</Text>
@@ -271,7 +284,7 @@ const styles = StyleSheet.create({
   },
   
   genreButton: {
-    width: 60,
+    width: 65,
     height: 60,
     borderRadius: 30,
     alignItems: "center",

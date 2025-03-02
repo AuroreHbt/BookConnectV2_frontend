@@ -203,7 +203,9 @@ const styles = StyleSheet.create({
     headerBackground: {
         width: "100%",
         height: 140,
-        borderRadius: 10
+        borderTopLeftRadius : 10,
+        borderTopRightRadius: 10,
+        overflow: "hidden",
     },
     avatar: {
         width: 110,
