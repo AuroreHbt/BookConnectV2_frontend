@@ -24,7 +24,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
 
-export default function ExploreStories({ selectedGenre, backLibrary  }) {
+export default function ExploreStories({ writerName, backLibrary  }) {
     return (
         <View style={styles.container}>
                         <Header title="Lecture" onBackPress={backLibrary} />

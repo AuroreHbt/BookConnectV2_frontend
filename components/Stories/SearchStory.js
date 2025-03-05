@@ -14,6 +14,7 @@ import {
     TouchableWithoutFeedback
 } from 'react-native';
 import Header from '../../modules/Header';
+import AvatarHeader from '../../modules/AvatarHeader';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 

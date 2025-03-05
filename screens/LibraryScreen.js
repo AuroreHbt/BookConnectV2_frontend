@@ -21,6 +21,9 @@ import ReadStories from '../components/Stories/ReadStories';
 import CreateStories from '../components/Stories/CreateStories';
 import ExploreStories from '../components/Stories/ExploreStories'
 import WriterPage from '../components/Users/WriterPage';
+import SummaryStories from '../components/Stories/SummaryStories'
+
+import AvatarHeader from "../modules/AvatarHeader";
 
 const storiesByGenre = [
   { id: "1", genre: "Fantasy", title: "L’épée du Crépuscule", author: "Alice Martin", rating: 4.7, cover: require("../assets/jinx.jpg") },
@@ -60,10 +63,10 @@ export default function LibraryScreen() {
           Keyboard.dismiss();
           setTimeout(() => setCurrentComponent("library"), 100);
         }}
-        openReadStory={(story) => {
+        openSummaryPage={(story) => {
           setSelectedStory(story);
           setPreviousScreen("search");
-          setCurrentComponent("read");
+          setCurrentComponent("summary");
         }}
         openWriterPage={(writer) => {
           setSelectedWriter(writer);
@@ -90,10 +93,10 @@ export default function LibraryScreen() {
     return (
       <WriterPage 
         writerName={selectedWriter}
-        openReadStory={(story) => {
+        openSummaryPage={(story) => {
           setSelectedStory(story);
           setPreviousScreen("writer");
-          setCurrentComponent("read");
+          setCurrentComponent("summary");
         }}
         backSearch={() => setCurrentComponent("search")}
       />
@@ -106,11 +109,20 @@ export default function LibraryScreen() {
      backLibrary={() => setCurrentComponent("library")} />;
   }
 
+  if (currentComponent === 'summary') {
+    return (
+      <SummaryStories selectedStory={selectedStory}
+      backLibrary={() => setCurrentComponent(previousScreen)}
+
+       />
+    )
+  }
+
   return (
     <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Icon name="user-circle" size={45} color="#b4b4b4" />
+        <AvatarHeader onLogout={() => console.log("Déconnexion...")} />
           <Text style={styles.title}>Histoire</Text>
         </View>
         
@@ -167,6 +179,29 @@ export default function LibraryScreen() {
               )}
             />
           </View>
+          <View style={styles.flatListContainer}>
+            <Text style={styles.flatListTitle}>Histoires récentes</Text>
+            <FlatList
+              data={storiesByGenre}
+              keyExtractor={(item) => item.id}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <View style={styles.storyCard}>
+                  <Image source={item.cover} style={styles.storyImage} />
+                  <View style={styles.storyTextContainer}>
+                    <Text style={styles.storyTitle} numberOfLines={2} >{item.title}</Text>
+                    <Text style={styles.storyGenre}>{item.genre}</Text>
+                  </View>
+                  <View style={styles.storySeparator} />
+                  <View style={styles.storyAuthorRatingContainer}>
+                    <Text style={styles.storyAuthor} numberOfLines={1} > {item.author}</Text>
+                    <Text style={styles.storyRating}>⭐ {item.rating}</Text>
+                  </View>
+                </View>
+              )}
+            />
+            </View>
         </ScrollView>
       </View>
     </KeyboardAvoidingView>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, TouchableOpacity, Image, Modal, StyleSheet } from "react-native";
 import { useSelector } from "react-redux"; // Import de useSelector
-import UserSettings from "./UserSettings";
+import UserSettings from "../components/Users/UserSettings";
 
 const AvatarHeader = ({ onLogout }) => {
   const [isParameterVisible, setIsParameterVisible] = useState(false);
@@ -18,7 +18,7 @@ const AvatarHeader = ({ onLogout }) => {
           source={
             user?.avatar
               ? { uri: user.avatar }
-              : require("../../assets/avatar1.jpg")
+              : require("../assets/jinx.jpg")
           }
           style={styles.avatar}
         />

@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, TextInput, TouchableOpacity, Text, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
-import AvatarHeader from "../Users/AvatarHeader"; // Import de AvatarHeader
+import AvatarHeader from "../../modules/AvatarHeader";
 
 const SearchBar = ({ city, setCity, handleSearchPlace, onFiltersPress, onAddPress }) => {
   return (

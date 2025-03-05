@@ -18,7 +18,7 @@ import imageTest from "../../assets/jinx.jpg"; // Image de test
 
 const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
 
-export default function WriterPage({ writerName, backSearch, openReadStory }) {
+export default function WriterPage({ writerName, backSearch, openSummaryPage }) {
     const [stories, setStories] = useState([]);
     const [noStoriesMessage, setNoStoriesMessage] = useState("");
     const [isFollowing, setIsFollowing] = useState(false);
@@ -145,7 +145,7 @@ export default function WriterPage({ writerName, backSearch, openReadStory }) {
                             showsHorizontalScrollIndicator={false}
                             contentContainerStyle={styles.storyList}
                             renderItem={({ item }) => (
-                                <TouchableOpacity style={styles.storyCard} onPress={() => openReadStory(item)}>
+                                <TouchableOpacity style={styles.storyCard} onPress={() => openSummaryPage(item)}>
                                 <Image source={imageTest} style={styles.storyImage} />
                             
                                 {/* Contenu structuré */}

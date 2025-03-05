@@ -4,7 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Svg, Text as SvgText, Defs, LinearGradient as SvgLinearGradient, Stop } from "react-native-svg";
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, TouchableWithoutFeedback, Keyboard, Image } from "react-native";
 import { logout } from "../reducers/user";
-import AvatarHeader from "../components/Users/AvatarHeader";
+import AvatarHeader from "../modules/AvatarHeader";
 
 const defaultImage = require("../assets/image-livre-defaut.jpg");
 const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
