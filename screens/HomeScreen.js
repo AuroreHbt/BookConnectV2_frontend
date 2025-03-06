@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { LinearGradient } from "expo-linear-gradient";
-import { Svg, Text as SvgText, Defs, LinearGradient as SvgLinearGradient, Stop } from "react-native-svg";
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, TouchableWithoutFeedback, Keyboard, Image } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, Image, Keyboard, Dimensions } from "react-native";
 import { logout } from "../reducers/user";
+import Svg, { Path, Defs, Stop, LinearGradient, Rect } from "react-native-svg";
 import AvatarHeader from "../components/Users/AvatarHeader";
 
+const { width, height } = Dimensions.get("window");
 const defaultImage = require("../assets/image-livre-defaut.jpg");
 const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
 
@@ -18,7 +18,7 @@ export default function HomeScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const story = useSelector((state) => state.story.value);
   const addedEvents = useSelector((state) => state.event.events);
-  const [allStories, setAllStories] = React.useState([]);
+  const [allStories, setAllStories] = useState([]);
 
   useEffect(() => {
     fetch(`${BACKEND_ADDRESS}/stories/laststories`)
@@ -36,161 +36,169 @@ export default function HomeScreen({ navigation }) {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={styles.container}>
-        <LinearGradient
-          colors={[
-            "rgba(85, 0, 255, 0.1)",
-            "rgba(85, 0, 255, 0.2)",
-            "rgba(45, 118, 230, 0.3)",
-            "rgba(21, 187, 216, 0.4)",
-            "rgba(21, 187, 216, 0.01)",
-          ]}
-          start={{ x: 0, y: 0.1 }}
-          end={{ x: 0, y: 1 }}
-          style={styles.gradient}
-        >
-          {/* Header avec AvatarHeader */}
-          <View style={styles.header}>
-            <AvatarHeader onLogout={handleLogout} />
-            <View style={styles.welcomeContainer}>
-              <Svg height="30" width="200">
-                <Defs>
-                  <SvgLinearGradient id="textGradient" x1="0" y1="1" x2="0" y2="0">
-                    <Stop offset="0" stopColor="#5500FF" stopOpacity="1" />
-                    <Stop offset="1" stopColor="#15BBD8" stopOpacity="1" />
-                  </SvgLinearGradient>
-                </Defs>
-                <SvgText
-                  x="0"
-                  y="25"
-                  fontSize="20"
-                  fontWeight="bold"
-                  fill="url(#textGradient)"
-                  fontFamily="Poppins"
-                >
-                  Hello {user?.username || "Utilisateur"}
-                </SvgText>
-              </Svg>
-            </View>
-          </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.headerContainer}>
+        {/* Rectangle arrondi avec gradient */}
+        <Svg height={height * 0.28} width="100%" style={styles.headerRectangle}>
+          <Defs>
+            <LinearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <Stop offset="0%" stopColor="rgba(21, 187, 216, 1)" />
+              <Stop offset="100%" stopColor="rgba(162, 0, 255, 1)" />
+            </LinearGradient>
+          </Defs>
+          <Rect x="0" y="0" width="100%" height="100%" rx="20" ry="20" fill="url(#gradient)" />
+        </Svg>
 
-          {/* Scrollable Content */}
-          <ScrollView style={styles.scrollContent}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.textSection}>Lectures en cours</Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {story ? (
-                  <TouchableOpacity onPress={() => navigation.navigate("ReadStory", { story })}>
-                    <Image
-                      source={story.coverImage ? { uri: story.coverImage } : defaultImage}
-                      style={styles.book}
-                      resizeMode="cover"
-                    />
-                    <Text>{story.title}</Text>
-                  </TouchableOpacity>
-                ) : (
-                  <Text>Aucune lecture en cours.</Text>
-                )}
-              </ScrollView>
-            </View>
+        {/* Marque-page blanc */}
+        <Svg height={90} width={80} style={styles.bookmark} viewBox="0 0 60 90">
+          <Path d="M0,0 L60,0 L60,80 L30,60 L0,80 Z" fill="#ffffff" /> {/* Marque-page en blanc */}
+        </Svg>
 
-            <View style={styles.sectionContainer}>
-              <Text style={styles.textSection}>Dernières histoires</Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {allStories.length > 0 ? (
-                  allStories.map((story, index) => (
-                    <TouchableOpacity key={index} onPress={() => navigation.navigate("ReadStory", { story })}>
-                      <View style={styles.card}>
-                        <Image
-                          source={story.coverImage ? { uri: story.coverImage } : defaultImage}
-                          style={styles.book}
-                          resizeMode="cover"
-                        />
-                        <Text style={styles.cardTitle}>{story.title}</Text>
-                      </View>
-                    </TouchableOpacity>
-                  ))
-                ) : (
-                  <Text>Aucune histoire trouvée.</Text>
-                )}
-              </ScrollView>
-            </View>
+        <View style={styles.avatarContainer}>
+          <AvatarHeader onLogout={handleLogout} style={styles.avatar} />
+          <Text style={styles.welcomeText}>Hello {user?.username || "Utilisateur"}</Text>
+        </View>
+      </View>
 
-            <View style={styles.sectionContainer}>
-              <Text style={styles.textSection}>Mes évènements</Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {addedEvents.length > 0 ? (
-                  addedEvents.map((event, index) => (
-                    <View key={index}>
-                      <Text>{event.title}</Text>
-                      <Text>
-                        {event.date?.day
-                          ? new Date(event.date.day).toLocaleDateString()
-                          : "Date non renseignée"}
-                      </Text>
-                    </View>
-                  ))
-                ) : (
-                  <Text>Aucun événement trouvé.</Text>
-                )}
-              </ScrollView>
-            </View>
+      <ScrollView style={styles.scrollContent}>
+        <View style={styles.sectionContainer}>
+          <Text style={styles.textSection}>📖 Lectures en cours</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {story ? (
+              <TouchableOpacity onPress={() => navigation.navigate("ReadStory", { story })}>
+                <View style={styles.cardSmall}>
+                  <Image source={story.coverImage ? { uri: story.coverImage } : defaultImage} style={styles.bookSmall} resizeMode="cover" />
+                  <Text style={styles.cardTitle}>{story.title}</Text>
+                </View>
+              </TouchableOpacity>
+            ) : (
+              <Text style={styles.noData}>Aucune lecture en cours.</Text>
+            )}
           </ScrollView>
-        </LinearGradient>
-      </SafeAreaView>
-    </TouchableWithoutFeedback>
+        </View>
+
+        <View style={styles.sectionContainer}>
+          <Text style={styles.textSection}>📚 Dernières histoires</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {allStories.length > 0 ? (
+              allStories.map((story, index) => (
+                <TouchableOpacity key={index} onPress={() => navigation.navigate("ReadStory", { story })}>
+                  <View style={styles.cardSmall}>
+                    <Image source={story.coverImage ? { uri: story.coverImage } : defaultImage} style={styles.bookSmall} resizeMode="cover" />
+                    <Text style={styles.cardTitle}>{story.title}</Text>
+                  </View>
+                </TouchableOpacity>
+              ))
+            ) : (
+              <Text style={styles.noData}>Aucune histoire trouvée.</Text>
+            )}
+          </ScrollView>
+        </View>
+
+        <View style={styles.sectionContainer}>
+          <Text style={styles.textSection}>📅 Mes événements</Text>
+          <ScrollView vertical showsVerticalScrollIndicator={false}>
+            {addedEvents.length > 0 ? (
+              addedEvents.map((event, index) => (
+                <View key={index} style={styles.cardSmall}>
+                  <Text style={styles.cardTitle}>{event.title}</Text>
+                  <Text style={styles.eventDate}>{event.date?.day ? new Date(event.date.day).toLocaleDateString() : "Date non renseignée"}</Text>
+                </View>
+              ))
+            ) : (
+              <Text style={styles.noData}>Aucun événement trouvé.</Text>
+            )}
+          </ScrollView>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.95,
-  },
-  gradient: {
     flex: 1,
   },
-  header: {
-    flexDirection: "row",
+  headerContainer: {
     alignItems: "center",
-    paddingTop: 30,
-    paddingLeft: 15,
-    paddingBottom: 15,
+    width: "100%",
+    position: "relative",
   },
-  welcomeContainer: {
-    marginLeft: 10,
+  headerRectangle: {
+    marginTop: -20,
+    width: "80%",
+    borderRadius: 30,
+    paddingVertical: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
+  },
+
+  avatarContainer: {
+    position: "absolute",
+    top: height * 0.09, // 10% de la hauteur de l'écran
+    alignItems: "center",
+  },
+  bookmark: {
+    position: "absolute",
+    top: 0,
+    right: 30,
+    zIndex: 1,
+  },
+  welcomeText: {
+    fontSize: width * 0.06, // 6% de la largeur de l'écran
+    fontWeight: "400",
+    color: "rgb(255, 255, 255)",
+    marginTop: 8,
   },
   scrollContent: {
-    padding: 20,
+    marginTop: 20,
   },
   sectionContainer: {
-    marginBottom: 40,
+    marginBottom: 20,
+    paddingHorizontal: 20,
   },
   textSection: {
-    fontSize: 17,
-    fontWeight: "normal",
+    fontSize: width * 0.05, // 5% de la largeur de l'écran
+    fontWeight: "bold",
+    color: "#001f3f",
     marginBottom: 10,
-    fontFamily: "Poppins",
-    color: "rgba(85, 0, 255, 1)",
   },
-  card: {
-    backgroundColor: "#fff",
+  cardSmall: {
+    padding: 5,
     borderRadius: 10,
-    width: 130,
-    padding: 10,
-    marginRight: 15,
     alignItems: "center",
+    width: width * 0.25, // 25% de la largeur de l'écran
+    height: width * 0.35, // 35% de la largeur de l'écran
+    justifyContent: "space-between",
+    margin: 8,
+    marginTop: 6,
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    borderWidth: 0.1,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 4,
   },
-  book: {
-    width: 110,
-    height: 150,
-    marginBottom: 10,
+  bookSmall: {
+    width: "95%",
+    height: "70%",
+    marginBottom: 3,
     borderRadius: 5,
   },
   cardTitle: {
-    fontSize: 14,
-    color: "#333",
+    fontSize: width * 0.035, // 3.5% de la largeur de l'écran
+    color: "#001f3f",
     textAlign: "center",
-    fontFamily: "Poppins",
+  },
+  eventDate: {
+    fontSize: width * 0.03, // 3% de la largeur de l'écran
+    color: "#001f3f",
+    textAlign: "center",
+  },
+  noData: {
+    color: "#001f3f",
+    fontStyle: "italic",
   },
 });

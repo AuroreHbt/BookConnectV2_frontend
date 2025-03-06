@@ -1,26 +1,26 @@
+// UserSettings.js
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image, Modal, Animated } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useDispatch, useSelector } from "react-redux"; 
-import { logout, updateAvatar } from "../../reducers/user"; 
+import { updateAvatar } from "../../reducers/user"; 
 import AvatarSelector from "./AvatarSelector"; 
+import Logout from "./Logout"; // Importation du composant Logout
 
 const defaultImage = require("../../assets/avatar1.jpg");
 
-const UserSettings = ({ visible, onClose }) => {
+const UserSettings = ({ visible, onClose, navigation }) => { // navigation est passé ici
   const dispatch = useDispatch();
   const slideAnim = useState(new Animated.Value(-300))[0];
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
+  const [showLogout, setShowLogout] = useState(false);
 
-  // Récupère les données utilisateur depuis Redux
   const user = useSelector((state) => state.user.value);
   
-  // Vérifie si un avatar sélectionné est présent et le récupère
   const avatarSource = user?.avatar 
   ? { uri: user.avatar }
   : defaultImage;
 
-  // Effet d'ouverture et de fermeture
   React.useEffect(() => {
     if (visible) {
       Animated.timing(slideAnim, {
@@ -38,12 +38,11 @@ const UserSettings = ({ visible, onClose }) => {
   }, [visible]);
 
   const handleLogout = () => {
-    dispatch(logout());
-    onClose();
+    setShowLogout(true);
   };
 
   const handleAvatarSelected = (newAvatar) => {
-    dispatch(updateAvatar(newAvatar)); // Met à jour l'avatar dans Redux
+    dispatch(updateAvatar(newAvatar));
     setShowAvatarSelector(false);
   };
 
@@ -51,13 +50,11 @@ const UserSettings = ({ visible, onClose }) => {
     <Modal transparent={true} visible={visible} animationType="fade">
       <TouchableOpacity style={styles.overlay} onPress={onClose} activeOpacity={1}>
         <Animated.View style={[styles.modalContainer, { transform: [{ translateX: slideAnim }] }]}>
-          {/* HEADER AVEC AVATAR */}
           <View style={styles.header}>
             <Image source={avatarSource} style={styles.avatar} />
             <Text style={styles.userName}>{user?.username || "Utilisateur"}</Text>
           </View>
 
-          {/* OPTIONS DE SETTINGS */}
           <TouchableOpacity style={styles.option} onPress={() => setShowAvatarSelector(true)}>
             <Icon name="camera" size={20} color="#6A2D99" />
             <Text style={styles.optionText}>Changer ma photo</Text>
@@ -80,10 +77,15 @@ const UserSettings = ({ visible, onClose }) => {
         </Animated.View>
       </TouchableOpacity>
 
-      {/* MODAL POUR LE SÉLECTEUR D'AVATAR */}
       {showAvatarSelector && (
         <Modal transparent={true} visible={showAvatarSelector} animationType="slide">
           <AvatarSelector onAvatarSelected={handleAvatarSelected} onClose={() => setShowAvatarSelector(false)} />
+        </Modal>
+      )}
+
+      {showLogout && (
+        <Modal transparent={true} visible={showLogout} animationType="fade">
+          <Logout navigation={navigation} /> {/* Passer navigation à Logout */}
         </Modal>
       )}
     </Modal>
