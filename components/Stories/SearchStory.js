@@ -11,14 +11,18 @@ import {
     KeyboardAvoidingView,
     Platform,
     Keyboard,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    Dimensions,
+    StatusBar,
 } from 'react-native';
 import Header from '../../modules/Header';
-import AvatarHeader from '../../modules/AvatarHeader';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
+
+const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
 
 export default function SearchScreen({ backLibrary, openReadStory, openWriterPage }) {
     const navigation = useNavigation(); // 🔹 Pour la navigation
@@ -162,53 +166,65 @@ export default function SearchScreen({ backLibrary, openReadStory, openWriterPag
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 15,
+        paddingHorizontal: screenWidth * 0.04, // Ajuste le padding horizontal selon la largeur de l’écran (~4%)
+        paddingVertical: screenHeight * 0.02, // Ajuste le padding vertical (~2%)
         backgroundColor: "#F8F5F2",
+        paddingTop: Platform.OS === "android" 
+            ? (StatusBar.currentHeight ? StatusBar.currentHeight + 10 : 30) 
+            : screenHeight * 0.05, // Gère l’espace sous la barre de statut de manière adaptative
     },
-   
+    
     searchContainer: {
         flexDirection: "row",
         alignItems: "center",
         backgroundColor: "#F0F0F0",
-        borderRadius: 25,
-        marginTop: 30,
+        borderRadius: screenWidth * 0.06, // Arrondis adaptatifs (6% de la largeur)
+        marginTop: screenHeight * 0.03, // Marge haute proportionnelle (3% de la hauteur)
         borderWidth: 1.5,
         borderColor: "#C0C0C0",
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 4 },
+        shadowOffset: { width: 0, height: screenHeight * 0.005 }, // Ombre responsive
         shadowOpacity: 0.15,
-        shadowRadius: 6,
+        shadowRadius: screenHeight * 0.008, // Ajuste la portée de l’ombre
         elevation: 4,
-        padding: 1
-    },
+        paddingVertical: screenHeight * 0.002, // Ajuste l’épaisseur du champ
+        paddingHorizontal: screenWidth * 0.04, // Ajuste l’espace intérieur
+    },    
+
     searchIcon: {
-        marginRight: 7,
-        marginLeft: 8.5,
-        marginBottom: 0.5
+        marginRight: screenWidth * 0.02, // Ajuste l’espacement dynamique à 2% de la largeur de l’écran
+        marginLeft: screenWidth * 0.02,  // Ajuste aussi le décalage à gauche
     },
+    
     searchInput: {
         flex: 1,
-        fontSize: 16,
+        fontSize: Math.max(screenWidth * 0.04, 14),
         color: '#000',
     },
+
     suggestionItem: {
-        padding: 15,
+        paddingVertical: screenHeight * 0.015, // Adapte le padding vertical
+        paddingHorizontal: screenWidth * 0.04, // Adapte le padding horizontal
         borderBottomWidth: 1,
-        borderBottomColor: '#ddd',
+        borderBottomColor: "#ddd",
     },
+
     suggestionText: {
-        fontSize: 16,
+        fontSize: Math.max(screenWidth * 0.04, 14),
         color: '#333',
     },
+
     suggestionType: {
-        fontSize: 14,
-        color: '#666',
-        fontStyle: 'italic',
-    },
+        fontSize: Math.max(screenWidth * 0.035, 12),
+        color: "#666",
+        fontStyle: "italic",
+    },    
+
     emptyText: {
-        textAlign: 'center',
-        color: '#aaa',
-        fontSize: 16,
-        marginTop: 20,
-    },
+        textAlign: "center",
+        color: "#aaa",
+        fontSize: Math.max(screenWidth * 0.04, 14), // Adapte la taille, min 14px
+        marginTop: screenHeight * 0.03, // Adapte la marge haute
+    }
+    
 });

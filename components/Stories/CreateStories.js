@@ -365,7 +365,7 @@ export default function CreateStorie({ backLibrary }) {
                       value={description}
                       multiline
                       numberOfLines={5}
-                      maxLength={200}
+                      maxLength={800}
                     />
                   </View>
                   <Text
@@ -377,7 +377,7 @@ export default function CreateStorie({ backLibrary }) {
                       marginBottom: 5,
                     }}
                   >
-                    {characterDescriptionCount}/200
+                    {characterDescriptionCount}/800
                   </Text>
                   {descError ? (
                     <Text style={styles.errorText}>{descError}</Text>

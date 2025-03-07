@@ -9,7 +9,9 @@ import {
   Platform,
   Image,
   ScrollView,
-  Keyboard
+  Keyboard,
+  Dimensions,
+  StatusBar,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -24,9 +26,10 @@ import WriterPage from '../components/Users/WriterPage';
 import SummaryStories from '../components/Stories/SummaryStories'
 
 import AvatarHeader from "../modules/AvatarHeader";
+import Header from "../modules/Header";
 
 const storiesByGenre = [
-  { id: "1", genre: "Fantasy", title: "L’épée du Crépuscule", author: "Alice Martin", rating: 4.7, cover: require("../assets/jinx.jpg") },
+  { id: "1", genre: "Fantasy", title: "L’épée du Crépuscule", author: "Guillaume Lebrun", rating: 4.7, cover: require("../assets/jinx.jpg") },
   { id: "2", genre: "Science-Fiction", title: "Cybernetic Dawn", author: "Marc Dubois", rating: 4.5, cover: require("../assets/jinx.jpg") },
   { id: "3", genre: "Policier", title: "L’énigme du 8e étage", author: "Sophie Durant", rating: 4.2, cover: require("../assets/jinx.jpg") },
 ];
@@ -41,6 +44,9 @@ const genres = [
   { id: "7", name: "Aventure", icon: "treasure-chest", color: "#FF8C00" }, 
   { id: "8", name: "Poésie", icon: "feather", color: "#4682B4" }, 
 ];
+
+const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
 
 export default function LibraryScreen() {
   const [currentComponent, setCurrentComponent] = useState("library");
@@ -119,19 +125,19 @@ export default function LibraryScreen() {
   }
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <View style={styles.headerContainer}>
-        <AvatarHeader onLogout={() => console.log("Déconnexion...")} />
-          <Text style={styles.title}>Histoire</Text>
-        </View>
-        
-        <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <View style={[styles.container, { marginBottom: screenHeight * 0.05 }]} >
+        <ScrollView
+        style={styles.scrollContainer}
+        contentContainerStyle={[styles.scrollContent, { flexGrow : 1}]}
+        showsVerticalScrollIndicator={false}
+        >
+        <Header title="Histoire" />
+        <View>
           <TouchableOpacity style={styles.searchContainer} onPress={() => setCurrentComponent("search")}>
             <Icon name="search" size={25} color="#000" style={styles.searchIcon} />
             <Text style={styles.searchPlaceholder}>Rechercher une histoire</Text>
           </TouchableOpacity>
-
+          </View>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={() => setCurrentComponent("publish")}>
               <Text style={styles.buttonText}>Publier une histoire</Text>
@@ -172,7 +178,7 @@ export default function LibraryScreen() {
                   </View>
                   <View style={styles.storySeparator} />
                   <View style={styles.storyAuthorRatingContainer}>
-                    <Text style={styles.storyAuthor} numberOfLines={1} > {item.author}</Text>
+                    <Text style={styles.storyAuthor} numberOfLines={2} > {item.author}</Text>
                     <Text style={styles.storyRating}>⭐ {item.rating}</Text>
                   </View>
                 </View>
@@ -195,7 +201,7 @@ export default function LibraryScreen() {
                   </View>
                   <View style={styles.storySeparator} />
                   <View style={styles.storyAuthorRatingContainer}>
-                    <Text style={styles.storyAuthor} numberOfLines={1} > {item.author}</Text>
+                    <Text style={styles.storyAuthor} numberOfLines={2} > {item.author}</Text>
                     <Text style={styles.storyRating}>⭐ {item.rating}</Text>
                   </View>
                 </View>
@@ -204,59 +210,48 @@ export default function LibraryScreen() {
             </View>
         </ScrollView>
       </View>
-    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 15,
-    backgroundColor: "#F8F5F2",
+ container: {
+        flex: 1,
+        paddingHorizontal: screenWidth * 0.04, // Ajuste le padding horizontal selon la largeur de l’écran (~4%)
+        paddingVertical: screenHeight * 0.02, // Ajuste le padding vertical (~2%)
+        backgroundColor: "#F8F5F2",
+        paddingTop: Platform.OS === "android" 
+            ? (StatusBar.currentHeight ? StatusBar.currentHeight + 10 : 30) 
+            : screenHeight * 0.05, // Gère l’espace sous la barre de statut de manière adaptative
+    },
+
+    searchContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: "#F0F0F0",
+      borderRadius: screenWidth * 0.06, // Arrondis adaptatifs (6% de la largeur)
+      marginTop: screenHeight * 0.03, // Marge haute proportionnelle (3% de la hauteur)
+      borderWidth: 1.5,
+      borderColor: "#C0C0C0",
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: screenHeight * 0.005 }, // Ombre responsive
+      shadowOpacity: 0.15,
+      shadowRadius: screenHeight * 0.008, // Ajuste la portée de l’ombre
+      elevation: 4,
+      paddingVertical: screenHeight * 0.012, // Ajuste l’épaisseur du champ
+      paddingHorizontal: screenWidth * 0.045, // Ajuste l’espace intérieur
   },
 
-  scrollContainer: {
-    flex: 1, 
-    backgroundColor: "#F8F5F2",
+  searchIcon: {
+    marginRight: screenWidth * 0.02, // Ajuste l’espacement dynamique à 2% de la largeur de l’écran
+        marginLeft: screenWidth * 0.015,  // Ajuste aussi le décalage à gauche
   },
   
-  scrollContent: {
-    paddingBottom: 30, // Ajoute de l’espace en bas pour éviter le chevauchement
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 34,
-    fontWeight: "bold",
-    marginLeft: 30,
-    color: '#222',
-  },
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#F0F0F0", // Fond clair légèrement gris
-    borderRadius: 25, // Bords arrondis
-    padding: 10,
-    marginTop: 20,
-    borderWidth: 1.5, // Bordure plus visible
-    borderColor: "#C0C0C0", // Gris plus foncé pour contraste
-    shadowColor: "#000", // Ombre
-    shadowOffset: { width: 0, height: 4 }, // Ombre portée vers le bas
-    shadowOpacity: 0.15, // Plus subtil pour éviter que ça soit trop prononcé
-    shadowRadius: 6, // Étendue de l'ombre
-    elevation: 4, // Ombre pour Android
-    background: "linear-gradient(to bottom, #F8F8F8, #EDEDED)", // Dégradé gris-blanc
-  },
-  searchIcon: {
-    marginRight: 10,
-  },
   searchPlaceholder: {
-    fontSize: 16,
-    color: "#888",
+    flex: 1,
+        fontSize: Math.max(screenWidth * 0.04, 14),
+        color: '#6D6D72',
+        
+
   },
   buttonContainer: {
     flexDirection: "row",
@@ -289,11 +284,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
- 
   
   flatListContainer: {
     marginTop: 40,
-    
   },
   flatListTitle: {
     fontSize: 18,
@@ -349,21 +342,21 @@ const styles = StyleSheet.create({
 
   // **Cartes des histoires (FlatList)**
   storyCard: {
-    padding: 5,
-    borderRadius: 10,
+    padding: screenWidth * 0.015, // Ajustement automatique
+    borderRadius: screenWidth * 0.03,
     alignItems: "center",
-    width: 130,
-    height: 200,
+    width: screenWidth * 0.33, // Augmente légèrement pour éviter un effet trop compact
+    height: screenHeight * 0.25, // Ajuste légèrement pour un meilleur ratio hauteur/largeur
     justifyContent: "space-between",
-    margin: 10,
-    marginTop: 20,
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
-    borderWidth: 0.1, 
+    margin: screenWidth * 0.025,
+    backgroundColor: "rgba(255, 255, 255, 0.95)", // Légèrement plus opaque pour une meilleure visibilité
+    borderWidth: screenWidth * 0.0015, // Rendre le contour plus fin et responsive
+    borderColor: "#DDD", // Légère teinte pour mieux s’intégrer aux designs modernes
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4, // Ombre Android
+    shadowOffset: { width: 0, height: screenHeight * 0.005 }, 
+    shadowOpacity: 0.12,
+    shadowRadius: screenHeight * 0.01, // Diffusion d’ombre ajustée
+    elevation: 4, // Augmente l’élévation pour un meilleur effet de relief sur Android
   },
   
   /* storyGenreIcon: {
@@ -393,10 +386,11 @@ const styles = StyleSheet.create({
 },
   
   storyTitle: {
-    fontSize: 14,
+    fontSize: Math.max(screenWidth * 0.035, 12),
     fontWeight: "bold",
     textAlign: "center",
     maxWidth: "100%",
+    paddingTop: screenHeight * 0.01
   },
   
     storySeparator: {

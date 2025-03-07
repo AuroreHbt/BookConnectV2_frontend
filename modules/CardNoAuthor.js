@@ -1,17 +1,16 @@
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, Dimensions } from "react-native";
 
-const WriterCard = ({ title, cover, category, rating }) => {
+const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
+
+export default function WriterCard ({ title, cover, category, rating }) {
   return (
     <View style={styles.card}>
-      {/* Image de couverture */}
-      <Image source={cover} style={styles.image} />
-
-      {/* Titre */}
-      <Text style={styles.title} numberOfLines={2}>
-        {title}
-      </Text>
-      {/* Catégorie et note (optionnels) */}
+      <Image source={cover ? cover : require("../../assets/jinx.jpg")} style={styles.image} />
+      <View style={styles.textContainer}>
+        <Text style={styles.title} numberOfLines={3}>{title}</Text>
+      </View>
       <View style={styles.categoryRatingContainer}>
         {category && <Text style={styles.category}>{category}</Text>}
         {rating && <Text style={styles.rating}>⭐ {rating}</Text>}
@@ -22,30 +21,44 @@ const WriterCard = ({ title, cover, category, rating }) => {
 
 const styles = StyleSheet.create({
   card: {
-    padding: 5,
-    borderRadius: 10,
-    alignItems: "center",
-    width: 130,
-    height: 200,
-    justifyContent: "space-between",
-    margin: 10,
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
+    padding: screenWidth * 0.02, // Ajustement automatique
+        borderRadius: screenWidth * 0.03,
+        alignItems: "center",
+        width: screenWidth * 0.35, // Augmente légèrement pour éviter un effet trop compact
+        height: screenHeight * 0.27, // Ajuste légèrement pour un meilleur ratio hauteur/largeur
+        justifyContent: "space-between",
+        margin: screenWidth * 0.025,
+        backgroundColor: "rgba(255, 255, 255, 0.95)", // Légèrement plus opaque pour une meilleure visibilité
+        borderWidth: screenWidth * 0.0015, // Rendre le contour plus fin et responsive
+        borderColor: "#DDD", // Légère teinte pour mieux s’intégrer aux designs modernes
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: screenHeight * 0.005 }, 
+        shadowOpacity: 0.12,
+        shadowRadius: screenHeight * 0.01, // Diffusion d’ombre ajustée
+        elevation: 4, // Augmente l’élévation pour un meilleur effet de relief sur Android
   },
+
   image: {
     width: "100%",
-    height: 90,
-    borderRadius: 10,
+    height: screenHeight * 0.12,
+    borderRadius: screenWidth * 0.03,
   },
+
+  textContainer: {
+    flex: 1,
+    minHeight: Math.max(screenHeight * 0.06, 50),  // Fixe une hauteur minimale pour l’alignement
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: screenWidth * 0.03,
+    width: "100%",
+  },
+
   title: {
-    fontSize: 14,
+    fontSize: Math.max(screenWidth * 0.035, 12),
     fontWeight: "bold",
     textAlign: "center",
     maxWidth: "100%",
+    marginTop: screenHeight * 0.01,
   },
 
   categoryRatingContainer: {
@@ -53,19 +66,23 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    paddingHorizontal: 5,
+    height: Math.max(screenHeight * 0.04, 30),
+    paddingHorizontal: screenWidth * 0.01,
   },
+
   category: {
-    fontSize: 12,
-    fontWeight: "bold",
+    fontSize: Math.max(screenWidth * 0.035, 12),
     color: "#666",
-    flexShrink: 1,
+    fontWeight: 'bold',
+    flex: 1,
+    paddingLeft: 10,
+    textAlign: "left",
   },
+
   rating: {
-    fontSize: 12,
+    fontSize: Math.max(screenWidth * 0.035, 12),
     color: "#f5a623",
     fontWeight: "bold",
   },
 });
 
-export default WriterCard;

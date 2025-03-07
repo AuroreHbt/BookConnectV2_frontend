@@ -11,12 +11,18 @@ import {
     FlatList,
     StyleSheet,
     ScrollView,
+    StatusBar, 
+    Platform,
+    Dimensions
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import axios from "axios";
 import imageTest from "../../assets/jinx.jpg"; // Image de test
 
 const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
+
+const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
 
 export default function WriterPage({ writerName, backSearch, openSummaryPage }) {
     const [stories, setStories] = useState([]);
@@ -55,6 +61,11 @@ export default function WriterPage({ writerName, backSearch, openSummaryPage }) 
             style={styles.container}
             contentContainerStyle={styles.contentContainer}
         >
+             <ScrollView
+                style={styles.scrollContainer}
+                contentContainerStyle={styles.scrollContent}
+                showsVerticalScrollIndicator={false}
+            >
             <TouchableOpacity style={styles.backButton} onPress={backSearch}>
                 <Icon name="angle-left" size={30} color="white" />
             </TouchableOpacity>
@@ -62,13 +73,9 @@ export default function WriterPage({ writerName, backSearch, openSummaryPage }) 
                 <Image source={imageTest} style={styles.headerBackground} />
                 <Image source={imageTest} style={styles.avatar} />
             </View>
-
+           
             <Text style={styles.writerName}>{writerName}</Text>
-            <ScrollView
-                style={styles.scrollContainer}
-                contentContainerStyle={styles.scrollContent}
-                showsVerticalScrollIndicator={false}
-            >
+          
                 <View style={styles.statsContainer}>
                     <View style={styles.stat}>
                         <Text style={styles.statValue}>{stories.length}</Text>
@@ -181,188 +188,222 @@ export default function WriterPage({ writerName, backSearch, openSummaryPage }) 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingVertical: 20,
+        paddingVertical: screenHeight * 0.025,
         backgroundColor: "#F8F5F2",
+        paddingTop: Platform.OS === "android" ? (StatusBar.currentHeight ? StatusBar.currentHeight + 10 : 30) : screenHeight * 0.05
     },
     contentContainer: {
         alignItems: "center",
-        paddingBottom: 30,
+        paddingBottom: screenHeight * 0.03,
     },
+
     backButton: {
         position: "absolute",
-        top: 20,
-        right: 20,
-        padding: 10,
+        top: Platform.OS === "android" 
+            ? (StatusBar.currentHeight ? StatusBar.currentHeight + screenHeight * 0.015 : screenHeight * 0.03) 
+            : screenHeight * 0.03,  // Ajuste la position en fonction de l'écran et de la barre de statut
+        right: screenWidth * 0.05,  // 5% de la largeur de l'écran pour éviter d’être trop collé sur écran large
+        padding: screenWidth * 0.02,  // Padding responsive
+        top : screenWidth * 0.01,
+        right: screenWidth * 0.06,
         zIndex: 10,
     },
+    
     header: {
         width: "100%",
         alignItems: "center",
-        marginBottom: 10,
+        marginBottom: screenHeight * 0.015, // 1.5% de la hauteur de l’écran pour un meilleur espacement
     },
+
     headerBackground: {
         width: "100%",
-        height: 140,
-        borderTopLeftRadius : 10,
-        borderTopRightRadius: 10,
+        height: screenHeight * 0.16,  // ~18% de la hauteur de l’écran, adaptable à toutes tailles
+        borderTopLeftRadius: screenWidth * 0.03, // Ajuste le rayon des bords selon l'écran
+        borderTopRightRadius: screenWidth * 0.03, // Garde des bords arrondis harmonieux
         overflow: "hidden",
     },
+    
     avatar: {
-        width: 110,
-        height: 110,
-        borderRadius: 55,
-        borderWidth: 4,
+        width: screenWidth * 0.25, 
+        height: screenWidth * 0.25,
+        borderRadius: screenWidth * 0.125,
+        borderWidth: 3,
         borderColor: "black",
         marginTop: -55,
     },
     writerName: {
-        fontSize: 22,
+        fontSize: screenWidth * 0.055,
         fontWeight: "bold",
         textAlign: "center",
-        marginTop: 10,
+        marginTop: screenHeight * 0.02,
     },
+
     statsContainer: {
         flexDirection: "row",
         justifyContent: "center",
         width: "100%",
-        padding: 20,
+        paddingVertical: screenHeight * 0.02, // 2% de la hauteur de l’écran (marge en haut et en bas)
+        paddingHorizontal: screenWidth * 0.05, // 5% de la largeur de l’écran (marge sur les côtés)
     },
+
     stat: {
         alignItems: "center",
         backgroundColor: "#FFF",
-        padding: 10,
-        borderRadius: 20,
-        width: 90,
-        marginHorizontal: 10,
+        padding: screenHeight * 0.015, // 1.5% de la hauteur de l’écran
+        borderRadius: screenWidth * 0.05, // 5% de la largeur de l’écran (proportionné)
+        width: screenWidth * 0.22, // 22% de la largeur de l’écran (évite d’être trop grand/petit)
+        marginHorizontal: screenWidth * 0.025, // Espacement horizontal responsive
     },
+    
+statLabel: {
+    fontSize: Math.max(screenWidth * 0.025, 12), // Ajuste dynamiquement, minimum 12px
+    color: "#777",
+    textAlign: "center"
+},
+
+statValue: {
+    fontSize: Math.max(screenWidth * 0.035, 16), // Ajuste dynamiquement, minimum 16px
+    fontWeight: "bold",
+    color: "#333",
+},
+
     buttonContainer: {
         flexDirection: "row",
         justifyContent: "center",
-        marginTop: 10,
-        marginBottom: 10,
+        marginVertical: screenHeight * 0.02, 
         width: "100%",
-        paddingHorizontal: 15,
+        paddingHorizontal: screenWidth * 0.05, 
     },
+    
     followButton: {
         flexDirection: "row", 
         alignItems: "center",
         justifyContent: "center",
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        borderRadius: 50,
-        marginHorizontal: 5,
-        flex: 1,
+        paddingVertical: screenHeight * 0.012, // 1.2% de la hauteur de l’écran
+        paddingHorizontal: screenWidth * 0.04, // 4% de la largeur de l’écran
+        borderRadius: screenWidth * 0.1, // Rayon de bordure adaptatif (garde une bonne courbure)
+        marginHorizontal: screenWidth * 0.02, // Espacement horizontal dynamique
+        flex: 1, 
     },
+
     heartIcon: {
-        marginRight: 8, 
+        marginRight: screenWidth * 0.02, 
     },
+
     followButtonText: {
-        fontSize: 16,
+        fontSize: Math.max(screenWidth * 0.038, 14),
         fontWeight: "bold",
     },
+
     optionButton: {
         backgroundColor: "#696864",
-        paddingVertical: 10,
-        paddingHorizontal: 10,
-        borderRadius: 50,
-        marginHorizontal: 5,
+        paddingVertical: screenHeight * 0.012, // Ajuste automatiquement
+        paddingHorizontal: screenWidth * 0.04, // S’adapte mieux
+        borderRadius: screenWidth * 0.2, 
+        marginHorizontal: screenWidth * 0.02,
         flex: 1,
         alignItems: "center",
     },
+
     buttonText: {
-        fontSize: 16,
+        fontSize: Math.max(screenWidth * 0.038, 14),
         fontWeight: "bold",
         color: "white",
     },
+
     aboutText: {
-        fontSize: 15,
+        fontSize: Math.max(screenWidth * 0.038, 13),  // Minimum 13px, sinon 4% de la largeur de l'écran
         textAlign: "center",
-        marginHorizontal: 15,
-        marginTop: 10,
-        marginBottom: 10,
+        marginHorizontal: screenWidth * 0.05, // Environ 5% de la largeur de l’écran
+        marginTop: screenHeight * 0.02, // 1.5% de la hauteur de l’écran
+        marginBottom: screenHeight * 0.015, // 1.5% de la hauteur de l’écran
     },
+    
+
     contactButton: {
         backgroundColor: "#007BFF",
-        padding: 10,
+        paddingVertical: screenHeight * 0.015, 
+        paddingHorizontal: screenWidth * 0.08, 
         borderRadius: 50,
-        alignItems: "center",
-        justifyContent: "center",
-        width: "50%", 
+        alignItems: "center", 
+        justifyContent: "center", 
         alignSelf: "center", 
-        marginBottom: 20,
-        marginTop: 20,
+        marginTop: screenHeight * 0.02
     },
+    
     contactText: {
         color: "#fff",
-        fontSize: 16,
+        fontSize: Math.max(screenWidth * 0.038, 14),
         fontWeight: "bold",
     },
+
     storyHeader: {
         width: "100%",
-        paddingLeft: 20,
-        marginTop: 20, 
-        marginBottom: 5, 
+        paddingLeft: screenWidth * 0.05,  // S’adapte à la taille de l’écran (~5% de la largeur)
+        marginTop: screenHeight * 0.04,  // Ajuste l’espace au-dessus (~2% de la hauteur)
     },
+    
     storyTitle: {
-        fontSize: 18,
+        fontSize: Math.max(screenWidth * 0.04, 14),
         fontWeight: "bold",
         textAlign: "left",
     },
+
     noStoriesText: {
-        fontSize: 16,
+        fontSize: Math.max(screenWidth * 0.04, 14), //  Minimum 14px, sinon 4% de la largeur de l’écran
         fontStyle: "italic",
-        marginTop: 20,
+        marginTop: screenHeight * 0.03, // Environ 3% de la hauteur de l’écran
         color: "#777",
         textAlign: "center",
     },
+
     storyContainer: {
         width: "100%",
-        paddingVertical: 15,
-        paddingHorizontal: 10,
-        paddingBottom: 40,
+        paddingVertical: screenHeight * 0.02,  // Environ 2% de la hauteur de l'écran
+        paddingHorizontal: screenWidth * 0.03,  // Environ 3% de la largeur de l'écran
+        paddingBottom: screenHeight * 0.05,  // Environ 5% de la hauteur de l’écran
         alignItems: "center",
     },
 
-    // 🔹 **NOUVEAU DESIGN DES CARTES D'HISTOIRE**
     storyCard: {
-        padding: 5,
-        borderRadius: 10,
+        padding: screenWidth * 0.015, // Ajustement automatique
+        borderRadius: screenWidth * 0.03,
         alignItems: "center",
-        width: 130,
-        height: 200, 
+        width: screenWidth * 0.33, // Augmente légèrement pour éviter un effet trop compact
+        height: screenHeight * 0.25, // Ajuste légèrement pour un meilleur ratio hauteur/largeur
         justifyContent: "space-between",
-        margin: 10,
-        marginTop: 20,
-        backgroundColor: "rgba(255, 255, 255, 0.9)",
-        borderWidth: 0.1, 
+        margin: screenWidth * 0.025,
+        backgroundColor: "rgba(255, 255, 255, 0.95)", // Légèrement plus opaque pour une meilleure visibilité
+        borderWidth: screenWidth * 0.0015, // Rendre le contour plus fin et responsive
+        borderColor: "#DDD", // Légère teinte pour mieux s’intégrer aux designs modernes
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 4, 
-        
+        shadowOffset: { width: 0, height: screenHeight * 0.005 }, 
+        shadowOpacity: 0.12,
+        shadowRadius: screenHeight * 0.01, // Diffusion d’ombre ajustée
+        elevation: 4, // Augmente l’élévation pour un meilleur effet de relief sur Android
     },
+
     storyImage: {
         width: "100%",
-        height: 90,  // Taille fixe pour éviter les chevauchements
-        borderRadius: 10,
+        height: screenHeight * 0.12, 
+        borderRadius: screenWidth * 0.03,
     },
+
     storyTextContainer: {
         flex: 1,
-        minHeight: 50,  // **Assure un espace sous l’image**
-        justifyContent: "flex-start",  // **Le texte commence toujours en haut**
+        minHeight: Math.max(screenHeight * 0.06, 50),  // Minimum 50px, sinon 6% de la hauteur de l’écran
+        justifyContent: "flex-start",  
         alignItems: "center", 
-        paddingHorizontal: 5,
+        paddingHorizontal: screenWidth * 0.03,  // Adapté à la largeur de l’écran (~3%)
         width: "100%", 
-        
     },
+
     storyText: {
-        fontSize: 14,
+        fontSize: Math.max(screenWidth * 0.035, 12),
         fontWeight: "bold",
         textAlign: "center",
         maxWidth: "100%",
-        
-
+        paddingTop: screenHeight * 0.01
     },
 
 
@@ -375,28 +416,26 @@ const styles = StyleSheet.create({
     
         
     // },
-    // 🔹 **CONTENEUR DE LA CATÉGORIE + NOTE**
     storyAuthorRatingContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
         width: "100%",
-        height: 30, // Fixer une hauteur pour l'auteur et la note
-
-      },
+        height: Math.max(screenHeight * 0.04, 30), // Fixer une hauteur pour l'auteur et la note
+        paddingHorizontal: screenWidth * 0.01
+    },
 
     storyCategory: {
-        fontSize: 12,
+        fontSize: Math.max(screenWidth * 0.035, 12),
         color: "#666",
         fontWeight: 'bold',
         flex: 1,
         paddingLeft: 10,
         textAlign: "left"
-
     },
 
     storyRating: {
-        fontSize: 12,
+        fontSize: Math.max(screenWidth * 0.035, 12),
         color: "#f5a623",
         fontWeight: "bold",
     },
