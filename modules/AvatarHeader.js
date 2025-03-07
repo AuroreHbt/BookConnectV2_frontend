@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, TouchableOpacity, Image, Modal, StyleSheet } from "react-native";
 import { useSelector } from "react-redux"; // Import de useSelector
-import UserSettings from "./UserSettings";
+import UserSettings from "../components/Users/UserSettings";
 
 const AvatarHeader = ({ onLogout, style }) => {
   const [isParameterVisible, setIsParameterVisible] = useState(false);

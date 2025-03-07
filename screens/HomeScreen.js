@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, Image, Keyboard, Dimensions } from "react-native";
 import { logout } from "../reducers/user";
 import Svg, { Path, Defs, Stop, LinearGradient, Rect } from "react-native-svg";
-import AvatarHeader from "../components/Users/AvatarHeader";
+import AvatarHeader from "../modules/AvatarHeader";
 
 const { width, height } = Dimensions.get("window");
 const defaultImage = require("../assets/image-livre-defaut.jpg");
