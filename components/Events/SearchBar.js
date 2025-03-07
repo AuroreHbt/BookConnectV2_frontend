@@ -9,7 +9,7 @@ const SearchBar = ({ city, setCity, handleSearchPlace, onFiltersPress, onAddPres
     <View style={styles.searchContainer}>
       
       {/* Avatar en haut à gauche */}
-      <AvatarHeader />
+      <AvatarHeader style={{ width: 50, height: 50, borderRadius: 30 }}/>
 
       <View style={styles.inputWrapper}>
         <FontAwesome name="map-marker" size={20} color="#4B0082" style={styles.inputIcon} />

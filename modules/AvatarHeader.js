@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Image, Modal, StyleSheet } from "react-native";
 import { useSelector } from "react-redux"; // Import de useSelector
 import UserSettings from "../components/Users/UserSettings";
 
-const AvatarHeader = ({ onLogout }) => {
+const AvatarHeader = ({ onLogout, style }) => {
   const [isParameterVisible, setIsParameterVisible] = useState(false);
   const user = useSelector((state) => state.user.value); // Récupère le user depuis Redux
 
@@ -20,7 +20,7 @@ const AvatarHeader = ({ onLogout }) => {
               ? { uri: user.avatar }
               : require("../assets/jinx.jpg")
           }
-          style={styles.avatar}
+          style={[styles.avatar, style]} // Fusion du style existant avec la prop `style`
         />
       </TouchableOpacity>
 
@@ -47,9 +47,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 70, // Taille par défaut
+    height: 70, // Taille par défaut
+    borderRadius: 35,
   },
 });
 

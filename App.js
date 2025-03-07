@@ -4,6 +4,7 @@ import { StyleSheet, View } from "react-native";
 // Import des Screens pour la navigation
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
+import UserSettings from "./components/Users/UserSettings";
 import EventScreen from "./screens/EventScreen";
 import LibraryScreen from "./screens/LibraryScreen";
 import ShopScreen from "./screens/ShopScreen";
@@ -121,6 +122,8 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="UserSettings" component={UserSettings} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
