@@ -1,212 +1,119 @@
 import React, { useState } from "react";
 import { signPageStyles } from "../../styles/signPageStyles";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { LinearGradient } from "expo-linear-gradient";
+import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 
 import {
   Image,
   KeyboardAvoidingView,
-  Platform,
   Text,
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
   View,
-  Alert,
 } from "react-native";
-
 import { useDispatch } from "react-redux";
 import { login } from "../../reducers/user";
-import { useNavigation } from "@react-navigation/native"; // Import de useNavigation
-import SignUp from "./SignUp";
-
-// import du fond plein gradient
-import GradientBackground from "../../styles/gradientBackground";
+import { useNavigation } from "@react-navigation/native"; // Import navigation for redirection
+import SignUp from "./SignUp";  // Import SignUp component
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const passwordRegex =
-  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
+const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS || "http://ton-backend-url"; // Change it to your backend URL
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
-  const navigation = useNavigation(); // Initialisation de navigation
-
-  // État pour gérer l'affichage de SignIn ou SignUp
-  const [currentComponent, setCurrentComponent] = useState("signin");
-
-  // États pour les inputs
+  const navigation = useNavigation(); // Use navigation to navigate to the home screen
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
-
-  // États pour la validation
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-
-  // État pour afficher ou cacher le mot de passe
   const [showPassword, setShowPassword] = useState(false);
+  const [currentComponent, setCurrentComponent] = useState("signin");  // State to toggle between SignIn and SignUp
 
-  const validateFields = () => {
-    let isValid = true;
-
+  const handleLoginSubmit = () => {
     if (!EMAIL_REGEX.test(email)) {
-      setEmailError("Veuillez entrer un email valide.");
-      isValid = false;
-    } else {
-      setEmailError("");
+      return; // Do nothing if email is invalid
     }
-
     if (!passwordRegex.test(password)) {
-      setPasswordError(
-        "Le mot de passe doit contenir au moins 8 caractères, une lettre, un chiffre et un caractère spécial."
-      );
-      isValid = false;
-    } else {
-      setPasswordError("");
-    }
-
-    return isValid;
-  };
-
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleSubmitSignIn = () => {
-    if (!validateFields()) {
-      console.log("Validation échouée");
-      return;
+      return; // Do nothing if password is invalid
     }
 
     fetch(`${BACKEND_ADDRESS}/users/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, username }),
+      body: JSON.stringify({ email, password }),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Données retournées par le backend:", data);
-
         if (data.result) {
-          dispatch(
-            login({
-              username: data.username,
-              email: data.email,
-              token: data.token,
-              _id: data._id,
-            })
-          );
-          console.log("Connexion réussie");
-          setPassword("");
-          setUsername("");
-          // Redirection vers HomeScreen après connexion réussie
-          navigation.navigate('TabNavigator', { screen: 'Accueil' });
+          dispatch(login(data)); // Dispatch login action
+          navigation.navigate("TabNavigator", { screen: "Accueil" }); // Navigate to the home screen after successful login
         } else {
-          console.log("Erreur lors de la connexion:", data.error);
-          Alert.alert("Erreur", data.error);
+          // You can display an error message here if needed
         }
+      })
+      .catch((error) => {
+        console.error("Erreur de connexion :", error);
       });
   };
 
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);  // Toggle password visibility
+  };
+
+  // Render SignIn or SignUp component based on currentComponent state
   const renderComponent = () => {
     if (currentComponent === "signup") {
       return <SignUp onGoBack={() => setCurrentComponent("signin")} />;
     }
 
     return (
-      <GradientBackground>
+      <View style={signPageStyles.container}> {/* Keep the background color of the page simple */}
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={{ flex: 1, justifyContent: "center", padding: 16 }}>
-            <KeyboardAvoidingView
-              style={signPageStyles.container}
-              behavior={Platform.OS === "ios" ? "padding" : "height"}
-            >
-              <Image
-                style={signPageStyles.logo}
-                source={require("../../assets/LogoBc.png")}
-              />
+            <KeyboardAvoidingView style={signPageStyles.container} behavior="padding">
+              <Image style={signPageStyles.logo} source={require("../../assets/LogoBc.png")} />
               <Text style={signPageStyles.title}>BookConnect</Text>
-              <View style={signPageStyles.separator} />
               <View style={signPageStyles.inputContainer}>
                 <TextInput
                   placeholder="E-mail"
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  autoComplete="email"
-                  textContentType="emailAddress"
                   onChangeText={setEmail}
                   value={email}
                   style={signPageStyles.input}
                 />
-                {emailError ? (
-                  <Text style={signPageStyles.errorText}>{emailError}</Text>
-                ) : null}
-
-                <View style={signPageStyles.inputPwd}>
-                  <TextInput
-                    placeholder="Mot de passe"
-                    secureTextEntry={!showPassword}
-                    onChangeText={setPassword}
-                    value={password}
-                    style={signPageStyles.input}
-                  />
-                  <TouchableOpacity
-                    style={signPageStyles.iconContainer}
-                    onPress={toggleShowPassword}
-                  >
-                    <Icon
-                      name={showPassword ? "eye" : "eye-slash"}
-                      size={24}
-                      color={showPassword ? "rgba(55, 27, 12, 0.8)" : "#D3D3D3"}
-                    />
-                  </TouchableOpacity>
-                </View>
-                {passwordError ? (
-                  <Text style={signPageStyles.errorText}>{passwordError}</Text>
-                ) : null}
+                <TextInput
+                  placeholder="Mot de passe"
+                  secureTextEntry={!showPassword}
+                  onChangeText={setPassword}
+                  value={password}
+                  style={signPageStyles.input}
+                />
+                <TouchableOpacity onPress={toggleShowPassword} style={signPageStyles.iconContainer}>
+                  <Icon name={showPassword ? "eye" : "eye-slash"} size={24} />
+                </TouchableOpacity>
 
                 <View style={signPageStyles.buttonContainer}>
+                  {/* Applying LinearGradient to the button */}
                   <LinearGradient
-                    colors={[
-                      "rgba(21, 187, 216, 0.7)",
-                      "rgba(85, 0, 255, 0.7)",
-                    ]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 0, y: 0.7 }}
+                    colors={["rgba(21, 187, 216, 0.7)", "rgba(85, 0, 255, 0.1)"]}
                     style={signPageStyles.gradientButton}
-                    activeOpacity={0.8}
                   >
-                    <TouchableOpacity
-                      onPress={handleSubmitSignIn}
-                      style={signPageStyles.button}
-                    >
-                      <Text style={signPageStyles.textButton}>
-                        Se connecter
-                      </Text>
+                    <TouchableOpacity onPress={handleLoginSubmit}>
+                      <Text style={signPageStyles.textButton}>Se connecter</Text>
                     </TouchableOpacity>
                   </LinearGradient>
                 </View>
-
-                <View>
-                  <TouchableOpacity
-                    onPress={() => setCurrentComponent("signup")}
-                    activeOpacity={0.8}
-                  >
-                    <Text style={signPageStyles.textReturn}>
-                      Je n'ai pas encore de compte
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                 <TouchableOpacity onPress={() => setCurrentComponent("signup")}>
+                  <Text style={signPageStyles.textReturn}>Je n'ai pas encore de compte</Text>
+                </TouchableOpacity>
               </View>
             </KeyboardAvoidingView>
           </View>
         </TouchableWithoutFeedback>
-      </GradientBackground>
+      </View>
     );
   };
 
-  return renderComponent();
+  return renderComponent();  // Render the appropriate component based on currentComponent state
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, Alert } from "react-native";
 import FindEvents from "../components/Events/FindEvents";
 
 export default function EventScreen() {
@@ -8,6 +8,7 @@ export default function EventScreen() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
+      {/* Affichage direct de FindEvents sans demande de permission */}
       <FindEvents />
     </KeyboardAvoidingView>
   );
