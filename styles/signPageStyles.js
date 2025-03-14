@@ -1,138 +1,84 @@
-//  import { signPageStyles } from '../styles/signPageStyles';
-// SignUpScreen
-// SignIn Screen
-
 import { Dimensions, StyleSheet } from 'react-native';
 
 const screenWidth = Dimensions.get('window').width;
-const inputWidth = screenWidth * 0.6; // 80% de la largeur de l'écran
+const inputWidth = screenWidth * 0.8; // Champs plus courts (80% de la largeur de l'écran)
 
 export const signPageStyles = StyleSheet.create({
-
     container: {
         flex: 1,
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingHorizontal: 10,
-    },
-
-    gradient: {
-        flex: 1,
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-        alignItems: 'center',
-        justifyContent: 'center',
+        backgroundColor: '#F6F8FB', // Fond clair sans gradient
     },
 
     logo: {
-        width: 100, // taille en pixels
-        height: 100,
-        resizeMode: 'contain', // éviter la déformation
-    },
-
-    title: {
-        fontFamily: 'Poppins-Medium',
-        fontWeight: '600',
-        fontSize: 36,
-        marginBottom: 5,
-        color: '#7325A8',
-    },
-
-    slogan: {
-        fontFamily: 'Poppins-Medium',
-        fontWeight: '400',
-        fontSize: 22,
-        marginBottom: 5,
-        color: '#7325A8',
-    },
-
-    inputContainer: {
-        width: inputWidth, // largeur fixe pour le container
-        alignItems: 'center',
-        paddingTop: 50,
+        width: 120,
+        height: 120,
+        resizeMode: 'contain',
         marginBottom: 20,
     },
 
-    inputPwd: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: inputWidth,
-        backgroundColor: 'transparent',
-        paddingVertical: 15,
-        borderRadius: 5,
-        borderBottomWidth: 1,
-        borderBottomColor: '#FFFFFF',
-        marginVertical: 10,
-      },
-
-    inputPwdText: {
-        flex: 1, // Permet au champ texte d'occuper tout l'espace restant
-        paddingHorizontal: 10,
-        fontFamily: 'Poppins-Regular',
-        fontSize: 14,
+    title: {
+        fontFamily: 'Poppins-Bold',
+        fontSize: 36,
+        color: '#333', // Couleur sombre pour le texte
+        marginBottom: 20,
     },
 
-    iconContainer: {
-        position: 'absolute',
-        right: 15, // Ajustement pour bien aligner l'icône
+    inputContainer: {
+        width: inputWidth,
+        alignItems: 'center',
+        paddingTop: 20,
     },
 
     input: {
-        backgroundColor: 'transparent',
+        backgroundColor: '#FFFFFF', // Fond clair pour les champs
         paddingVertical: 15,
-        borderRadius: 5,
-        borderBottomWidth: 1,
-        borderBottomColor: '#FFFFFF',
+        borderRadius: 30, // Coins arrondis
+        borderWidth: 1,
+        borderColor: '#E0E0E0', // Bord doux et subtil
         width: inputWidth,
-        paddingHorizontal: 10,
-        marginVertical: 10,
+        paddingHorizontal: 20,
+        marginVertical: 12,
         fontFamily: 'Poppins-Regular',
-        fontSize: 14,
-      },
+        fontSize: 16,
+        color: '#333',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+    },
 
     buttonContainer: {
         width: inputWidth,
         alignItems: 'center',
-        paddingBottom: 15,
+        marginTop: 30,
     },
 
     gradientButton: {
-        padding: 25,
-        width: inputWidth/1.3,
+        paddingVertical: 15,
+        width: inputWidth / 1.5,
         alignItems: 'center',
-        borderRadius: 20,
-    },
-
-    button: {
-        padding: 5,
-        margin: 10,
+        borderRadius: 30,
+        backgroundColor: '#6a11cb', // Couleur simple pour le bouton sans gradient
+        marginTop: 20,
     },
 
     textButton: {
         textAlign: 'center',
-        fontFamily: 'sans-serif',
-        fontWeight: 'bold',
-        fontSize: 18,
-        color: 'white'
+        fontFamily: 'Poppins-Bold',
+        fontSize: 16,
+        color: 'white',
     },
 
     textReturn: {
         fontFamily: 'Poppins-Regular',
         fontWeight: '300',
-        fontSize: 12,
+        fontSize: 14,
         borderBottomWidth: 1,
         borderBottomColor: "#5500FF",
         color: "#5500FF",
+        marginTop: 20,
     },
-
-    errorText: {
-        textAlign: 'left',
-        fontSize: 14,
-        color: 'red',
-        width: '100%', // Assurer l'alignement avec les inputs
-        paddingLeft: 10, // Ajout d'un padding pour éviter le chevauchement
-    },
-
 });
