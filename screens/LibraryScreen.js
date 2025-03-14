@@ -26,7 +26,7 @@ import WriterPage from '../components/Users/WriterPage';
 import SummaryStories from '../components/Stories/SummaryStories'
 
 import AvatarHeader from "../modules/AvatarHeader";
-import Header from "../modules/Header";
+import Header from "../modules/HeaderStory";
 
 const storiesByGenre = [
   { id: "1", genre: "Fantasy", title: "L’épée du Crépuscule", author: "Guillaume Lebrun", rating: 4.7, cover: require("../assets/jinx.jpg") },
@@ -48,7 +48,7 @@ const genres = [
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 
-export default function LibraryScreen() {
+export default function LibraryScreen({openSummaryPage}) {
   const [currentComponent, setCurrentComponent] = useState("library");
   const [selectedStory, setSelectedStory] = useState(null);
   const [selectedWriter, setSelectedWriter] = useState(null);
@@ -170,7 +170,7 @@ export default function LibraryScreen() {
               horizontal
               showsHorizontalScrollIndicator={false}
               renderItem={({ item }) => (
-                <View style={styles.storyCard}>
+                <TouchableOpacity style={styles.storyCard} onPress={() => openSummaryPage}>
                   <Image source={item.cover} style={styles.storyImage} />
                   <View style={styles.storyTextContainer}>
                     <Text style={styles.storyTitle} numberOfLines={2} >{item.title}</Text>
@@ -181,7 +181,7 @@ export default function LibraryScreen() {
                     <Text style={styles.storyAuthor} numberOfLines={2} > {item.author}</Text>
                     <Text style={styles.storyRating}>⭐ {item.rating}</Text>
                   </View>
-                </View>
+                </TouchableOpacity>
               )}
             />
           </View>
@@ -193,7 +193,7 @@ export default function LibraryScreen() {
               horizontal
               showsHorizontalScrollIndicator={false}
               renderItem={({ item }) => (
-                <View style={styles.storyCard}>
+                <TouchableOpacity style={styles.storyCard} onPress={() => openSummaryPage}>
                   <Image source={item.cover} style={styles.storyImage} />
                   <View style={styles.storyTextContainer}>
                     <Text style={styles.storyTitle} numberOfLines={2} >{item.title}</Text>
@@ -204,7 +204,7 @@ export default function LibraryScreen() {
                     <Text style={styles.storyAuthor} numberOfLines={2} > {item.author}</Text>
                     <Text style={styles.storyRating}>⭐ {item.rating}</Text>
                   </View>
-                </View>
+                </TouchableOpacity>
               )}
             />
             </View>

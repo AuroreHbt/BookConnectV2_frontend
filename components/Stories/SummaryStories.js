@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     View,
     Text,
@@ -8,16 +8,58 @@ import {
     ScrollView,
     Dimensions,
     StatusBar,
-    Platform
+    Platform,
+    SafeAreaView,
 } from "react-native";
+
+import { WebView} from "react-native-webview"
+
 import Icon from "react-native-vector-icons/FontAwesome";
-import Header from "../../modules/Header";
+import Header from "../../modules/HeaderStory";
 import imageTest from "../../assets/jinx.jpg"; // Image de test
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 
-export default function SummaryStories({ selectedStory = {}, backLibrary }) {
+export default function SummaryStories({ selectedStory, backLibrary, }) {
+    const [showPdf, setShowPdf] = useState(false);
+    const [userRating, setUserRating] = useState(0)
+
+    const pdfUrl = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(selectedStory.storyFile)}&zoom=page-width&scrollMode=vertical&pageMode=thumbs`;
+
+
+    const injectedJavaScript = `
+    document.body.style.backgroundColor = 'white';
+    document.documentElement.style.backgroundColor = 'white';
+    setTimeout(() => {
+        const toolbar = document.getElementById('toolbarContainer'); 
+        if (toolbar) toolbar.style.display = 'none;  // 🔹 Affiche la barre d'outils
+    }, 500);
+`; // Les 4 dernières lignes sont censées faire apparaitre ou disparaitre la barre d outil en fonction de none ou flex mais ca rajoute un margin, va comprendre ce truc de con
+
+
+    if (showPdf) {
+        return (
+            <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF" }}>
+                <WebView 
+                    source={{ uri: pdfUrl }} 
+                    style={{ flex: 1, marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,  }} 
+                    javaScriptEnabled={true}
+                    domStorageEnabled={true}
+                    injectedJavaScript={injectedJavaScript}
+                    nestedScrollEnabled={true}
+                    showsVerticalScrollIndicator={true}
+                />
+                <TouchableOpacity style={styles.backArrow} onPress={() => setShowPdf(false)}>
+                <Icon name="angle-left" size={30} color="black" />
+                </TouchableOpacity>
+            </SafeAreaView>
+        );
+    }
+const handleStarPress = (index) => {
+    setUserRating(index + 1)
+}
+
     return (
         <View style={styles.container}>
             <ScrollView
@@ -35,27 +77,29 @@ export default function SummaryStories({ selectedStory = {}, backLibrary }) {
                         
                         <View style={styles.ratingContainer}>
                             {[...Array(5)].map((_, index) => (
+                                <TouchableOpacity key={index} onPress={() => handleStarPress(index)}>
                                 <Icon
                                     key={index}
                                     name="star"
                                     size={25}
-                                    color={index < (selectedStory.rating || 0) ? "#FFD700" : "#CCCCCC"}
+                                    color={index < userRating ? "#FFD700" : "#CCCCCC"}
                                 />
+                                </TouchableOpacity>
                             ))}
                         </View>
                         <Text style={styles.votes}>{selectedStory?.votes ?? 0} votes</Text>
-                        <TouchableOpacity style={styles.readButton} onPress={() => {}}>
+                        <TouchableOpacity style={styles.readButton} onPress={() => setShowPdf(true)} >
                             <Text style={styles.buttonText}>Lire</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
                 <View>
                 <Text style={styles.title}>{selectedStory.title}</Text>
-                <Text style={styles.author}>{selectedStory.writer.username}</Text>
+                <Text style={styles.author}>{selectedStory.writer?.username}</Text>
                 </View>
                 <Text style={styles.summary}>"{selectedStory.description}"</Text>
                 <TouchableOpacity 
-    style={[styles.button, styles.backButton, { marginBottom: screenHeight * 0.05 }]} 
+    style={[styles.button, { marginBottom: screenHeight * 0.05 }]} 
     onPress={backLibrary}
 >
                     <Text style={styles.buttonText}>Retour</Text>
@@ -183,7 +227,13 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
 
-    backButton: {
-
+    backArrow: {
+        position: "absolute",
+        top: Platform.OS === "ios" ? 50 : 30,  // 🔹 Ajuste selon iOS ou Android
+        right: 20,  // 🔹 Place l'icône à droite
+        marginTop: 30,
+        zIndex: 100,  // 🔹 Toujours au premier plan
+        padding: 10,  // 🔹 Meilleur confort de clic
     },
+    
 });

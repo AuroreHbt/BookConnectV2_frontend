@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   avatar: {
-    width: 70, // Taille par défaut
-    height: 70, // Taille par défaut
+    width: 50, // Taille par défaut
+    height: 50, // Taille par défaut
     borderRadius: 35,
   },
 });

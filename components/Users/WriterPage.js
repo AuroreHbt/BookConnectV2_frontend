@@ -202,10 +202,9 @@ const styles = StyleSheet.create({
         top: Platform.OS === "android" 
             ? (StatusBar.currentHeight ? StatusBar.currentHeight + screenHeight * 0.015 : screenHeight * 0.03) 
             : screenHeight * 0.03,  // Ajuste la position en fonction de l'écran et de la barre de statut
-        right: screenWidth * 0.05,  // 5% de la largeur de l'écran pour éviter d’être trop collé sur écran large
+        right: screenWidth * 0.08,  // 5% de la largeur de l'écran pour éviter d’être trop collé sur écran large
         padding: screenWidth * 0.02,  // Padding responsive
         top : screenWidth * 0.01,
-        right: screenWidth * 0.06,
         zIndex: 10,
     },
     

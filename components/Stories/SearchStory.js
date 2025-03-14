@@ -14,8 +14,9 @@ import {
     TouchableWithoutFeedback,
     Dimensions,
     StatusBar,
+    ActivityIndicator
 } from 'react-native';
-import Header from '../../modules/Header';
+import Header from '../../modules/HeaderStory';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -24,34 +25,47 @@ const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 
-export default function SearchScreen({ backLibrary, openReadStory, openWriterPage }) {
-    const navigation = useNavigation(); // 🔹 Pour la navigation
-    const inputRef = useRef(null); // 🔹 Référence à l’input pour l’autoFocus
+export default function SearchScreen({ backLibrary, openSummaryPage, openWriterPage }) {
+    const navigation = useNavigation();
+    const inputRef = useRef(null);
     const [search, setSearch] = useState('');
     const [allStories, setAllStories] = useState([]);
     const [filteredStories, setFilteredStories] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     // 🔹 Récupération des histoires depuis l'API
     const fetchStories = async () => {
         try {
+            setLoading(true);
             const response = await axios.get(`${BACKEND_ADDRESS}/stories/allstories`);
+            
+
             setAllStories(response.data.stories);
         } catch (error) {
-            console.error('Erreur lors de la récupération des histoires', error);
+            console.error('❌ Erreur lors de la récupération des histoires', error);
             setAllStories([]);
+        } finally {
+            setLoading(false);
         }
     };
 
+    // 🔹 Charge les histoires à l'affichage
     useEffect(() => {
         fetchStories();
     }, []);
+
+    // 🔹 Recharge les histoires quand on revient sur l'écran
+    useFocusEffect(
+        useCallback(() => {
+            fetchStories();
+        }, [])
+    );
 
     // 🔹 Filtrer les résultats selon la recherche
     useEffect(() => {
         if (search.length > 0) {
             const lowerSearch = search.toLowerCase();
             
-            // 🔹 Éviter les doublons d’auteurs
             const authorMap = new Map();
             allStories.forEach((story) => {
                 const writerName = story.writer.username;
@@ -63,9 +77,9 @@ export default function SearchScreen({ backLibrary, openReadStory, openWriterPag
                     });
                 }
             });
+
             const matchingAuthors = [...authorMap.values()];
 
-            // 🔹 Filtrer les histoires contenant le mot-clé
             const matchingStories = allStories
                 .filter((story) => story.title.toLowerCase().includes(lowerSearch))
                 .map((story) => ({
@@ -73,28 +87,28 @@ export default function SearchScreen({ backLibrary, openReadStory, openWriterPag
                     title: story.title,
                     type: 'Histoire',
                     writer: story.writer.username,
-                    storyFile: story.storyFile
+                    category: story.category,
+                    storyFile: story.storyFile,
+                    description: story.description
                 }));
 
-            // 🔹 Ajouter les auteurs en premier
             setFilteredStories([...matchingAuthors, ...matchingStories]);
         } else {
             setFilteredStories([]);
         }
     }, [search, allStories]);
 
-    // 🔹 Active autoFocus dès que l’écran Search s’affiche
+    // 🔹 Active autoFocus sur l'input
     useFocusEffect(
         useCallback(() => {
             const timeout = setTimeout(() => {
-                inputRef.current?.focus(); // 🔹 Met le focus sur l’input
-            }, 100); // 🔹 Petit délai pour éviter un bug de navigation
-
+                inputRef.current?.focus();
+            }, 100);
             return () => clearTimeout(timeout);
         }, [])
     );
 
-    // 🔹 Ferme le clavier proprement quand on quitte l’écran Search
+    // 🔹 Ferme le clavier quand on quitte l'écran
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
             Keyboard.dismiss();
@@ -102,17 +116,24 @@ export default function SearchScreen({ backLibrary, openReadStory, openWriterPag
         return unsubscribe;
     }, [navigation]);
 
-    // 🔹 Gestion du clic sur un élément (ferme le clavier et attend avant de naviguer)
+    // 🔹 Gestion du clic sur un élément
+
     const handlePressItem = (item) => {
         Keyboard.dismiss();
         setTimeout(() => {
             if (item.type === "Auteur") {
                 openWriterPage(item.title);
             } else {
-                openReadStory(item, "search");
+                const fullStory = allStories.find((story) => story._id === item.id) || item;
+    
+                openSummaryPage({
+                    ...fullStory,
+                    writer: { username: item.writer}
+                }, "search");
             }
         }, 150);
     };
+
 
     // 🔹 Fonction pour afficher chaque élément
     const renderItem = useCallback(({ item }) => (
@@ -123,6 +144,16 @@ export default function SearchScreen({ backLibrary, openReadStory, openWriterPag
             </Text>
         </TouchableOpacity>
     ), []);
+
+    // 🔹 Affichage si les histoires sont en train de charger
+    if (loading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#4A90E2" />
+                <Text style={styles.loadingText}>Chargement des histoires...</Text>
+            </View>
+        );
+    }
 
     return ( 
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}> 
